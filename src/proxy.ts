@@ -11,7 +11,7 @@ import {
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
 
 export default async function proxy(req: any): Promise<any> {
-  const functionName = 'middleware'
+  const functionName = 'proxy'
   const { nextUrl } = req
   //
   //  Requested path name

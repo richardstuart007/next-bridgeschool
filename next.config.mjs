@@ -15,10 +15,10 @@ const config = {
         has: [
           {
             type: 'host',
-            value: 'nextjs-bridgeschool.vercel.app' // URL_old1 value
+            value: 'nextjs-bridgeschool.vercel.app'
           }
         ],
-        destination: 'https://nextjs15-bridgeschool.vercel.app/:path*',
+        destination: 'https://next-bridgeschool.vercel.app/:path*',
         permanent: true
       },
       {
@@ -26,10 +26,21 @@ const config = {
         has: [
           {
             type: 'host',
-            value: 'nextjs14-bridgeschool.vercel.app' // URL_old2 value
+            value: 'nextjs14-bridgeschool.vercel.app'
           }
         ],
-        destination: 'https://nextjs15-bridgeschool.vercel.app/:path*',
+        destination: 'https://next-bridgeschool.vercel.app/:path*',
+        permanent: true
+      },
+      {
+        source: '/:path*',
+        has: [
+          {
+            type: 'host',
+            value: 'nextjs15-bridgeschool.vercel.app'
+          }
+        ],
+        destination: 'https://next-bridgeschool.vercel.app/:path*',
         permanent: true
       }
     ]
