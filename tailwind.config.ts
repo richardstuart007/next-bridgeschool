@@ -1,7 +1,11 @@
 import type { Config } from 'tailwindcss'
 
 const config: Config = {
-  content: ['./src/**/*.{js,ts,jsx,tsx,mdx}', './src/**/*.css'],
+  content: [
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.css',
+    './node_modules/nextjs-shared/src/**/*.{js,ts,jsx,tsx}'
+  ],
   theme: {
     extend: {
       gridTemplateColumns: {

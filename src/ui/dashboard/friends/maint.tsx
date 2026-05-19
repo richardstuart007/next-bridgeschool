@@ -90,7 +90,7 @@ export default function Maint({
   //----------------------------------------------------------------------------------------------
   return (
     <form action={handleSubmit} className='space-y-3 '>
-      <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
+      <div className='rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
         {/*  ...................................................................................*/}
         {/*  User ID  */}
         {/*  ...................................................................................*/}
@@ -117,7 +117,7 @@ export default function Maint({
             showSelectedCount={true}
             showResortButton={true}
             minSelections={0}
-            overrideClass_Container='max-h-44'
+            overrideClass_Container='max-h-44 w-72'
             sortBy='label'
           />
         </div>

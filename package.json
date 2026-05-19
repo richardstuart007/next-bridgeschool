@@ -15,12 +15,10 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
+    "@neondatabase/serverless": "^1.1.0",
     "@tailwindcss/forms": "^0.5.9",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "20.5.7",
-    "@neondatabase/serverless": "^1.1.0",
-    "ws": "^8.20.0",
-    "nextjs-shared": "github:richardstuart007/nextjs-shared",
     "autoprefixer": "10.4.15",
     "bcryptjs": "^2.4.3",
     "chart.js": "^4.4.7",
@@ -30,6 +28,7 @@
     "date-fns-tz": "^3.2.0",
     "next": "^16.2.4",
     "next-auth": "^5.0.0-beta.22",
+    "nextjs-shared": "github:richardstuart007/nextjs-shared",
     "pg": "^8.20.0",
     "postcss": "8.4.31",
     "react": "19.2.4",
@@ -38,6 +37,7 @@
     "react-icons": "^5.3.0",
     "tailwindcss": "3.3.3",
     "typescript": "5.2.2",
+    "ws": "^8.20.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {
