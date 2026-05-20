@@ -15,6 +15,7 @@ import { table_Users } from '@/src/lib/tables/definitions'
 import { ProviderType } from '@/src/root/constants/constants_other'
 import { socials_signin } from '@/src/ui/login/socials_signin'
 import { Routes_AfterLogin_redirect } from '@/src/root/constants/constants_validroutes'
+import GuestLogin from '@/src/ui/login/GuestLogin'
 
 export default function LoginForm() {
   // -------------------------------------------------------------------------
@@ -125,6 +126,7 @@ export default function LoginForm() {
             {renderCredentials()}
             {showSocialButtons() && <Socials setSigningIn={setSigningIn} />}
             {showRegisterLink() && renderRegisterButton()}
+            <GuestLogin setSigningIn={setSigningIn} />
           </>
         )}
       </>
