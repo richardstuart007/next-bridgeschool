@@ -1,13 +1,14 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { COOKIE_NAME } from '@/src/root/constants/constants_other'
 // ----------------------------------------------------------------------
 //  Update Cookie information
 // ----------------------------------------------------------------------
 export async function cookie_update(co_ssid: number) {
   const functionName = 'cookie_update'
   try {
-    const cookieName = 'BridgeCookie'
+    const cookieName = COOKIE_NAME
     //
     // Write the cookie
     //

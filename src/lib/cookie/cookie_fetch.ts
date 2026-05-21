@@ -1,10 +1,11 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { COOKIE_NAME } from '@/src/root/constants/constants_other'
 // ----------------------------------------------------------------------
 //  Get Cookie information
 // ----------------------------------------------------------------------
-export async function cookie_fetch(cookieName: string = 'BridgeCookie'): Promise<number | null> {
+export async function cookie_fetch(cookieName: string = COOKIE_NAME): Promise<number | null> {
   const functionName = 'cookie_fetch'
   try {
     const cookieStore = await cookies()

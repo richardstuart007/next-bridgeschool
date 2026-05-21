@@ -1,10 +1,11 @@
 'use server'
 
 import { cookies } from 'next/headers'
+import { COOKIE_NAME } from '@/src/root/constants/constants_other'
 // ----------------------------------------------------------------------
 //  Delete Cookie
 // ----------------------------------------------------------------------
-export async function cookie_delete(cookieName: string = 'BridgeCookie') {
+export async function cookie_delete(cookieName: string = COOKIE_NAME) {
   const functionName = 'cookie_delete'
   try {
     const cookieStore = await cookies()
