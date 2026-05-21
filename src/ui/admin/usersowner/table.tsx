@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import MaintPopup from '@/src/ui/admin/usersowner/maint-popup'
+import MaintPopup from '@/src/ui/admin/usersowner/maintPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { table_Usersowner } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
