@@ -9,6 +9,7 @@ import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import { table_fetch } from 'nextjs-shared/table_fetch'
 import { userCache_purgeOnSignIn } from '@/src/lib/tables/cache/userCache_purgeOnSignIn'
+import { write_Logging } from 'nextjs-shared/write_logging'
 
 const functionName = 'auth'
 // ----------------------------------------------------------------------
@@ -96,7 +97,12 @@ export const {
           //  Errors
           //
         } catch (error) {
-          console.error('Authorization error:', error)
+          write_Logging({
+            lg_caller: functionName,
+            lg_functionname: 'authorize',
+            lg_msg: `Authorization error: ${(error as Error).message}`,
+            lg_severity: 'E'
+          })
           return null
         }
       }
@@ -209,7 +215,12 @@ export const {
         //  Errors
         //
       } catch (error) {
-        console.error('Provider signIn error:', error)
+        write_Logging({
+          lg_caller: functionName,
+          lg_functionname: 'signIn',
+          lg_msg: `Provider signIn error: ${(error as Error).message}`,
+          lg_severity: 'E'
+        })
         return false
       }
     }

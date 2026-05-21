@@ -50,6 +50,7 @@ export default function LoginForm() {
   // Track previous email to avoid clearing errors unnecessarily
   //
   const previousEmailRef = useRef('')
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // -------------------------------------------------------------------------
   //  EFFECTS
@@ -184,6 +185,20 @@ export default function LoginForm() {
               </p>
             </div>
           )}
+
+          {/* Manual social login button — shown when email matches a social account */}
+          {userInfo.exists && userInfo.provider && userInfo.provider !== 'email' && !signingIn && (
+            <MyButton
+              overrideClass='mt-3 w-full flex justify-center'
+              type='button'
+              onClick={function () {
+                setSigningIn(true)
+                socials_signin(userInfo.provider as 'google' | 'github', setSigningIn)
+              }}
+            >
+              {`Continue with ${userInfo.provider === 'google' ? 'Google' : 'GitHub'}`}
+            </MyButton>
+          )}
         </div>
 
         {/* Only show password field for email accounts or new users */}
@@ -255,15 +270,16 @@ export default function LoginForm() {
   // -------------------------------------------------------------------------
   // Handle email change and check account type
   // -------------------------------------------------------------------------
-  async function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
     const newEmail = e.target.value
     setEmail(newEmail)
     //
-    // Clear user info if email is empty
+    // Clear user info if email is empty or missing @
     //
     if (!newEmail || !newEmail.includes('@')) {
       setUserInfo({ exists: false })
       previousEmailRef.current = newEmail
+      if (debounceRef.current) clearTimeout(debounceRef.current)
       return
     }
     //
@@ -274,46 +290,30 @@ export default function LoginForm() {
     }
     previousEmailRef.current = newEmail
     //
-    //  Get user information
+    // Debounce: wait 300 ms after typing stops before querying
     //
-    try {
-      //
-      //  Get User
-      //
-      const rows = await table_fetch({
-        caller: functionName,
-        table: 'tus_users',
-        whereColumnValuePairs: [{ column: 'us_email', value: newEmail }]
-      } as table_fetch_Props)
+    if (debounceRef.current) clearTimeout(debounceRef.current)
+    debounceRef.current = setTimeout(async () => {
+      try {
+        const rows = await table_fetch({
+          caller: functionName,
+          table: 'tus_users',
+          whereColumnValuePairs: [{ column: 'us_email', value: newEmail }]
+        } as table_fetch_Props)
 
-      const userRecord: table_Users | undefined = rows[0]
-      //
-      // Email doesn't exist - allow registration
-      //
-      if (!userRecord) {
+        const userRecord: table_Users | undefined = rows[0]
+
+        if (!userRecord) {
+          setUserInfo({ exists: false })
+        } else {
+          const provider = userRecord.us_provider as ProviderType
+          setUserInfo({ exists: true, provider })
+        }
+      } catch (error) {
+        console.error('Error checking email:', error)
         setUserInfo({ exists: false })
       }
-      //
-      // Email exists - get the provider type
-      //
-      else {
-        const provider = userRecord.us_provider as ProviderType
-        setUserInfo({
-          exists: true,
-          provider: provider
-        })
-        //
-        // Auto-trigger social login if it's a social account
-        //
-        if (provider !== 'email' && !signingIn) {
-          setSigningIn(true)
-          socials_signin(provider, setSigningIn)
-        }
-      }
-    } catch (error) {
-      console.error('Error checking email:', error)
-      setUserInfo({ exists: false })
-    }
+    }, 300)
   }
   // -------------------------------------------------------------------------
   // Determine if password field should be shown (only for email accounts)
@@ -350,12 +350,12 @@ export default function LoginForm() {
       case 'google':
         return {
           type: 'info',
-          text: 'Signing in with Google...'
+          text: 'This account uses Google sign-in.'
         }
       case 'github':
         return {
           type: 'info',
-          text: 'Signing in with GitHub...'
+          text: 'This account uses GitHub sign-in.'
         }
       default:
         console.error(`Unexpected provider type: ${userInfo.provider}`)

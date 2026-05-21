@@ -48,7 +48,7 @@ export default function RegisterForm() {
     function () {
       if (formState?.success === true) {
         setRegistering(true)
-        router.push('/login')
+        router.push('/dashboard')
       }
     },
     [formState, router]
