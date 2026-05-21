@@ -8,7 +8,11 @@ import { Filter } from 'nextjs-shared/tableFetchUtils'
 import MyPagination from 'nextjs-shared/MyPagination'
 import { MyInput } from 'nextjs-shared/MyInput'
 
-export default function Table() {
+interface TableProps {
+  initialRows?: table_Logging[]
+  initialTotalPages?: number
+}
+export default function Table({ initialRows, initialTotalPages }: TableProps = {}) {
   const functionName = 'Table_Logging'
   //
   //  Input selection
@@ -24,10 +28,9 @@ export default function Table() {
   //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, settabledata] = useState<table_Logging[]>([])
-  const [totalPages, setTotalPages] = useState<number>(0)
+  const [tabledata, settabledata] = useState<table_Logging[]>(initialRows ?? [])
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
-  const [loading, setLoading] = useState(true)
   //......................................................................................
   // Debounce selection
   //......................................................................................
@@ -122,7 +125,8 @@ export default function Table() {
         filters,
         orderBy: 'lg_lgid DESC',
         limit: rowsPerPage,
-        offset
+        offset,
+        skipCache: true
       })
       settabledata(data)
       //
@@ -132,13 +136,10 @@ export default function Table() {
         caller: functionName,
         table,
         filters,
-        items_per_page: rowsPerPage
+        items_per_page: rowsPerPage,
+        skipCache: true
       })
       setTotalPages(fetchedTotalPages)
-      //
-      //  Data can be displayed
-      //
-      setLoading(false)
       //
       //  Errors
       //
@@ -146,10 +147,6 @@ export default function Table() {
       console.error('Error fetching history:', error)
     }
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------

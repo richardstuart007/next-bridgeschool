@@ -23,8 +23,16 @@ interface FormProps {
   selected_sbid?: number | undefined
   selected_owner?: string | undefined
   selected_subject?: string | undefined
+  initialRows?: object[]
+  initialTotalPages?: number
 }
-export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
+export default function Table({
+  selected_sbid,
+  selected_owner,
+  selected_subject,
+  initialRows,
+  initialTotalPages
+}: FormProps) {
   const functionName = 'Table_Questions'
   const rowsPerPage = 17
   //
@@ -41,10 +49,9 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [record, setrecord] = useState<table_Questions[]>([])
-  const [totalPages, setTotalPages] = useState<number>(0)
-  const [shouldFetchData, setShouldFetchData] = useState(true)
-  const [loading, setLoading] = useState(true)
+  const [record, setrecord] = useState<table_Questions[]>((initialRows as table_Questions[]) ?? [])
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 0)
+  const [shouldFetchData, setShouldFetchData] = useState(false)
 
   const [isModelOpenEdit_detail, setIsModelOpenEdit_detail] = useState(false)
   const [isModelOpenAdd_detail, setIsModelOpenAdd_detail] = useState(false)
@@ -126,7 +133,8 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         filters,
         orderBy: 'qq_owner, qq_subject, qq_seq',
         limit: rowsPerPage,
-        offset
+        offset,
+        skipCache: true
       })
       setrecord(data)
       //
@@ -136,13 +144,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
         caller: functionName,
         table,
         filters,
-        items_per_page: rowsPerPage
+        items_per_page: rowsPerPage,
+        skipCache: true
       })
       setTotalPages(fetchedTotalPages)
-      //
-      //  Data can be displayed
-      //
-      setLoading(false)
       //
       //  Errors
       //
@@ -255,10 +260,6 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     //
     setrfid_cmp(validOperator)
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------

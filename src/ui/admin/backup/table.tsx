@@ -32,7 +32,6 @@ export default function Table() {
   //
   //  Base Data
   //
-  const [loading, setLoading] = useState(true)
   const [currentPage, setcurrentPage] = useState(1)
   const [tabledata, settabledata] = useState<string[]>(basetables)
   const [tabledata_count, settabledata_count] = useState<number[]>([])
@@ -99,7 +98,6 @@ export default function Table() {
     const functionName = `fetch${mode}`
     try {
       setmessage(`Starting.... ${functionName}`)
-      setLoading(false)
 
       // Determine table list based on mode
       const tableList =
@@ -127,13 +125,15 @@ export default function Table() {
                 filters: updatedFilters,
                 orderBy: 'tablename',
                 limit: rowsPerPage,
-                offset
+                offset,
+                skipCache: true
               }),
               fetchTotalPages({
                 caller: functionName,
                 table: 'pg_tables',
                 filters: updatedFilters,
-                items_per_page: rowsPerPage
+                items_per_page: rowsPerPage,
+                skipCache: true
               })
             ])
           : [
@@ -143,7 +143,8 @@ export default function Table() {
                 filters: updatedFilters,
                 orderBy: 'tablename',
                 limit: rowsPerPage,
-                offset
+                offset,
+                skipCache: true
               }),
               undefined
             ]
@@ -1434,10 +1435,6 @@ export default function Table() {
       </div>
     )
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------

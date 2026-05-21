@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
+import { table_Reference, table_ReferenceSubject, table_Subject } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import { Filter, JoinParams } from 'nextjs-shared/tableFetchUtils'
@@ -15,23 +15,33 @@ import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 
 interface FormProps {
   uq_sbid?: string | undefined
+  initialUsid?: number
+  initialSubjectInfo?: table_Subject
+  initialRows?: object[]
+  initialTotalPages?: number
 }
 
-export default function Table_Reference({ uq_sbid }: FormProps) {
+export default function Table_Reference({
+  uq_sbid,
+  initialUsid,
+  initialSubjectInfo,
+  initialRows,
+  initialTotalPages
+}: FormProps) {
   const functionName = 'Table_Reference'
   //
   //  User context
   //
   const { sessionContext } = useUserContext()
-  const ref_selected_cx_usid = useRef(0)
+  const ref_selected_cx_usid = useRef(initialUsid ?? 0)
   const [initialisationCompleted, setinitialisationCompleted] = useState(false)
   //
   //  Parameter Selection
   //
-  const ref_sb_owner = useRef('')
-  const ref_sb_subject = useRef('')
-  const ref_sb_cntreferences = useRef('')
-  const ref_sb_cntquestions = useRef(0)
+  const ref_sb_owner = useRef(initialSubjectInfo?.sb_owner ?? '')
+  const ref_sb_subject = useRef(initialSubjectInfo?.sb_subject ?? '')
+  const ref_sb_cntreferences = useRef(String(initialSubjectInfo?.sb_cntreference ?? ''))
+  const ref_sb_cntquestions = useRef(initialSubjectInfo?.sb_cntquestions ?? 0)
   //
   //  Input
   //
@@ -59,12 +69,13 @@ export default function Table_Reference({ uq_sbid }: FormProps) {
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>([])
-  const [totalPages, setTotalPages] = useState<number>(0)
+  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>(
+    (initialRows ?? []) as (table_Reference | table_ReferenceSubject)[]
+  )
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 0)
   //
   //  Initialisation
   //
-  const [loading, setLoading] = useState(true)
   //
   //  Shrink/Detail
   //
@@ -104,7 +115,7 @@ export default function Table_Reference({ uq_sbid }: FormProps) {
       //
       //  Set the selected values
       //
-      if (uq_sbid) await selectedOwnerSubject()
+      if (uq_sbid && !initialSubjectInfo) await selectedOwnerSubject()
       //
       //  Update Columns and rows
       //
@@ -411,10 +422,6 @@ export default function Table_Reference({ uq_sbid }: FormProps) {
       // Reset message after debounce completes
       //
       setMessage('')
-      //
-      //  Data can be displayed
-      //
-      setLoading(false)
       //
       //  Errors
       //
@@ -813,12 +820,6 @@ export default function Table_Reference({ uq_sbid }: FormProps) {
       </div>
     )
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
-  //----------------------------------------------------------------------------------------------
-  // Data loaded
   //----------------------------------------------------------------------------------------------
   return (
     <>

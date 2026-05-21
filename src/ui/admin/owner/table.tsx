@@ -13,19 +13,22 @@ import { table_delete } from 'nextjs-shared/table_delete'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
 
-export default function Table() {
+interface TableProps {
+  initialRows?: table_Owner[]
+  initialTotalPages?: number
+}
+export default function Table({ initialRows, initialTotalPages }: TableProps = {}) {
   const functionName = 'Table_Owner'
   const rowsPerPage = 17
-  const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
   const [owner, setowner] = useState('')
   const [currentPage, setcurrentPage] = useState(1)
 
-  const [data, setdata] = useState<table_Owner[]>([])
-  const [totalPages, setTotalPages] = useState<number>(0)
-  const [shouldFetchData, setShouldFetchData] = useState(true)
+  const [data, setdata] = useState<table_Owner[]>(initialRows ?? [])
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 0)
+  const [shouldFetchData, setShouldFetchData] = useState(false)
   const [isModelOpenAdd, setIsModelOpenAdd] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
   const [confirmDialog, setConfirmDialog] = useState<ConfirmDialogInt>({
@@ -91,7 +94,8 @@ export default function Table() {
         filters,
         orderBy: 'ow_owner',
         limit: rowsPerPage,
-        offset
+        offset,
+        skipCache: true
       })
       setdata(data)
       //
@@ -101,13 +105,10 @@ export default function Table() {
         caller: functionName,
         table,
         filters,
-        items_per_page: rowsPerPage
+        items_per_page: rowsPerPage,
+        skipCache: true
       })
       setTotalPages(fetchedTotalPages)
-      //
-      //  Data loading ready
-      //
-      setLoading(false)
       //
       //  Errors
       //
@@ -175,10 +176,6 @@ export default function Table() {
       }
     })
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------

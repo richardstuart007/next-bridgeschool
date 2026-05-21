@@ -18,11 +18,18 @@ interface FormProps {
   selected_sbid?: number | undefined
   selected_owner?: string | undefined
   selected_subject?: string | undefined
+  initialRows?: object[]
+  initialTotalPages?: number
 }
-export default function Table({ selected_sbid, selected_owner, selected_subject }: FormProps) {
+export default function Table({
+  selected_sbid,
+  selected_owner,
+  selected_subject,
+  initialRows,
+  initialTotalPages
+}: FormProps) {
   const functionName = 'Table_Reference'
   const rowsPerPage = 17
-  const [loading, setLoading] = useState(true)
   //
   //  Selection
   //
@@ -37,8 +44,10 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
   //  Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>([])
-  const [totalPages, setTotalPages] = useState<number>(0)
+  const [tabledata, setTabledata] = useState<(table_Reference | table_ReferenceSubject)[]>(
+    (initialRows as (table_Reference | table_ReferenceSubject)[]) ?? []
+  )
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 0)
   const [shouldFetchData, setShouldFetchData] = useState(false)
   //
   //  Maintenance
@@ -150,10 +159,6 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
       })
       setTotalPages(fetchedTotalPages)
       //
-      //  Data loading ready
-      //
-      setLoading(false)
-      //
       //  Errors
       //
     } catch (error) {
@@ -224,10 +229,6 @@ export default function Table({ selected_sbid, selected_owner, selected_subject 
     }
     setConfirmDialog({ ...confirmDialog, isOpen: false })
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xs'>Loading....</p>
   //----------------------------------------------------------------------------------------------
   // Data loaded
   //----------------------------------------------------------------------------------------------

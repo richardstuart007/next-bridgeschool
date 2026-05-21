@@ -9,15 +9,19 @@ import MyDropdown from 'nextjs-shared/MyDropdown'
 import { COUNTRIES } from '@/src/root/constants/constants_Countries'
 import { useUserContext } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
+import { table_Users } from '@/src/lib/tables/definitions'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { MyToggle } from 'nextjs-shared/MyToggle'
 import MainWrapper from '@/src/ui/dashboard/friends/mainWrapper'
 
 interface Props {
   admin_uid?: number
+  initialUsid?: number
+  initialUserData?: table_Users
+  initialOwner?: string
 }
 
-export default function Form_User({ admin_uid }: Props) {
+export default function Form_User({ admin_uid, initialUsid, initialUserData, initialOwner }: Props) {
   const functionName = 'Form_User'
   //
   //  User context
@@ -51,20 +55,30 @@ export default function Form_User({ admin_uid }: Props) {
   //
   //  User State
   //
-  const [us_name, setus_name] = useState('')
-  const [us_fedid, setus_fedid] = useState('')
-  const [us_fedcountry, setus_fedcountry] = useState<string | number>('')
-  const [us_usid, setus_usid] = useState(0)
-  const [us_email, setus_email] = useState('')
-  const [us_maxquestions, setus_maxquestions] = useState<number>(0)
-  const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(false)
-  const [us_admin, setus_admin] = useState<boolean>(false)
-  const [formattedCountries, setformattedCountries] = useState<{ value: string; label: string }[]>(
-    []
+  const [us_name, setus_name] = useState(admin_uid ? '' : (initialUserData?.us_name ?? ''))
+  const [us_fedid, setus_fedid] = useState(admin_uid ? '' : (initialUserData?.us_fedid ?? ''))
+  const [us_fedcountry, setus_fedcountry] = useState<string | number>(
+    admin_uid ? '' : (initialUserData?.us_fedcountry ?? '')
   )
-  const [ow_owner, setow_owner] = useState<string | number>('')
+  const [us_usid, setus_usid] = useState(admin_uid ? 0 : (initialUsid ?? 0))
+  const [us_email, setus_email] = useState(admin_uid ? '' : (initialUserData?.us_email ?? ''))
+  const [us_maxquestions, setus_maxquestions] = useState<number>(
+    admin_uid ? 0 : (initialUserData?.us_maxquestions ?? 0)
+  )
+  const [us_skipcorrect, setus_skipcorrect] = useState<boolean>(
+    admin_uid ? false : (initialUserData?.us_skipcorrect ?? false)
+  )
+  const [us_admin, setus_admin] = useState<boolean>(
+    admin_uid ? false : (initialUserData?.us_admin ?? false)
+  )
+  const [formattedCountries] = useState<{ value: string; label: string }[]>(
+    () => COUNTRIES.map(({ code, label }) => ({ value: code, label }))
+  )
+  const [ow_owner, setow_owner] = useState<string | number>(
+    admin_uid ? '' : (initialOwner ?? '')
+  )
   const [shouldFetchData, setShouldFetchData] = useState(false)
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!!admin_uid || !initialUserData)
   const [isFriendsPopupOpen, setIsFriendsPopupOpen] = useState(false)
 
   //-------------------------------------------------------------------------
@@ -86,9 +100,9 @@ export default function Form_User({ admin_uid }: Props) {
     if (admin_uid) {
       setus_usid(admin_uid)
       setShouldFetchData(true)
-    } else {
+    } else if (!initialUserData) {
       //
-      //  Not admin then for the logged on user
+      //  No server data — fall back to context
       //
       if (sessionContext?.cx_usid) {
         const cx_usid = sessionContext.cx_usid
@@ -136,14 +150,6 @@ export default function Form_User({ admin_uid }: Props) {
       setus_maxquestions(data.us_maxquestions)
       setus_skipcorrect(data.us_skipcorrect)
       setus_admin(data.us_admin)
-      //
-      //  Format countries
-      //
-      const Countries = COUNTRIES.map(({ code, label }) => ({
-        value: code,
-        label: label
-      }))
-      setformattedCountries(Countries)
       //---------------------------------
       //  Get Usersowner
       //---------------------------------

@@ -10,21 +10,33 @@ import MyDropdown from 'nextjs-shared/MyDropdown'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { MyLink } from 'nextjs-shared/MyLink'
-import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 
-export default function Table_Subject() {
+interface TableProps {
+  initialUsid: number
+  initialOwners: { uo_owner: string }[]
+  initialRows: table_Subject[]
+  initialTotalPages: number
+}
+
+export default function Table_Subject({
+  initialUsid,
+  initialOwners,
+  initialRows,
+  initialTotalPages
+}: TableProps) {
   const functionName = 'Table_Subject'
   //
   //  User context
   //
   const { sessionContext } = useUserContext()
-  const ref_selected_cx_usid = useRef(0)
+  const ref_selected_cx_usid = useRef(initialUsid)
   const [initialisationCompleted, setinitialisationCompleted] = useState(false)
-  const ref_selected_uoowner = useRef('')
+  const initOwner = initialOwners.length === 1 ? initialOwners[0].uo_owner : ''
+  const ref_selected_uoowner = useRef(initOwner)
   //
   //  Selection
   //
-  const [owner, setowner] = useState<string | number>('')
+  const [owner, setowner] = useState<string | number>(initOwner)
   const [subject, setsubject] = useState<string | number>('')
   const [cntquestions, setcntquestions] = useState<number | string>(1)
   const [cntreference, setcntreference] = useState<number | string>('')
@@ -45,9 +57,8 @@ export default function Table_Subject() {
   //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, setTabledata] = useState<table_Subject[]>([])
-  const [totalPages, setTotalPages] = useState<number>(0)
-  const [loading, setloading] = useState(true)
+  const [tabledata, setTabledata] = useState<table_Subject[]>(initialRows)
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages)
   //
   //  Shrink/Detail
   //
@@ -77,11 +88,6 @@ export default function Table_Subject() {
           setshrink_Text('text-xxs md:text-xs')
         }
         //
-        //  Get owner for user
-        //
-        if (!initialisationCompleted) {
-          await fetchUserOwner()
-        }
         //
         //  Header info
         //
@@ -194,38 +200,6 @@ export default function Table_Subject() {
     }
   }, [owner, subject, cntquestions, cntreference, currentPage, initialisationCompleted])
   //----------------------------------------------------------------------------------------------
-  // fetch Owner for a user
-  //----------------------------------------------------------------------------------------------
-  async function fetchUserOwner() {
-    //
-    //  Already set
-    //
-    if (initialisationCompleted) return
-    //
-    //  Continue
-    //
-    try {
-      //
-      //  Set the owner if only 1
-      //
-      const rows = await table_fetch({
-        caller: functionName,
-        table: 'tuo_usersowner',
-        whereColumnValuePairs: [{ column: 'uo_usid', value: ref_selected_cx_usid.current }]
-      } as table_fetch_Props)
-      if (rows.length === 1) {
-        const uo_owner = rows[0].uo_owner
-        ref_selected_uoowner.current = uo_owner
-        setowner(uo_owner)
-      }
-      //
-      //  Errors
-      //
-    } catch (error) {
-      console.error('Error fetching tuo_usersowner:', error)
-    }
-  }
-  //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
   async function fetchdata() {
@@ -298,10 +272,6 @@ export default function Table_Subject() {
       // Reset message after debounce completes
       //
       setMessage('')
-      //
-      //  Data can be displayed
-      //
-      setloading(false)
       //
       //  Errors
       //
@@ -627,12 +597,6 @@ export default function Table_Subject() {
       </div>
     )
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xxs md:text-xs'>Loading....</p>
-  //----------------------------------------------------------------------------------------------
-  // Data loaded
   //----------------------------------------------------------------------------------------------
   return (
     <>

@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import { Filter, JoinParams } from 'nextjs-shared/tableFetchUtils'
@@ -12,21 +11,38 @@ import { MyLink } from 'nextjs-shared/MyLink'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
-export default function Table_History() {
+import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
+
+interface TableProps {
+  initialUsid?: number
+  initialCountryCode?: string
+  initialOwners?: { uo_owner: string }[]
+  initialRows?: table_UsershistorySubjectUser[]
+  initialTotalPages?: number
+}
+
+export default function Table_History({
+  initialUsid,
+  initialCountryCode,
+  initialOwners,
+  initialRows,
+  initialTotalPages
+}: TableProps = {}) {
   const functionName = 'Table_History'
   //
   //  User context
   //
   const { sessionContext } = useUserContext()
-  const ref_selected_uoowner = useRef('')
-  const ref_selected_cx_usid = useRef(0)
-  const [countryCode, setcountryCode] = useState('')
+  const initOwner = initialOwners?.length === 1 ? initialOwners[0].uo_owner : ''
+  const ref_selected_uoowner = useRef(initOwner)
+  const ref_selected_cx_usid = useRef(initialUsid ?? 0)
+  const [countryCode, setcountryCode] = useState(initialCountryCode ?? '')
   const [initialisationCompleted, setinitialisationCompleted] = useState(false)
   //
   //  Input selection
   //
-  const [usid, setusid] = useState<number | string>('')
-  const [owner, setowner] = useState<string | number>('')
+  const [usid, setusid] = useState<number | string>(initialUsid || '')
+  const [owner, setowner] = useState<string | number>(initOwner)
   const [subject, setsubject] = useState<string | number>('')
   const [title, settitle] = useState('')
   const [hsid, sethsid] = useState<number | string>('')
@@ -60,9 +76,8 @@ export default function Table_History() {
   //  Other state
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, settabledata] = useState<table_UsershistorySubjectUser[]>([])
-  const [totalPages, setTotalPages] = useState<number>(0)
-  const [loading, setLoading] = useState(true)
+  const [tabledata, settabledata] = useState<table_UsershistorySubjectUser[]>(initialRows ?? [])
+  const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 0)
   //
   //  Shrink/Detail
   //
@@ -99,17 +114,18 @@ export default function Table_History() {
         //  Get users country code
         //
         if (!initialisationCompleted) {
-          const rows = await table_fetch({
-            caller: functionName,
-            table: 'tus_users',
-            whereColumnValuePairs: [{ column: 'us_usid', value: ref_selected_cx_usid.current }]
-          } as table_fetch_Props)
-          const userRecord = rows[0]
-          setcountryCode(userRecord.us_fedcountry)
-          //
-          //  Get owner for user
-          //
-          await fetchUserOwner()
+          if (!initialCountryCode) {
+            const rows = await table_fetch({
+              caller: functionName,
+              table: 'tus_users',
+              whereColumnValuePairs: [{ column: 'us_usid', value: ref_selected_cx_usid.current }]
+            } as table_fetch_Props)
+            const userRecord = rows[0]
+            setcountryCode(userRecord.us_fedcountry)
+          }
+          if (!initialOwners?.length) {
+            await fetchUserOwner()
+          }
         }
         //
         //  Header info
@@ -365,10 +381,6 @@ export default function Table_History() {
       // Reset message after debounce completes
       //
       setMessage('')
-      //
-      //  Data can be displayed
-      //
-      setLoading(false)
       //
       //  Errors
       //
@@ -899,12 +911,6 @@ export default function Table_History() {
       </div>
     )
   }
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
-  if (loading) return <p className='text-xxs md:text-xs'>Loading....</p>
-  //----------------------------------------------------------------------------------------------
-  // Data loaded
   //----------------------------------------------------------------------------------------------
   return (
     <>
