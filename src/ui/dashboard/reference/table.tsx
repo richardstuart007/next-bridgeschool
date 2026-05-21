@@ -134,28 +134,14 @@ export default function Table_Reference({
   //......................................................................................
   // Debounce selection
   //......................................................................................
-  type DebouncedState = {
-    owner: string | number
-    subject: string | number
-    ref: string | number
-    desc: string | number
-    who: string | number
-    questions: string | number
-    type: string | number
-    currentPage: number
-    initialisationCompleted: boolean
-  }
-
-  const [debouncedState, setDebouncedState] = useState<DebouncedState>({
-    owner: '',
-    subject: '',
+  const prevFilters = useRef({
+    owner: '' as string | number,
+    subject: '' as string | number,
     ref: '',
     desc: '',
-    who: '',
+    who: '' as string | number,
     questions: 0,
-    type: '',
-    currentPage: 1,
-    initialisationCompleted: false
+    type: '' as string | number
   })
   //
   //  Debounce message
@@ -180,26 +166,27 @@ export default function Table_Reference({
     //
     //  Reset subject if Owner changes
     //
-    if (owner !== debouncedState.owner && subject) setsubject('')
+    if (owner !== prevFilters.current.owner && subject) setsubject('')
     //
     //  Debounce Message
     //
     setMessage('Debouncing...')
     //
+    const prev = prevFilters.current
     // Input change
     //
     const inputChange =
-      ref !== debouncedState.ref ||
-      desc !== debouncedState.desc ||
-      Number(questions) !== debouncedState.questions
+      ref !== prev.ref ||
+      desc !== prev.desc ||
+      Number(questions) !== prev.questions
     //
     // Dropdown change
     //
     const dropdownChange =
-      owner !== debouncedState.owner ||
-      subject !== debouncedState.subject ||
-      who !== debouncedState.who ||
-      type !== debouncedState.type
+      owner !== prev.owner ||
+      subject !== prev.subject ||
+      who !== prev.who ||
+      type !== prev.type
     //
     // Determine debounce time
     //
@@ -208,17 +195,15 @@ export default function Table_Reference({
     //  Debounce
     //
     const handler = setTimeout(() => {
-      setDebouncedState({
+      prevFilters.current = {
         owner,
         subject,
         ref,
         desc,
         who,
-        questions: Number(questions as string),
-        type,
-        currentPage,
-        initialisationCompleted
-      })
+        questions: Number(questions),
+        type
+      }
       //
       //  Default timeout after first render
       //

@@ -152,33 +152,17 @@ export default function Table_History({
   //......................................................................................
   // Debounce selection
   //......................................................................................
-  type DebouncedState = {
-    owner: string | number
-    subject: string | number
-    hsid: string | number
-    sbid: string | number
-    rfid: string | number
-    title: string | number
-    usid: string | number
-    name: string | number
-    questions: string | number
-    correct: string | number
-    currentPage: number
-    initialisationCompleted: boolean
-  }
-  const [debouncedState, setDebouncedState] = useState<DebouncedState>({
+  const prevFilters = useRef({
+    owner: '' as string | number,
+    subject: '' as string | number,
+    hsid: 0,
+    sbid: 0,
+    rfid: 0,
+    title: '',
     usid: 0,
     name: '',
-    owner: '',
-    subject: '',
     questions: 0,
-    title: '',
-    hsid: '',
-    sbid: '',
-    rfid: '',
-    correct: 0,
-    currentPage: 1,
-    initialisationCompleted: false
+    correct: 0
   })
   //
   //  Debounce message
@@ -203,28 +187,29 @@ export default function Table_History({
     //
     //  Reset subject if Owner changes
     //
-    if (owner !== debouncedState.owner && subject) setsubject('')
+    if (owner !== prevFilters.current.owner && subject) setsubject('')
     //
     //  Debounce Message
     //
     setMessage('Debouncing...')
     //
+    const prev = prevFilters.current
     // Input change
     //
     const inputChange =
-      subject !== debouncedState.subject ||
-      Number(sbid) !== debouncedState.sbid ||
-      Number(rfid) !== debouncedState.rfid ||
-      Number(hsid) !== debouncedState.hsid ||
-      title !== debouncedState.title ||
-      Number(usid) !== debouncedState.usid ||
-      name !== debouncedState.name ||
-      Number(questions) !== debouncedState.questions ||
-      Number(correct) !== debouncedState.correct
+      subject !== prev.subject ||
+      Number(sbid) !== prev.sbid ||
+      Number(rfid) !== prev.rfid ||
+      Number(hsid) !== prev.hsid ||
+      title !== prev.title ||
+      Number(usid) !== prev.usid ||
+      name !== prev.name ||
+      Number(questions) !== prev.questions ||
+      Number(correct) !== prev.correct
     //
     // Dropdown change
     //
-    const dropdownChange = owner !== debouncedState.owner || subject !== debouncedState.subject
+    const dropdownChange = owner !== prev.owner || subject !== prev.subject
     //
     // Determine debounce time
     //
@@ -233,20 +218,18 @@ export default function Table_History({
     //  Debounce
     //
     const handler = setTimeout(() => {
-      setDebouncedState({
-        usid: Number(usid as string),
-        name,
+      prevFilters.current = {
         owner,
         subject,
-        questions: Number(questions as string),
+        hsid: Number(hsid),
+        sbid: Number(sbid),
+        rfid: Number(rfid),
         title,
-        hsid: Number(hsid as string),
-        sbid: Number(sbid as string),
-        rfid: Number(rfid as string),
-        correct: Number(correct as string),
-        currentPage,
-        initialisationCompleted
-      })
+        usid: Number(usid),
+        name,
+        questions: Number(questions),
+        correct: Number(correct)
+      }
       //
       //  Default timeout after first render
       //

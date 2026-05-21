@@ -113,21 +113,11 @@ export default function Table_Subject({
   //......................................................................................
   // Debounce selection
   //......................................................................................
-  type DebouncedState = {
-    owner: string | number
-    subject: string | number
-    cntquestions: string | number
-    cntreference: string | number
-    currentPage: number
-    initialisationCompleted: boolean
-  }
-  const [debouncedState, setDebouncedState] = useState<DebouncedState>({
-    owner: '',
-    subject: '',
+  const prevFilters = useRef({
+    owner: '' as string | number,
+    subject: '' as string | number,
     cntquestions: 0,
-    cntreference: 0,
-    currentPage: 1,
-    initialisationCompleted: false
+    cntreference: 0
   })
   //
   //  Debounce message
@@ -152,21 +142,22 @@ export default function Table_Subject({
     //
     //  Reset subject if Owner changes
     //
-    if (owner !== debouncedState.owner && subject) setsubject('')
+    if (owner !== prevFilters.current.owner && subject) setsubject('')
     //
     //  Debounce Message
     //
     setMessage('Debouncing...')
     //
+    const prev = prevFilters.current
     // Input change
     //
     const inputChange =
-      Number(cntquestions) !== debouncedState.cntquestions ||
-      Number(cntreference) !== debouncedState.cntreference
+      Number(cntquestions) !== prev.cntquestions ||
+      Number(cntreference) !== prev.cntreference
     //
     // Dropdown change
     //
-    const dropdownChange = owner !== debouncedState.owner || subject !== debouncedState.subject
+    const dropdownChange = owner !== prev.owner || subject !== prev.subject
     //
     // Determine debounce time
     //
@@ -175,14 +166,12 @@ export default function Table_Subject({
     //  Debounce
     //
     const handler = setTimeout(() => {
-      setDebouncedState({
+      prevFilters.current = {
         owner,
         subject,
-        cntquestions: Number(cntquestions as string),
-        cntreference: Number(cntreference as string),
-        currentPage,
-        initialisationCompleted
-      })
+        cntquestions: Number(cntquestions),
+        cntreference: Number(cntreference)
+      }
       //
       //  Default timeout after first render
       //

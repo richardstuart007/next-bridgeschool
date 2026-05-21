@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { table_Logging } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
@@ -30,66 +30,37 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
   const [currentPage, setcurrentPage] = useState(1)
   const [tabledata, settabledata] = useState<table_Logging[]>(initialRows ?? [])
   const [totalPages, setTotalPages] = useState<number>(initialTotalPages ?? 0)
-  const [shouldFetchData, setShouldFetchData] = useState(false)
   //......................................................................................
   // Debounce selection
   //......................................................................................
-  const [debouncedState, setDebouncedState] = useState({
-    functionname: '',
-    severity: '',
-    msg: ''
-  })
+  const prevFilters = useRef({ msg: '', functionname: '', severity: '' })
   //
   //  Debounce message
   //
   const [message, setMessage] = useState('')
   //
-  // Debounce the state
-  //
-  useEffect(() => {
-    setMessage('Applying filters...')
-    const handler = setTimeout(() => {
-      setDebouncedState({
-        functionname,
-        severity,
-        msg
-      })
-    }, 2000)
-    //
-    // Cleanup the timeout on change
-    //
-    return () => {
-      clearTimeout(handler)
-    }
-    //
-    //  Values to debounce
-    //
-  }, [functionname, severity, msg])
-  //......................................................................................
-  // Fetch Data event
-  //......................................................................................
-  //
-  // Reset currentPage to 1 when fetching new data
-  //
-  useEffect(() => {
-    if (shouldFetchData) setcurrentPage(1)
-  }, [shouldFetchData])
-  //
   // Adjust currentPage if it exceeds totalPages
   //
   useEffect(() => {
-    if (currentPage > totalPages && totalPages > 0) {
-      setcurrentPage(totalPages)
-    }
+    if (currentPage > totalPages && totalPages > 0) setcurrentPage(totalPages)
   }, [currentPage, totalPages])
   //
-  // Change of current page or should fetch data
+  // Debounce filter changes (2 s); page changes are immediate
   //
   useEffect(() => {
-    fetchdata()
-    setShouldFetchData(false)
-    setMessage('')
-  }, [currentPage, shouldFetchData, debouncedState])
+    const filtersChanged =
+      msg !== prevFilters.current.msg ||
+      functionname !== prevFilters.current.functionname ||
+      severity !== prevFilters.current.severity
+    setMessage(filtersChanged ? 'Applying filters...' : '')
+    const timeout = filtersChanged ? 2000 : 1
+    const handler = setTimeout(() => {
+      prevFilters.current = { msg, functionname, severity }
+      fetchdata()
+      setMessage('')
+    }, timeout)
+    return () => clearTimeout(handler)
+  }, [msg, functionname, severity, currentPage])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
