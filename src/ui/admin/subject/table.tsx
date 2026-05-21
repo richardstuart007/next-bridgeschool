@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import MaintPopup_Subject from '@/src/ui/admin/subject/maintPopup'
+import FormPopup_Subject from '@/src/ui/admin/subject/formPopup'
 import MaintPopup_Reference from '@/src/ui/admin/reference/tablePopup'
 import MaintPopup_Questions from '@/src/ui/admin/questions/tablePopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
@@ -395,7 +395,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       {/* ---------------------------------------------------------------------------------- */}
       {/* Edit Modal */}
       {selectedRow && (
-        <MaintPopup_Subject
+        <FormPopup_Subject
           record={selectedRow}
           isOpen={isModelOpenEdit_subject}
           onClose={handleModalCloseEdit_subject}
@@ -422,7 +422,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
 
       {/* Add Modal */}
       {isModelOpenAdd_subject && (
-        <MaintPopup_Subject
+        <FormPopup_Subject
           record={null}
           isOpen={isModelOpenAdd_subject}
           onClose={handleModalCloseAdd_subject}

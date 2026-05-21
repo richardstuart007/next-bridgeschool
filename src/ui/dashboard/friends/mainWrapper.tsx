@@ -1,6 +1,6 @@
 'use client'
 import { useState, useEffect } from 'react'
-import MaintPopup from './maintPopup'
+import FormPopup from './formPopup'
 import { useUserContext } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 
@@ -88,7 +88,7 @@ export default function MainWrapper({ isOpen, onClose, uid }: Props) {
   }
 
   return (
-    <MaintPopup
+    <FormPopup
       isOpen={isOpen}
       onClose={onClose}
       uf_usid={uf_usid}

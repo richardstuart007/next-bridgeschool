@@ -1,10 +1,10 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import MaintPopup_detail from '@/src/ui/admin/questions/detail/maintPopup'
-import MaintPopup_answers from '@/src/ui/admin/questions/answers/maintPopup'
-import MaintPopup_hands from '@/src/ui/admin/questions/hands/maintPopup'
-import MaintPopup_bidding from '@/src/ui/admin/questions/bidding/maintPopup'
+import FormPopup_detail from '@/src/ui/admin/questions/detail/formPopup'
+import FormPopup_answers from '@/src/ui/admin/questions/answers/formPopup'
+import FormPopup_hands from '@/src/ui/admin/questions/hands/formPopup'
+import FormPopup_bidding from '@/src/ui/admin/questions/bidding/formPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { table_Questions } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -547,7 +547,7 @@ export default function Table({
       {/* ---------------------------------------------------------------------------------- */}
       {/* Edit Modal */}
       {selectedRow && (
-        <MaintPopup_detail
+        <FormPopup_detail
           questionRecord={selectedRow}
           isOpen={isModelOpenEdit_detail}
           onClose={handleModalCloseEdit_detail}
@@ -555,21 +555,21 @@ export default function Table({
       )}
 
       {selectedRow && (
-        <MaintPopup_answers
+        <FormPopup_answers
           record={selectedRow}
           isOpen={isModelOpenEdit_answers}
           onClose={handleModalCloseEdit_answers}
         />
       )}
       {selectedRow && (
-        <MaintPopup_hands
+        <FormPopup_hands
           record={selectedRow}
           isOpen={isModelOpenEdit_hands}
           onClose={handleModalCloseEdit_hands}
         />
       )}
       {selectedRow && (
-        <MaintPopup_bidding
+        <FormPopup_bidding
           record={selectedRow}
           isOpen={isModelOpenEdit_bidding}
           onClose={handleModalCloseEdit_bidding}
@@ -578,7 +578,7 @@ export default function Table({
 
       {/* Add Modal */}
       {isModelOpenAdd_detail && (
-        <MaintPopup_detail
+        <FormPopup_detail
           selected_owner={String(owner)}
           selected_subject={String(subject)}
           isOpen={isModelOpenAdd_detail}

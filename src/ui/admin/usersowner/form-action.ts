@@ -1,0 +1,112 @@
+'use server'
+
+import { z } from 'zod'
+import Validate from '@/src/ui/admin/usersowner/form-validate'
+import { table_write } from 'nextjs-shared/table_write'
+import { write_Logging } from 'nextjs-shared/write_logging'
+// ----------------------------------------------------------------------
+//  Update Setup
+// ----------------------------------------------------------------------
+//
+//  Errors and Messages
+//
+type StateSetup = {
+  errors?: {
+    uid?: string[]
+    owner?: string[]
+  }
+  message?: string | null
+  databaseUpdated?: boolean
+}
+
+export async function Action(
+  _prevState: StateSetup,
+  formData: FormData
+): Promise<StateSetup> {
+  const functionName = 'Action_Usersowner'
+  //
+  //  Form Schema for validation
+  //
+  const FormSchemaSetup = z.object({
+    uid: z.string(),
+    owner: z.string()
+  })
+  const Setup = FormSchemaSetup
+  //
+  //  Validate form data
+  //
+  const validatedFields = Setup.safeParse({
+    uid: formData.get('uid'),
+    owner: formData.get('owner')
+  })
+  //
+  // If form validation fails, return errors early. Otherwise, continue.
+  //
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Invalid or missing fields'
+    }
+  }
+  //
+  // Unpack form data
+  //
+  const { owner } = validatedFields.data
+  //
+  //  Convert hidden fields value to numeric
+  //
+  const uid = Number(formData.get('uid'))
+  //
+  // Validate fields
+  //
+  const table_usersowner = {
+    uo_usid: uid,
+    uo_owner: owner
+  }
+  const errorMessages = await Validate(table_usersowner)
+  if (errorMessages.message) {
+    return {
+      errors: errorMessages.errors,
+      message: errorMessages.message,
+      databaseUpdated: false
+    }
+  }
+  //
+  // Update data into the database
+  //
+  try {
+    //
+    //  Write
+    //
+    const writeParams = {
+      caller: functionName,
+      table: 'tuo_usersowner',
+      columnValuePairs: [
+        { column: 'uo_usid', value: uid },
+        { column: 'uo_owner', value: owner }
+      ]
+    }
+    await table_write(writeParams)
+    return {
+      message: `Database updated successfully.`,
+      errors: undefined,
+      databaseUpdated: true
+    }
+    //
+    //  Errors
+    //
+  } catch (error) {
+    const errorMessage = 'Database Error: Failed to Update Usersowner.'
+    write_Logging({
+      lg_caller: '',
+      lg_functionname: functionName,
+      lg_msg: `${errorMessage} ${(error as Error).message}`,
+      lg_severity: 'E'
+    })
+    return {
+      message: errorMessage,
+      errors: undefined,
+      databaseUpdated: false
+    }
+  }
+}

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import MaintPopup from '@/src/ui/admin/reference/maintPopup'
+import FormPopup from '@/src/ui/admin/reference/formPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { table_Reference, table_ReferenceSubject } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -514,7 +514,7 @@ export default function Table({
 
       {/* Edit Modal */}
       {selectedRow && (
-        <MaintPopup
+        <FormPopup
           referenceRecord={selectedRow}
           isOpen={isModelOpenEdit}
           onClose={handleModalCloseEdit}
@@ -523,7 +523,7 @@ export default function Table({
 
       {/* Add Modal */}
       {isModelOpenAdd && (
-        <MaintPopup
+        <FormPopup
           selected_owner={selected_owner}
           selected_subject={selected_subject}
           isOpen={isModelOpenAdd}

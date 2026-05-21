@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import MaintPopup from '@/src/ui/admin/who/maintPopup'
+import FormPopup from '@/src/ui/admin/who/formPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { table_Who } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -312,12 +312,12 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
 
       {/* Edit Modal */}
       {selectedRow && (
-        <MaintPopup record={selectedRow} isOpen={isModelOpenEdit} onClose={handleModalCloseEdit} />
+        <FormPopup record={selectedRow} isOpen={isModelOpenEdit} onClose={handleModalCloseEdit} />
       )}
 
       {/* Add Modal */}
       {isModelOpenAdd && (
-        <MaintPopup record={null} isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
+        <FormPopup record={null} isOpen={isModelOpenAdd} onClose={handleModalCloseAdd} />
       )}
 
       {/* Confirmation Dialog */}

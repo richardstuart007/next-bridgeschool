@@ -1,4 +1,4 @@
-import Form from '@/src/ui/dashboard/users/maint'
+import Form from '@/src/ui/dashboard/users/form'
 import { Metadata } from 'next'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'

@@ -1,0 +1,91 @@
+'use server'
+
+import { z } from 'zod'
+import { table_write } from 'nextjs-shared/table_write'
+import Validate from '@/src/ui/admin/owner/form-validate'
+import { write_Logging } from 'nextjs-shared/write_logging'
+// ----------------------------------------------------------------------
+//  Update Owner Setup
+// ----------------------------------------------------------------------
+//
+//  Form Schema for validation
+//
+const FormSchemaSetup = z.object({
+  ow_owner: z.string()
+})
+//
+//  Errors and Messages
+//
+export type StateSetup = {
+  errors?: {
+    ow_owner?: string[]
+  }
+  message?: string | null
+  databaseUpdated?: boolean
+}
+
+const Setup = FormSchemaSetup
+
+export async function Action(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
+  const functionName = 'Action_Maint'
+  //
+  //  Validate form data
+  //
+  const validatedFields = Setup.safeParse({
+    ow_owner: formData.get('ow_owner')
+  })
+  //
+  // If form validation fails, return errors early. Otherwise, continue.
+  //
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: 'Invalid or missing fields'
+    }
+  }
+  //
+  // Unpack form data
+  //
+  const { ow_owner } = validatedFields.data
+  const errorMessages = await Validate(ow_owner)
+  if (errorMessages.message) {
+    return {
+      errors: errorMessages.errors,
+      message: errorMessages.message,
+      databaseUpdated: false
+    }
+  }
+  //
+  // Update data into the database
+  //
+  try {
+    const writeParams = {
+      caller: functionName,
+      table: 'tow_owner',
+      columnValuePairs: [{ column: 'ow_owner', value: ow_owner }]
+    }
+    await table_write(writeParams)
+
+    return {
+      message: `Database updated successfully.`,
+      errors: undefined,
+      databaseUpdated: true
+    }
+    //
+    //  Errors
+    //
+  } catch (error) {
+    const errorMessage = 'Database Error: Failed to Update Owner.'
+    write_Logging({
+      lg_caller: '',
+      lg_functionname: functionName,
+      lg_msg: `${errorMessage} ${(error as Error).message}`,
+      lg_severity: 'E'
+    })
+    return {
+      message: errorMessage,
+      errors: undefined,
+      databaseUpdated: false
+    }
+  }
+}
