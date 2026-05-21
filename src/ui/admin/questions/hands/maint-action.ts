@@ -268,24 +268,18 @@ export async function Maint(_prevState: StateSetup, formData: FormData): Promise
       await table_update(updateParams)
       message = `Database updated successfully.`
       databaseUpdated = true
-      const errorMessage = 'Database Error: Failed to Update.'
-      write_Logging({
-        lg_caller: '',
-        lg_functionname: functionName,
-        lg_msg: errorMessage,
-        lg_severity: 'E'
-      })
-      return {
-        message: errorMessage,
-        errors: undefined,
-        databaseUpdated: false
-      }
       //
       //  Errors
       //
     } catch (error) {
       ok = false
       message = 'Database Error: Failed to Update.'
+      write_Logging({
+        lg_caller: '',
+        lg_functionname: functionName,
+        lg_msg: `Database Error: Failed to Update. ${(error as Error).message}`,
+        lg_severity: 'E'
+      })
     }
   }
   // ----------------------------------------------------------------------

@@ -24,7 +24,6 @@ export async function ActionUsersowner(
   formData: FormData
 ): Promise<StateSetup> {
   const functionName = 'Action_Usersowner'
-  console.error('formData', formData)
   //
   //  Form Schema for validation
   //
@@ -101,7 +100,7 @@ export async function ActionUsersowner(
     write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
-      lg_msg: errorMessage,
+      lg_msg: `${errorMessage} ${(error as Error).message}`,
       lg_severity: 'E'
     })
     return {

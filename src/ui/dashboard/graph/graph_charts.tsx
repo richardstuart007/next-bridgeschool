@@ -10,7 +10,11 @@ import {
   Title,
   Tooltip,
   Legend,
-  LegendItem
+  LegendItem,
+  ChartEvent,
+  ActiveElement,
+  TooltipItem,
+  ChartDataset
 } from 'chart.js'
 import { Datasets } from './graph_types'
 
@@ -42,6 +46,15 @@ interface ClickData {
   value: number
   datasetIndex: number
   pointIndex: number
+}
+
+interface ChartDataForHandler {
+  datasets: Array<{
+    data: number[]
+    originalData?: number[]
+    keys?: number[]
+    keyType?: string
+  }>
 }
 
 //-------------------------------------------------------------------------------
@@ -136,7 +149,7 @@ export function MyBarChart({
         max: 100,
         ticks: {
           stepSize: 10,
-          callback: function (value: any) {
+          callback: function (value: string | number) {
             return value + '%'
           }
         }
@@ -152,14 +165,12 @@ export function MyBarChart({
     plugins: {
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function (context: TooltipItem<'bar'>) {
             const label = context.dataset.label || ''
-            // Get the original data value
-            const dataset = context.dataset
+            const dataset = context.dataset as ChartDataset<'bar'> & Datasets & { originalData?: number[] }
             const index = context.dataIndex
 
-            // Try to get original data if it exists, otherwise use the displayed value
-            let value = context.raw
+            let value = context.raw as number
             if (dataset.originalData && dataset.originalData[index] !== undefined) {
               value = dataset.originalData[index]
             }
@@ -185,7 +196,7 @@ export function MyBarChart({
         }
       }
     },
-    onClick: (event: any, elements: any[]) =>
+    onClick: (event: ChartEvent, elements: ActiveElement[]) =>
       chartClickHandler(event, elements, onPointClick, modifiedGraphData)
   }
 
@@ -274,7 +285,7 @@ export function MyLineChart({
         max: 100,
         ticks: {
           stepSize: 10,
-          callback: function (value: any) {
+          callback: function (value: string | number) {
             return value + '%'
           }
         }
@@ -307,10 +318,10 @@ export function MyLineChart({
       },
       tooltip: {
         callbacks: {
-          label: function (context: any) {
+          label: function (context: TooltipItem<'line'>) {
             const label = context.dataset.label || ''
-            const value = context.raw
-            const tooltipData = context.dataset.tooltipData
+            const value = context.raw as number
+            const tooltipData = (context.dataset as ChartDataset<'line'> & Datasets).tooltipData
 
             // Special handling for zero values
             if (value === 0) {
@@ -331,7 +342,7 @@ export function MyLineChart({
         }
       }
     },
-    onClick: (event: any, elements: any[]) =>
+    onClick: (event: ChartEvent, elements: ActiveElement[]) =>
       chartClickHandler(event, elements, onPointClick, modifiedGraphData)
   }
 
@@ -349,10 +360,10 @@ export function MyLineChart({
 //  Shared Chart Click Handler
 //--------------------------------------------------------------------------------
 function chartClickHandler(
-  _event: any,
-  elements: any[],
+  _event: ChartEvent,
+  elements: ActiveElement[],
   onPointClick?: (clickData: ClickData) => void,
-  chartData?: any
+  chartData?: ChartDataForHandler
 ) {
   if (!onPointClick || !elements || elements.length === 0) return
 

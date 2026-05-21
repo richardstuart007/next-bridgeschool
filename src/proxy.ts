@@ -1,3 +1,4 @@
+import { NextRequest } from 'next/server'
 import {
   Routes_App,
   Routes_LoginRegister,
@@ -10,7 +11,7 @@ import {
 } from '@/src/root/constants/constants_validroutes'
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
 
-export default async function proxy(req: any): Promise<any> {
+export default async function proxy(req: NextRequest): Promise<Response | null> {
   const functionName = 'proxy'
   const { nextUrl } = req
   //
@@ -75,7 +76,7 @@ export default async function proxy(req: any): Promise<any> {
     //  Redirect to LOGIN
     //
     if (!isLoggedInCookie) {
-      console.error(`${functionName}: Not logged in: Redirect ${Routes_Login}`)
+      console.warn(`${functionName}: Not logged in: Redirect ${Routes_Login}`)
       return Response.redirect(new URL(Routes_Login, nextUrl))
     }
     //

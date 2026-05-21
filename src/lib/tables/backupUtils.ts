@@ -292,7 +292,12 @@ async function processCsv(
       .on('end', () => {
         const formattedData = JSON.stringify(results, null, 4)
         fs.writeFileSync(Path_file_out, formattedData, 'utf-8')
-        console.error(`CSV data has been converted and saved to ${Path_file_out}`)
+        write_Logging({
+          lg_caller: caller,
+          lg_functionname: functionName,
+          lg_msg: `CSV data has been converted and saved to ${Path_file_out}`,
+          lg_severity: 'I'
+        })
       })
       .on('error', (error: Error) => {
         console.error('An error occurred:', error.message)

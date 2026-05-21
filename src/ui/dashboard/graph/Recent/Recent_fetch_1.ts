@@ -84,7 +84,7 @@ export async function Recent_fetch_1({
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    console.error(`${functionName}: ${errorMessage}`)
+    console.error(`${functionName}: ${errorMessage}`, error)
     return []
   }
 }

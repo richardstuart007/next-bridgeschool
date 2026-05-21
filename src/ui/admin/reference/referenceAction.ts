@@ -158,7 +158,7 @@ export async function referenceAction(
     write_Logging({
       lg_caller: '',
       lg_functionname: functionName,
-      lg_msg: errorMessage,
+      lg_msg: `${errorMessage} ${(error as Error).message}`,
       lg_severity: 'E'
     })
     return {

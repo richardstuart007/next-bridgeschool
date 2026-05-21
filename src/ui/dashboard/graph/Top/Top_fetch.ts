@@ -109,7 +109,7 @@ export async function Top_fetch({ caller, TopResults_limitMonths }: Top_fetchPro
     return rows
   } catch (error) {
     const errorMessage = (error as Error).message
-    console.error(`${functionName}: ${errorMessage}`)
+    console.error(`${functionName}: ${errorMessage}`, error)
     return []
   }
 }
