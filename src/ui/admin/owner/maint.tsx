@@ -3,7 +3,7 @@ import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
-import { OwnerMaint } from '@/src/ui/admin/owner/maint-action'
+import { Maint } from '@/src/ui/admin/owner/maint-action'
 import { MyInput } from 'nextjs-shared/MyInput'
 
 interface FormProps {
@@ -13,7 +13,7 @@ interface FormProps {
 
 export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProps) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
-  const [formState, formAction] = useActionState(OwnerMaint, initialState)
+  const [formState, formAction] = useActionState(Maint, initialState)
   //
   //  State and Initial values
   //

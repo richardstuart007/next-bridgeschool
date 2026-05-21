@@ -36,7 +36,7 @@ export type StateSetup = {
 
 const Setup = FormSchemaSetup
 
-export async function Maint_detail_action(
+export async function Maint(
   _prevState: StateSetup,
   formData: FormData
 ): Promise<StateSetup> {

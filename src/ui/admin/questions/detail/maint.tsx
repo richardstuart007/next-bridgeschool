@@ -3,7 +3,7 @@ import { useState, useActionState, useEffect, useCallback } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
-import { Maint_detail_action } from '@/src/ui/admin/questions/detail/maint-action'
+import { Maint } from '@/src/ui/admin/questions/detail/maint-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import MyDropdown from 'nextjs-shared/MyDropdown'
 import { MyInput } from 'nextjs-shared/MyInput'
@@ -27,7 +27,7 @@ export default function Form({
 }: FormProps) {
   const functionName = 'Form_Questions'
   const initialState = { message: null, errors: {}, databaseUpdated: false }
-  const [formState, formAction] = useActionState(Maint_detail_action, initialState)
+  const [formState, formAction] = useActionState(Maint, initialState)
   //
   //  State and Initial values
   //

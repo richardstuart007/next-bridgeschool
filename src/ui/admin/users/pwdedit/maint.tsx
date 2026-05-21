@@ -3,13 +3,13 @@ import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
-import { PwdEdit } from '@/src/ui/admin/users/pwdedit/maint-action'
+import { Maint } from '@/src/ui/admin/users/pwdedit/maint-action'
 import type { table_Users } from '@/src/lib/tables/definitions'
 import { MyInput } from 'nextjs-shared/MyInput'
 
 export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   const initialState = { message: null, errors: {}, databaseUpdated: false }
-  const [formState, formAction] = useActionState(PwdEdit, initialState)
+  const [formState, formAction] = useActionState(Maint, initialState)
   const [uppwd, setUppwd] = useState('')
   const up_usid = UserRecord.us_usid
   const up_email = UserRecord.us_email

@@ -26,8 +26,8 @@ export type StateSetup = {
 
 const Setup = FormSchemaSetup
 
-export async function OwnerMaint(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
-  const functionName = 'Action_OwnerMaint'
+export async function Maint(_prevState: StateSetup, formData: FormData): Promise<StateSetup> {
+  const functionName = 'Action_Maint'
   //
   //  Validate form data
   //
