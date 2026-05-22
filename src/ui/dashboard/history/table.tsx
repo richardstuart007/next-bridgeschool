@@ -12,7 +12,8 @@ import { MyInput } from 'nextjs-shared/MyInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
-import { getWidthNumber, ROWS_PER_PAGE } from '@/src/lib/tableUtils'
+import { getWidthNumber } from 'nextjs-shared/widthUtils'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface TableProps {
   initialUsid?: number
@@ -332,8 +333,7 @@ export default function Table_History({
       //
       // Calculate the offset for pagination
       //
-      const rowsPerPage = ROWS_PER_PAGE
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       //
       //  Get data
       //
@@ -343,7 +343,7 @@ export default function Table_History({
         joins,
         filters,
         orderBy: 'hs_hsid DESC',
-        limit: rowsPerPage,
+        limit: ROWS_PER_PAGE,
         offset
       })
       settabledata(data)
@@ -355,7 +355,7 @@ export default function Table_History({
         table,
         joins,
         filters,
-        items_per_page: rowsPerPage
+        items_per_page: ROWS_PER_PAGE
       })
       setTotalPages(fetchedTotalPages)
       //

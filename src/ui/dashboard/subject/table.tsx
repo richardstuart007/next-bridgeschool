@@ -10,7 +10,8 @@ import MyDropdown from 'nextjs-shared/MyDropdown'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { MyLink } from 'nextjs-shared/MyLink'
-import { getWidthNumber, ROWS_PER_PAGE } from '@/src/lib/tableUtils'
+import { getWidthNumber } from 'nextjs-shared/widthUtils'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface TableProps {
   initialUsid: number
@@ -227,8 +228,7 @@ export default function Table_Subject({
       //
       // Calculate the offset for pagination
       //
-      const rowsPerPage = ROWS_PER_PAGE
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       //
       //  Get data
       //
@@ -238,7 +238,7 @@ export default function Table_Subject({
         joins,
         filters,
         orderBy: 'sb_owner, sb_subject',
-        limit: rowsPerPage,
+        limit: ROWS_PER_PAGE,
         offset,
         distinctColumns
       })
@@ -251,7 +251,7 @@ export default function Table_Subject({
         table,
         joins,
         filters,
-        items_per_page: rowsPerPage,
+        items_per_page: ROWS_PER_PAGE,
         distinctColumns
       })
       setTotalPages(fetchedTotalPages)

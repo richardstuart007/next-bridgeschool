@@ -12,7 +12,8 @@ import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { MyLink } from 'nextjs-shared/MyLink'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
-import { getWidthNumber, ROWS_PER_PAGE } from '@/src/lib/tableUtils'
+import { getWidthNumber } from 'nextjs-shared/widthUtils'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface FormProps {
   uq_sbid?: string | undefined
@@ -344,8 +345,7 @@ export default function Table_Reference({
       //
       // Calculate the offset for pagination
       //
-      const rowsPerPage = ROWS_PER_PAGE
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       //
       //  Get data
       //
@@ -355,7 +355,7 @@ export default function Table_Reference({
         joins,
         filters,
         orderBy: 'rf_owner, rf_subject, rf_ref',
-        limit: rowsPerPage,
+        limit: ROWS_PER_PAGE,
         offset,
         distinctColumns
       })
@@ -368,7 +368,7 @@ export default function Table_Reference({
         table,
         joins,
         filters,
-        items_per_page: rowsPerPage,
+        items_per_page: ROWS_PER_PAGE,
         distinctColumns
       })
       setTotalPages(fetchedTotalPages)
