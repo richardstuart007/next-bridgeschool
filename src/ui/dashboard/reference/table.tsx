@@ -12,6 +12,7 @@ import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { MyLink } from 'nextjs-shared/MyLink'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
+import { getWidthNumber, ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface FormProps {
   uq_sbid?: string | undefined
@@ -55,8 +56,6 @@ export default function Table_Reference({
   //
   //  Show columns
   //
-  const ref_rowsPerPage = useRef(0)
-
   const [widthDesc, setwidthDesc] = useState(0)
   const [show_owner, setshow_owner] = useState(false)
   const [show_subject, setshow_subject] = useState(false)
@@ -120,7 +119,6 @@ export default function Table_Reference({
       //  Update Columns and rows
       //
       updateColumns()
-      updateRows()
       //
       //  Allow fetch of data
       //
@@ -227,53 +225,24 @@ export default function Table_Reference({
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
   function updateColumns() {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const innerWidth = window.innerWidth
-    let widthNumber = 1
-    if (innerWidth >= 1536) widthNumber = 5
-    else if (innerWidth >= 1280) widthNumber = 4
-    else if (innerWidth >= 1024) widthNumber = 3
-    else if (innerWidth >= 768) widthNumber = 2
-    else widthNumber = 1
-    //
-    //  smaller screens
-    //
+    const w = getWidthNumber()
+    setshow_quiz(false)
+    setshow_owner(false)
+    setshow_subject(false)
+    setshow_questions(false)
+    setshow_type(false)
+    setshow_who(false)
+    setshow_ref(false)
     setshow_quiz(true)
-    if (widthNumber >= 2) {
+    if (w >= 2) {
       if (!uq_sbid) setshow_owner(true)
       if (!uq_sbid) setshow_subject(true)
       setshow_questions(true)
       setshow_type(true)
     }
-    if (widthNumber >= 3) {
-      setshow_who(true)
-    }
-    if (widthNumber >= 4) {
-      setshow_ref(true)
-    }
-    // Description width
-    setwidthDesc(widthNumber >= 4 ? 100 : widthNumber >= 3 ? 75 : widthNumber >= 2 ? 40 : 30)
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Height affects ROWS
-  //----------------------------------------------------------------------------------------------
-  function updateRows() {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const height = window.screen.height
-    const innerheight = window.innerHeight
-    let screenRows = 5
-    if (height >= 1024) screenRows = 20
-    else if (innerheight >= 768) screenRows = 15
-    else if (innerheight >= 600) screenRows = 12
-    else screenRows = 9
-    //
-    //  Set the screenRows per page
-    //
-    ref_rowsPerPage.current = screenRows
+    if (w >= 3) setshow_who(true)
+    if (w >= 4) setshow_ref(true)
+    setwidthDesc(w >= 4 ? 100 : w >= 3 ? 75 : w >= 2 ? 40 : 30)
   }
   //----------------------------------------------------------------------------------------------
   // Selected subject
@@ -375,7 +344,7 @@ export default function Table_Reference({
       //
       // Calculate the offset for pagination
       //
-      const rowsPerPage = ref_rowsPerPage.current
+      const rowsPerPage = ROWS_PER_PAGE
       const offset = (currentPage - 1) * rowsPerPage
       //
       //  Get data
@@ -808,15 +777,17 @@ export default function Table_Reference({
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md max-w-full'>
         {render_selection()}
-        <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left'>
-            {render_tr1()}
-            {render_tr2()}
-          </thead>
-          {render_body()}
-        </table>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
+          <table className='min-w-full text-gray-900 table-auto'>
+            <thead className='sticky top-0 z-10 bg-gray-50 text-left'>
+              {render_tr1()}
+              {render_tr2()}
+            </thead>
+            {render_body()}
+          </table>
+        </div>
       </div>
       {render_pagination()}
       <p className='text-red-600 text-xxs md:text-xs'>{message}</p>

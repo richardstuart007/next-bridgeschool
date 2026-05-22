@@ -12,6 +12,7 @@ import { table_check } from 'nextjs-shared/table_check'
 import { table_delete } from 'nextjs-shared/table_delete'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface TableProps {
   initialRows?: table_Owner[]
@@ -19,7 +20,6 @@ interface TableProps {
 }
 export default function Table({ initialRows, initialTotalPages }: TableProps = {}) {
   const functionName = 'Table_Owner'
-  const rowsPerPage = 17
   //
   //  Selection
   //
@@ -84,7 +84,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       //
       // Calculate the offset for pagination
       //
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       //
       //  Get data
       //
@@ -93,7 +93,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         table,
         filters,
         orderBy: 'ow_owner',
-        limit: rowsPerPage,
+        limit: ROWS_PER_PAGE,
         offset,
         skipCache: true
       })
@@ -105,7 +105,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         caller: functionName,
         table,
         filters,
-        items_per_page: rowsPerPage,
+        items_per_page: ROWS_PER_PAGE,
         skipCache: true
       })
       setTotalPages(fetchedTotalPages)
@@ -196,9 +196,10 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md max-w-full'>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='sticky top-0 z-10 bg-gray-50 text-left font-normal text-xs'>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
@@ -258,6 +259,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
       {/* MyPagination                */}

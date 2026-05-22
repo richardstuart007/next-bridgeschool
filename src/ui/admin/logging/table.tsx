@@ -7,6 +7,8 @@ import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import { Filter } from 'nextjs-shared/tableFetchUtils'
 import MyPagination from 'nextjs-shared/MyPagination'
 import { MyInput } from 'nextjs-shared/MyInput'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
+import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 
 interface TableProps {
   initialRows?: table_Logging[]
@@ -23,7 +25,6 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
   //
   //  Show flags
   //
-  const rowsPerPage = 25
   //
   //  Other state
   //
@@ -86,7 +87,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       //
       // Calculate the offset for pagination
       //
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       //
       //  Get data
       //
@@ -95,7 +96,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         table,
         filters,
         orderBy: 'lg_lgid DESC',
-        limit: rowsPerPage,
+        limit: ROWS_PER_PAGE,
         offset,
         skipCache: true
       })
@@ -107,7 +108,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         caller: functionName,
         table,
         filters,
-        items_per_page: rowsPerPage,
+        items_per_page: ROWS_PER_PAGE,
         skipCache: true
       })
       setTotalPages(fetchedTotalPages)
@@ -126,15 +127,19 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md max-w-full'>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal text-xs'>
+          <thead className='sticky top-0 z-10 bg-gray-50 text-left font-normal text-xxs'>
             {/* ---------------------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
             <tr className=''>
               <th scope='col' className=' font-medium px-2'>
                 ID
+              </th>
+              <th scope='col' className=' font-medium px-2 whitespace-nowrap'>
+                Date
               </th>
               <th scope='col' className=' font-medium px-2'>
                 Function Name
@@ -149,7 +154,8 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
             {/* ---------------------------------------------------------------------------------- */}
             {/* DROPDOWN & SEARCHES             */}
             {/* ---------------------------------------------------------------------------------- */}
-            <tr className='text-xs align-bottom'>
+            <tr className='text-xxs align-bottom'>
+              <th scope='col' className='px-2'></th>
               <th scope='col' className='px-2'></th>
               {/* ................................................... */}
               {/* functionname                                                 */}
@@ -158,7 +164,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='functionname'
                   name='functionname'
-                  overrideClass={`w-28  rounded-md border border-blue-500   font-normal text-xs`}
+                  overrideClass={`w-28  rounded-md border border-blue-500   font-normal text-xxs`}
                   type='text'
                   value={functionname}
                   onChange={e => {
@@ -176,7 +182,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   <MyInput
                     id='severity'
                     name='severity'
-                    overrideClass={`w-16  rounded-md border border-blue-500   font-normal text-xs text-center `}
+                    overrideClass={`w-16  rounded-md border border-blue-500   font-normal text-xxs text-center `}
                     type='text'
                     value={severity}
                     onChange={e => {
@@ -193,7 +199,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='msg'
                   name='msg'
-                  overrideClass={`w-[950px]  rounded-md border border-blue-500   font-normal text-xs`}
+                  overrideClass={`w-[950px]  rounded-md border border-blue-500   font-normal text-xxs`}
                   type='text'
                   value={msg}
                   onChange={e => {
@@ -207,11 +213,14 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
+          <tbody className='bg-white text-xxs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
                 <tr key={tabledata.lg_lgid} className='w-full border-b'>
                   <td className='px-2 text-xxs '>{tabledata.lg_lgid}</td>
+                  <td className='px-2 text-xxs whitespace-nowrap'>
+                    {convertUTCtoLocal({ datetimeUTC: tabledata.lg_datetime, to_dateFormat: 'yyyy-MM-dd HH:mm' })}
+                  </td>
                   <td className='px-2 text-xxs '>{tabledata.lg_functionname}</td>
                   <td className='px-2 text-center text-xxs  '>{tabledata.lg_severity}</td>
                   <td className='px-2 text-xxs '>{tabledata.lg_msg}</td>
@@ -220,11 +229,12 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
               ))
             ) : (
               <tr>
-                <td colSpan={8}>No data available</td>
+                <td colSpan={5}>No data available</td>
               </tr>
             )}
           </tbody>
         </table>
+        </div>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
       {/* Message               */}

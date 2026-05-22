@@ -20,12 +20,12 @@ import {
   directory_list,
   table_write_fromJSON
 } from '@/src/lib/tables/backupUtils'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 export default function Table() {
   //
   //  Constants
   //
-  const rowsPerPage = 17
   const schemaname = 'public'
   const backupStartChar = 'z_'
   const dirPathPrefix = 'C:/backups/'
@@ -115,7 +115,7 @@ export default function Table() {
       const updatedFilters = filtersToUpdate.filter(filter => filter.value)
 
       // Fetch filtered data
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       const [filtered, totalPages] =
         mode === 'base'
           ? await Promise.all([
@@ -124,7 +124,7 @@ export default function Table() {
                 table: 'pg_tables',
                 filters: updatedFilters,
                 orderBy: 'tablename',
-                limit: rowsPerPage,
+                limit: ROWS_PER_PAGE,
                 offset,
                 skipCache: true
               }),
@@ -132,7 +132,7 @@ export default function Table() {
                 caller: functionName,
                 table: 'pg_tables',
                 filters: updatedFilters,
-                items_per_page: rowsPerPage,
+                items_per_page: ROWS_PER_PAGE,
                 skipCache: true
               })
             ])
@@ -142,7 +142,7 @@ export default function Table() {
                 table: 'pg_tables',
                 filters: updatedFilters,
                 orderBy: 'tablename',
-                limit: rowsPerPage,
+                limit: ROWS_PER_PAGE,
                 offset,
                 skipCache: true
               }),
@@ -1440,15 +1440,17 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      <div className='mt-4 py-2 px-2 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 py-2 px-2 bg-gray-50 rounded-lg shadow-md max-w-full'>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
         <table className='min-w-full text-gray-900 table-auto '>
-          <thead className='rounded-lg text-left font-normal text-xs '>
+          <thead className='sticky top-0 z-10 bg-gray-50 text-left font-normal text-xs '>
             {render_tr1()}
             {render_tr2()}
             {render_tr3()}
           </thead>
           {render_body()}
         </table>
+        </div>
       </div>
       {render_pagination()}
 

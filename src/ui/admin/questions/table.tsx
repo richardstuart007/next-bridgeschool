@@ -18,6 +18,7 @@ import { MyButton } from 'nextjs-shared/MyButton'
 import MyDropdown from 'nextjs-shared/MyDropdown'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { Comparison_operator, Comparison_values } from 'nextjs-shared/table_comparison_values'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface FormProps {
   selected_sbid?: number | undefined
@@ -34,7 +35,6 @@ export default function Table({
   initialTotalPages
 }: FormProps) {
   const functionName = 'Table_Questions'
-  const rowsPerPage = 17
   //
   //  Selection
   //
@@ -123,7 +123,7 @@ export default function Table({
       //
       // Calculate the offset for pagination
       //
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       //
       //  Get data
       //
@@ -132,7 +132,7 @@ export default function Table({
         table,
         filters,
         orderBy: 'qq_owner, qq_subject, qq_seq',
-        limit: rowsPerPage,
+        limit: ROWS_PER_PAGE,
         offset,
         skipCache: true
       })
@@ -144,7 +144,7 @@ export default function Table({
         caller: functionName,
         table,
         filters,
-        items_per_page: rowsPerPage,
+        items_per_page: ROWS_PER_PAGE,
         skipCache: true
       })
       setTotalPages(fetchedTotalPages)
@@ -280,9 +280,10 @@ export default function Table({
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md max-w-full'>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal '>
+          <thead className='sticky top-0 z-10 bg-gray-50 text-left font-normal '>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
@@ -531,6 +532,7 @@ export default function Table({
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
       {/* MyPagination                */}

@@ -10,6 +10,7 @@ import MyDropdown from 'nextjs-shared/MyDropdown'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { MyLink } from 'nextjs-shared/MyLink'
+import { getWidthNumber, ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface TableProps {
   initialUsid: number
@@ -47,8 +48,6 @@ export default function Table_Subject({
   //
   //  Table show
   //
-  const ref_rowsPerPage = useRef(0)
-
   const [show_owner, setshow_owner] = useState(false)
   const [show_subject, setshow_subject] = useState(false)
   const [show_cntquestions, setshow_cntquestions] = useState(false)
@@ -98,7 +97,6 @@ export default function Table_Subject({
         //  Table Info
         //
         updateColumns(cx_detail)
-        updateRows()
         //
         //  Allow fetch of data
         //
@@ -229,7 +227,7 @@ export default function Table_Subject({
       //
       // Calculate the offset for pagination
       //
-      const rowsPerPage = ref_rowsPerPage.current
+      const rowsPerPage = ROWS_PER_PAGE
       const offset = (currentPage - 1) * rowsPerPage
       //
       //  Get data
@@ -272,44 +270,17 @@ export default function Table_Subject({
   //  Update the columns based on screen width
   //----------------------------------------------------------------------------------------------
   function updateColumns(cx_detail: boolean) {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const innerWidth = window.innerWidth
-    let widthNumber = 1
-    if (innerWidth >= 1536) widthNumber = 5
-    else if (innerWidth >= 1280) widthNumber = 4
-    else if (innerWidth >= 1024) widthNumber = 3
-    else if (innerWidth >= 768) widthNumber = 2
-    else widthNumber = 1
-    //
-    //  smaller screens
-    //
+    const w = getWidthNumber()
+    setshow_subject(false)
+    setshow_owner(false)
+    setshow_cntquestions(false)
+    setshow_cntreference(false)
     setshow_subject(true)
-    if (widthNumber >= 2) {
+    if (w >= 2) {
       if (!ref_selected_uoowner.current) setshow_owner(true)
-      cx_detail ? setshow_cntquestions(true) : setshow_cntquestions(false)
-      cx_detail ? setshow_cntreference(true) : setshow_cntreference(false)
+      setshow_cntquestions(cx_detail)
+      setshow_cntreference(cx_detail)
     }
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Height affects ROWS
-  //----------------------------------------------------------------------------------------------
-  function updateRows() {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const height = window.screen.height
-    const innerheight = window.innerHeight
-    let screenRows = 5
-    if (height >= 1024) screenRows = 20
-    else if (innerheight >= 768) screenRows = 15
-    else if (innerheight >= 600) screenRows = 12
-    else screenRows = 9
-    //
-    //  Set the screenRows per page
-    //
-    ref_rowsPerPage.current = screenRows
   }
   //----------------------------------------------------------------------------------------------
   // Render selection
@@ -589,15 +560,17 @@ export default function Table_Subject({
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md max-w-full'>
         {render_selection()}
-        <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left'>
-            {render_tr1()}
-            {render_tr2()}
-          </thead>
-          {render_body()}
-        </table>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
+          <table className='min-w-full text-gray-900 table-auto'>
+            <thead className='sticky top-0 z-10 bg-gray-50 text-left'>
+              {render_tr1()}
+              {render_tr2()}
+            </thead>
+            {render_body()}
+          </table>
+        </div>
       </div>
       {render_pagination()}
       <p className='text-red-600 text-xxs md:text-xs'>{message}</p>

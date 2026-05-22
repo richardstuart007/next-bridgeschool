@@ -13,6 +13,7 @@ import { update_sb_cntreference } from '@/src/lib/tables/tableSpecific/update_sb
 import MyDropdown from 'nextjs-shared/MyDropdown'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface FormProps {
   selected_sbid?: number | undefined
@@ -29,7 +30,6 @@ export default function Table({
   initialTotalPages
 }: FormProps) {
   const functionName = 'Table_Reference'
-  const rowsPerPage = 17
   //
   //  Selection
   //
@@ -131,7 +131,7 @@ export default function Table({
       //
       // Calculate the offset for pagination
       //
-      const offset = (currentPage - 1) * rowsPerPage
+      const offset = (currentPage - 1) * ROWS_PER_PAGE
       //
       //  Get data
       //
@@ -141,7 +141,7 @@ export default function Table({
         joins,
         filters,
         orderBy: 'rf_owner, rf_subject, rf_ref',
-        limit: rowsPerPage,
+        limit: ROWS_PER_PAGE,
         offset,
         distinctColumns
       })
@@ -154,7 +154,7 @@ export default function Table({
         table,
         joins,
         filters,
-        items_per_page: rowsPerPage,
+        items_per_page: ROWS_PER_PAGE,
         distinctColumns
       })
       setTotalPages(fetchedTotalPages)
@@ -249,9 +249,10 @@ export default function Table({
       {/** -------------------------------------------------------------------- */}
       {/** TABLE                                                                */}
       {/** -------------------------------------------------------------------- */}
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md max-w-full'>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
         <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left font-normal '>
+          <thead className='sticky top-0 z-10 bg-gray-50 text-left font-normal '>
             {/* --------------------------------------------------------------------- */}
             {/** HEADINGS                                                                */}
             {/** -------------------------------------------------------------------- */}
@@ -497,6 +498,7 @@ export default function Table({
             ))}
           </tbody>
         </table>
+        </div>
       </div>
       {/* ---------------------------------------------------------------------------------- */}
       {/* MyPagination                */}

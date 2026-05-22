@@ -12,6 +12,7 @@ import { MyInput } from 'nextjs-shared/MyInput'
 import { convertUTCtoLocal } from '@/src/lib/convertUTCtoLocal'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { table_UsershistorySubjectUser } from '@/src/lib/tables/definitions'
+import { getWidthNumber, ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface TableProps {
   initialUsid?: number
@@ -58,8 +59,6 @@ export default function Table_History({
   //
   //  Table show
   //
-  const ref_rowsPerPage = useRef(0)
-
   const [show_sbid, setshow_sbid] = useState(false)
   const [show_rfid, setshow_rfid] = useState(false)
   const [show_owner, setshow_owner] = useState(false)
@@ -137,7 +136,6 @@ export default function Table_History({
         //  Update Columns and rows
         //
         updateColumns(cx_detail)
-        updateRows()
         //
         //  Allow fetch of data
         //
@@ -334,7 +332,7 @@ export default function Table_History({
       //
       // Calculate the offset for pagination
       //
-      const rowsPerPage = ref_rowsPerPage.current
+      const rowsPerPage = ROWS_PER_PAGE
       const offset = (currentPage - 1) * rowsPerPage
       //
       //  Get data
@@ -375,60 +373,39 @@ export default function Table_History({
   //  Width - update columns
   //----------------------------------------------------------------------------------------------
   function updateColumns(cx_detail: boolean) {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const innerWidth = window.innerWidth
-    let widthNumber = 1
-    if (innerWidth >= 1536) widthNumber = 5
-    else if (innerWidth >= 1280) widthNumber = 4
-    else if (innerWidth >= 1024) widthNumber = 3
-    else if (innerWidth >= 768) widthNumber = 2
-    else widthNumber = 1
-    //
-    //  Small to large screens
-    //
-    if (widthNumber >= 1) {
+    const w = getWidthNumber()
+    setshow_title(false)
+    setshow_datetime(false)
+    setshow_correct(false)
+    setshow_name(false)
+    setshow_owner(false)
+    setshow_subject(false)
+    setshow_questions(false)
+    setshow_hsid(false)
+    setshow_sbid(false)
+    setshow_rfid(false)
+    setshow_usid(false)
+    setref_to_dateFormat('MMM-dd')
+    if (w >= 1) {
       setshow_title(true)
       setshow_datetime(true)
     }
-    if (widthNumber >= 2) {
+    if (w >= 2) {
       setshow_correct(true)
       setref_to_dateFormat('yy-MMM-dd HH:mm')
     }
-    if (widthNumber >= 3) {
-      cx_detail ? setshow_name(true) : setshow_name(false)
-    }
-    if (widthNumber >= 4) {
+    if (w >= 3 && cx_detail) setshow_name(true)
+    if (w >= 4) {
       if (!ref_selected_uoowner.current) setshow_owner(true)
-      cx_detail ? setshow_subject(true) : setshow_subject(false)
+      if (cx_detail) setshow_subject(true)
     }
-    if (widthNumber >= 5) {
-      cx_detail ? setshow_questions(true) : setshow_questions(false)
-      cx_detail ? setshow_hsid(true) : setshow_hsid(false)
-      cx_detail ? setshow_sbid(true) : setshow_sbid(false)
-      cx_detail ? setshow_rfid(true) : setshow_rfid(false)
-      cx_detail ? setshow_usid(true) : setshow_usid(false)
+    if (w >= 5 && cx_detail) {
+      setshow_questions(true)
+      setshow_hsid(true)
+      setshow_sbid(true)
+      setshow_rfid(true)
+      setshow_usid(true)
     }
-  }
-  //----------------------------------------------------------------------------------------------
-  //  Height - update rows & fetch data
-  //----------------------------------------------------------------------------------------------
-  function updateRows() {
-    //
-    //  2xl, xl, lg, md, sm
-    //
-    const height = window.screen.height
-    const innerheight = window.innerHeight
-    let screenRows = 5
-    if (height >= 1024) screenRows = 20
-    else if (innerheight >= 768) screenRows = 15
-    else if (innerheight >= 600) screenRows = 12
-    else screenRows = 9
-    //
-    //  Set the screenRows per page
-    //
-    ref_rowsPerPage.current = screenRows
   }
   //----------------------------------------------------------------------------------------------
   // Render selection
@@ -897,15 +874,17 @@ export default function Table_History({
   //----------------------------------------------------------------------------------------------
   return (
     <>
-      <div className='mt-4 bg-gray-50 rounded-lg shadow-md overflow-x-hidden max-w-full'>
+      <div className='mt-4 bg-gray-50 rounded-lg shadow-md max-w-full'>
         {render_selection()}
-        <table className='min-w-full text-gray-900 table-auto'>
-          <thead className='rounded-lg text-left'>
-            {render_tr1()}
-            {render_tr2()}
-          </thead>
-          {render_body()}
-        </table>
+        <div className='overflow-x-auto overflow-y-auto max-h-[70vh]'>
+          <table className='min-w-full text-gray-900 table-auto'>
+            <thead className='sticky top-0 z-10 bg-gray-50 text-left'>
+              {render_tr1()}
+              {render_tr2()}
+            </thead>
+            {render_body()}
+          </table>
+        </div>
       </div>
       {render_pagination()}
       <p className='text-red-600 text-xxs md:text-xs'>{message}</p>
