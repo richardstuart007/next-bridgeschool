@@ -98,6 +98,10 @@ export async function action(_prevState: StateSetup, formData: FormData) {
       ],
       whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
     })
+    //
+    //  Clear the cache for this user to ensure fresh data is fetched next time
+    //
+    cache_clearTable('tus_users', functionName)
     // -----------------
     // Update usersowner
     // -----------------
@@ -107,7 +111,6 @@ export async function action(_prevState: StateSetup, formData: FormData) {
       columnValuePairs: [{ column: 'uo_owner', value: ow_owner }],
       whereColumnValuePairs: [{ column: 'uo_usid', value: us_usid }]
     })
-    cache_clearTable('tss_sessions', functionName)
     //
     //  OK
     //
