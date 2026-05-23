@@ -12,7 +12,7 @@ export default function Page() {
   return (
     <div className='w-full md:p-6'>
       <Suspense>
-        <CopyTable baseDir='C:/Users/richa/github/next-bridgeschool' />
+        <CopyTable baseDir='C:/Users/richa/github/next-bridgeschool' caller='admin/maint/copytable' />
       </Suspense>
     </div>
   )
