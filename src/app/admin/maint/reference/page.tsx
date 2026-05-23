@@ -2,7 +2,7 @@ import Table from '@/src/ui/admin/reference/table'
 import { Metadata } from 'next'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
-import { JoinParams } from 'nextjs-shared/tableFetchUtils'
+import type { JoinParams } from 'nextjs-shared/structures'
 
 export const dynamic = 'force-dynamic'
 

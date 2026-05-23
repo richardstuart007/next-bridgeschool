@@ -8,7 +8,7 @@ import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog
 import { table_Users } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
-import { Filter } from 'nextjs-shared/tableFetchUtils'
+import type { Filter } from 'nextjs-shared/structures'
 import { table_delete } from 'nextjs-shared/table_delete'
 import { MyButton } from 'nextjs-shared/MyButton'
 import MyPagination from 'nextjs-shared/MyPagination'

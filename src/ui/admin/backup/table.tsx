@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
-import { Filter } from 'nextjs-shared/tableFetchUtils'
+import type { Filter } from 'nextjs-shared/structures'
 import { table_duplicate } from 'nextjs-shared/table_duplicate'
 import { table_copy_data } from 'nextjs-shared/table_copy_data'
 import { table_truncate } from 'nextjs-shared/table_truncate'
@@ -13,7 +13,6 @@ import { table_drop } from 'nextjs-shared/table_drop'
 import MyPagination from 'nextjs-shared/MyPagination'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
-import { basetables } from '@/src/ui/admin/backup/basetables'
 import { table_seqReset } from 'nextjs-shared/table_seq_reset'
 import {
   table_write_toJSON,
@@ -22,7 +21,7 @@ import {
 } from '@/src/lib/tables/backupUtils'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
-export default function Table() {
+export default function Table({ tables }: { tables: string[] }) {
   //
   //  Constants
   //
@@ -33,7 +32,7 @@ export default function Table() {
   //  Base Data
   //
   const [currentPage, setcurrentPage] = useState(1)
-  const [tabledata, settabledata] = useState<string[]>(basetables)
+  const [tabledata, settabledata] = useState<string[]>(tables)
   const [tabledata_count, settabledata_count] = useState<number[]>([])
   const [totalPages, setTotalPages] = useState<number>(0)
   //
@@ -69,14 +68,16 @@ export default function Table() {
   }, [currentPage, totalPages])
   //...................................................................................
   //
-  //  Update Base
+  //  Update Base — fires on page navigation or tab switch
+  //  Pass activeTables explicitly to avoid stale closure reading the old tab's list
   //
   useEffect(() => {
     fetchTables({
       mode: 'base',
       setTableDataFn: settabledata,
       setTableDataCountFn: settabledata_count,
-      setTotalPagesFn: setTotalPages
+      setTotalPagesFn: setTotalPages,
+      tables: tables
     })
   }, [currentPage])
   //----------------------------------------------------------------------------------------------
@@ -87,23 +88,26 @@ export default function Table() {
     setTableDataFn,
     setTableDataCountFn,
     setTotalPagesFn,
-    setExistsFn
+    setExistsFn,
+    tables
   }: {
     mode: 'base' | 'backup'
     setTableDataFn: (data: string[]) => void
     setTableDataCountFn: (data: number[]) => void
     setTotalPagesFn?: (data: number) => void
     setExistsFn?: (data: boolean[]) => void
+    tables?: string[]
   }) {
     const functionName = `fetch${mode}`
     try {
       setmessage(`Starting.... ${functionName}`)
 
-      // Determine table list based on mode
+      // Use explicitly-passed list (avoids stale closure), fall back to state
+      const baseList = tables ?? tabledata
       const tableList =
         mode === 'base'
-          ? basetables
-          : tabledata.map(baseTable => `${backupStartChar}${prefix_Z}${baseTable}`)
+          ? baseList
+          : baseList.map(baseTable => `${backupStartChar}${prefix_Z}${baseTable}`)
 
       // Construct filters
       const filtersToUpdate: Filter[] = [
@@ -149,29 +153,39 @@ export default function Table() {
               undefined
             ]
 
-      // Extract table names
-      const tableData = filtered.map(row => row?.tablename).filter(Boolean)
+      let tableData: string[]
+      let rowCounts: number[]
 
-      // Fetch row counts
-      const rowCounts = await Promise.all(
-        tableData.map(async row => {
-          if (!row) return 0
-          const count = await table_count({ table: row, caller: functionName })
-          return count || 0
-        })
-      )
+      if (mode === 'base') {
+        // Base mode: use alphabetically-sorted results from pg_tables
+        tableData = filtered.map(row => row?.tablename).filter(Boolean)
+        rowCounts = await Promise.all(
+          tableData.map(async row => {
+            if (!row) return 0
+            const count = await table_count({ table: row, caller: functionName })
+            return count || 0
+          })
+        )
+      } else {
+        // Backup mode: keep arrays aligned with tableList (= base table order with z_ prefix)
+        // so that tabledata_Z[i] and tabledata_count_Z[i] always correspond to tabledata[i]
+        const exists = tableList.map(table => filtered.some(row => row?.tablename === table))
+        tableData = [...tableList]
+        rowCounts = await Promise.all(
+          tableList.map(async (tableName, i) => {
+            if (!exists[i]) return 0
+            const count = await table_count({ table: tableName, caller: functionName })
+            return count || 0
+          })
+        )
+        if (setExistsFn) setExistsFn(exists)
+      }
 
       // Update state
       setTableDataFn(tableData)
       setTableDataCountFn(rowCounts)
       if (mode === 'base' && setTotalPagesFn && totalPages !== undefined) {
         setTotalPagesFn(totalPages)
-      }
-
-      // If fetching backup, determine existence
-      if (mode === 'backup' && setExistsFn) {
-        const exists = tableList.map(table => filtered.some(row => row?.tablename === table))
-        setExistsFn(exists)
       }
 
       setmessage(`Task ${functionName} completed`)

@@ -159,7 +159,19 @@ export default function Page() {
             overrideClass='w-36 justify-center'
             caller={functionName}
           >
-            Backup table
+            Backup-static
+          </MyLink>
+
+          <MyLink
+            key='backuptabletrans'
+            href={{
+              pathname: '/admin/maint/backuptabletrans',
+              reference: 'backuptabletrans'
+            }}
+            overrideClass='w-36 justify-center'
+            caller={functionName}
+          >
+            Backup-trans
           </MyLink>
 
           <MyLink

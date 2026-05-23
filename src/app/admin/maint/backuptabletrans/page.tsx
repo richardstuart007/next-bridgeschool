@@ -1,10 +1,10 @@
 export const dynamic = 'force-dynamic'
 import Table from '@/src/ui/admin/backup/table'
-import { basetables } from '@/src/ui/admin/backup/basetables'
+import { transtables } from '@/src/ui/admin/backup/basetables'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 
-const title = 'Backuptable'
+const title = 'Backuptabletrans'
 export const metadata: Metadata = {
   title: title
 }
@@ -15,7 +15,7 @@ export default function Page() {
   return (
     <div className='w-full md:p-6'>
       <Suspense>
-        <Table tables={basetables} />
+        <Table tables={transtables} />
       </Suspense>
     </div>
   )

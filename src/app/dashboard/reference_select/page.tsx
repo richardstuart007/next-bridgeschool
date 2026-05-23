@@ -4,7 +4,7 @@ import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionI
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
-import { JoinParams, Filter } from 'nextjs-shared/tableFetchUtils'
+import type { JoinParams, Filter } from 'nextjs-shared/structures'
 import { table_Subject } from '@/src/lib/tables/definitions'
 
 export const dynamic = 'force-dynamic'

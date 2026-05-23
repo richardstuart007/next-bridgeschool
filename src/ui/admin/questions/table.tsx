@@ -9,7 +9,7 @@ import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog
 import { table_Questions } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
-import { Filter } from 'nextjs-shared/tableFetchUtils'
+import type { Filter } from 'nextjs-shared/structures'
 import MyPagination from 'nextjs-shared/MyPagination'
 import { table_delete } from 'nextjs-shared/table_delete'
 import { update_sb_cntquestions } from '@/src/lib/tables/tableSpecific/update_sb_cntquestions'

@@ -5,13 +5,15 @@ export const basetables = [
   'tqq_questions',
   'trt_reftype',
   'twh_who'
-  // 'ths_history',
-  // 'tss_sessions'
-  // 'tus_users',
-  // 'tuo_usersowner',
-  // 'tup_userspwd',
-  // 'tdb_database',
-  // 'tlg_logging',
-  // 'tml_menulinks'
-  // 'tuf_friends',
+]
+
+export const transtables = [
+  'ths_history',
+  'tss_sessions',
+  'tus_users',
+  'tuo_usersowner',
+  'tup_userspwd',
+  'tdb_database',
+  'tlg_logging',
+  'tuf_friends'
 ]

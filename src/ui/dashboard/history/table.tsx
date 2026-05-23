@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
-import { Filter, JoinParams } from 'nextjs-shared/tableFetchUtils'
+import type { Filter, JoinParams } from 'nextjs-shared/structures'
 import MyPagination from 'nextjs-shared/MyPagination'
 import MyDropdown from 'nextjs-shared/MyDropdown'
 import { useUserContext } from '@/src/context/UserContext'
