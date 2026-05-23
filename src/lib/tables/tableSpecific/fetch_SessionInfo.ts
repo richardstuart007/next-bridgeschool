@@ -22,7 +22,11 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
 
   try {
     const cached = cache_get<structure_SessionsInfo>(cacheKey, caller)
-    if (cached) return cached
+    if (cached) {
+      await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_HIT | ${cacheKey}`, lg_severity: 'I' })
+      return cached
+    }
+    await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_MISS | ${cacheKey}`, lg_severity: 'I' })
 
     const sqlQuery = `
     SELECT
@@ -62,6 +66,7 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
       si_skipcorrect: row.us_skipcorrect,
       si_maxquestions: row.us_maxquestions
     }
+    await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_SAV | ${cacheKey}`, lg_severity: 'I' })
     cache_set(cacheKey, structure_SessionsInfo, caller)
     return structure_SessionsInfo
     //
