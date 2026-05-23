@@ -221,7 +221,7 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Status Message
       //
@@ -259,7 +259,7 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Status Message
       //
@@ -299,7 +299,7 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Status Message
       //
@@ -339,11 +339,11 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Status Message
       //
-      setmessage(`CLEAR (${tablebackup})`)
+      setmessage(`DROP (${tablebackup})`)
       //
       //  Index check
       //
@@ -380,7 +380,7 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Status Message
       //
@@ -428,7 +428,7 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Index check
       //
@@ -475,7 +475,7 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Status Message
       //
@@ -523,7 +523,7 @@ export default function Table() {
       //
       //  Reset dialog
       //
-      if (!many) setConfirmDialog({ ...confirmDialog, isOpen: false })
+      if (!many) setConfirmDialog(prev => ({ ...prev, isOpen: false }))
       //
       //  Status Message
       //
@@ -548,7 +548,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Update count_Z
   //----------------------------------------------------------------------------------------------
-  async function updcount_Z(index: number, value: number) {
+  function updcount_Z(index: number, value: number) {
     //
     //  Update the latest version
     //
@@ -561,7 +561,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Update count
   //----------------------------------------------------------------------------------------------
-  async function updcount(index: number, value: number) {
+  function updcount(index: number, value: number) {
     //
     //  Update the latest version
     //
@@ -574,7 +574,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Update exists_Z
   //----------------------------------------------------------------------------------------------
-  async function updexists_Z(index: number, value: boolean) {
+  function updexists_Z(index: number, value: boolean) {
     //
     //  Update the latest version
     //
@@ -587,7 +587,7 @@ export default function Table() {
   //----------------------------------------------------------------------------------------------
   //  Update exists_D
   //----------------------------------------------------------------------------------------------
-  async function updexists_D(index: number, value: boolean) {
+  function updexists_D(index: number, value: boolean) {
     //
     //  Update the latest version
     //
@@ -669,7 +669,7 @@ export default function Table() {
     //
     //  Reset dialog
     //
-    setConfirmDialog({ ...confirmDialog, isOpen: false })
+    setConfirmDialog(prev => ({ ...prev, isOpen: false }))
     //
     //  Run function over array
     //
@@ -688,19 +688,37 @@ export default function Table() {
         //
         //  Run function
         //
-        perform_Run1({
+        return perform_Run1({
           routine,
           tablebase,
           tablebase_count,
           tablebackup,
           tablebackup_count,
-          tablebackup_exists
+          tablebackup_exists,
+          many: true
         })
       })
       //
       //  Resolve all the promises before continuing
       //
       await Promise.all(promises)
+      //
+      //  Refresh both base and backup to confirm UI matches DB state
+      //
+      await Promise.all([
+        fetchTables({
+          mode: 'base',
+          setTableDataFn: settabledata,
+          setTableDataCountFn: settabledata_count,
+          setTotalPagesFn: setTotalPages
+        }),
+        fetchTables({
+          mode: 'backup',
+          setTableDataFn: settabledata_Z,
+          setTableDataCountFn: settabledata_count_Z,
+          setExistsFn: setexists_Z
+        })
+      ])
       //
       //  Task completed message
       //
@@ -834,6 +852,7 @@ export default function Table() {
     tablebackup_exists: boolean
     tablebackup: string
     tablebackup_count: number
+    many?: boolean
   }
 
   async function perform_Run1({
@@ -842,13 +861,10 @@ export default function Table() {
     tablebase_count,
     tablebackup_exists,
     tablebackup,
-    tablebackup_count
+    tablebackup_count,
+    many = false
   }: Props_run) {
     const functionName = 'perform_Run1'
-    //
-    //  Just one
-    //
-    const many = false
     try {
       switch (routine) {
         case 'DUP':

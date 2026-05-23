@@ -13,4 +13,5 @@ export const basetables = [
   // 'tdb_database',
   // 'tlg_logging',
   // 'tml_menulinks'
+  // 'tuf_friends',
 ]

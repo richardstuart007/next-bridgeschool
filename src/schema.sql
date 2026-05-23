@@ -169,7 +169,7 @@ CREATE INDEX IF NOT EXISTS idx_tqq_questions_qq_sbid ON public.tqq_questions (qq
 CREATE INDEX IF NOT EXISTS idx_trf_reference_rf_sbid ON public.trf_reference (rf_sbid);
 
 -- Reset identity sequences to match current max values after data restore
-SELECT setval(pg_get_serial_sequence('tdb_database', 'db_dbid'),  COALESCE(MAX(db_dbid),  1)) FROM tdb_database;
+SELECT setval(pg_get_serial_sequence('tdb_database',  'db_dbid'),  COALESCE(MAX(db_dbid),  1)) FROM tdb_database;
 SELECT setval(pg_get_serial_sequence('ths_history',   'hs_hsid'),  COALESCE(MAX(hs_hsid),  1)) FROM ths_history;
 SELECT setval(pg_get_serial_sequence('tlg_logging',   'lg_lgid'),  COALESCE(MAX(lg_lgid),  1)) FROM tlg_logging;
 SELECT setval(pg_get_serial_sequence('tow_owner',     'ow_owid'),  COALESCE(MAX(ow_owid),  1)) FROM tow_owner;
@@ -178,5 +178,6 @@ SELECT setval(pg_get_serial_sequence('trf_reference', 'rf_rfid'),  COALESCE(MAX(
 SELECT setval(pg_get_serial_sequence('trt_reftype',   'rt_rtid'),  COALESCE(MAX(rt_rtid),  1)) FROM trt_reftype;
 SELECT setval(pg_get_serial_sequence('tsb_subject',   'sb_sbid'),  COALESCE(MAX(sb_sbid),  1)) FROM tsb_subject;
 SELECT setval(pg_get_serial_sequence('tss_sessions',  'ss_ssid'),  COALESCE(MAX(ss_ssid),  1)) FROM tss_sessions;
+SELECT setval(pg_get_serial_sequence('tuf_friends',    'uf_ufid'), COALESCE(MAX(uf_ufid),  1)) FROM tuf_friends;
 SELECT setval(pg_get_serial_sequence('tus_users',     'us_usid'),  COALESCE(MAX(us_usid),  1)) FROM tus_users;
 SELECT setval(pg_get_serial_sequence('twh_who',       'wh_whid'),  COALESCE(MAX(wh_whid),  1)) FROM twh_who;
