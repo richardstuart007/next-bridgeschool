@@ -1,6 +1,6 @@
 export const dynamic = 'force-dynamic'
-import Table from '@/src/ui/admin/backup/table'
-import { basetables } from '@/src/ui/admin/backup/basetables'
+import Table from 'nextjs-shared/BackupTable'
+import { basetables } from '@/src/lib/copytables/tables'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 

@@ -1,21 +1,18 @@
 export const dynamic = 'force-dynamic'
-import Table from 'nextjs-shared/BackupTable'
-import { transtables } from '@/src/lib/copytables/tables'
+import CopyTable from 'nextjs-shared/CopyTable'
 import { Metadata } from 'next'
 import { Suspense } from 'react'
 
-const title = 'Backuptabletrans'
+const title = 'Copytable'
 export const metadata: Metadata = {
   title: title
 }
-//
-//  App route
-//
+
 export default function Page() {
   return (
     <div className='w-full md:p-6'>
       <Suspense>
-        <Table tables={transtables} />
+        <CopyTable baseDir='C:/Users/richa/github/next-bridgeschool' />
       </Suspense>
     </div>
   )

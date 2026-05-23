@@ -175,6 +175,18 @@ export default function Page() {
           </MyLink>
 
           <MyLink
+            key='copytable'
+            href={{
+              pathname: '/admin/maint/copytable',
+              reference: 'copytable'
+            }}
+            overrideClass='w-36 justify-center'
+            caller={functionName}
+          >
+            Copy-table
+          </MyLink>
+
+          <MyLink
             key='Logging'
             href={{
               pathname: '/admin/maint/logging',
