@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
 import { write_Logging } from 'nextjs-shared/write_logging'
+import { cache_clearTable } from 'nextjs-shared/userCache_store'
 // ----------------------------------------------------------------------
 //  Update User Setup
 // ----------------------------------------------------------------------
@@ -106,6 +107,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
       columnValuePairs: [{ column: 'uo_owner', value: ow_owner }],
       whereColumnValuePairs: [{ column: 'uo_usid', value: us_usid }]
     })
+    cache_clearTable('tss_sessions', functionName)
     //
     //  OK
     //

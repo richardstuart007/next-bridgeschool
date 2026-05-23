@@ -3,6 +3,7 @@
 import { sql } from 'nextjs-shared/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { write_Logging } from 'nextjs-shared/write_logging'
+import { cache_get, cache_set } from 'nextjs-shared/userCache_store'
 import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
 //---------------------------------------------------------------------
 //  Fetch structure_SessionsInfo data by ID
@@ -17,7 +18,12 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
   //
   const co_ssid = await getAuthServer_au_ssid()
 
+  const cacheKey = `SELECT ss_ssid, us_usid, us_name, us_email, us_admin, us_skipcorrect, us_maxquestions FROM tss_sessions JOIN tus_users ON ss_usid = us_usid WHERE ss_ssid = ${co_ssid}`
+
   try {
+    const cached = cache_get<structure_SessionsInfo>(cacheKey, caller)
+    if (cached) return cached
+
     const sqlQuery = `
     SELECT
         ss_ssid,
@@ -56,6 +62,7 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
       si_skipcorrect: row.us_skipcorrect,
       si_maxquestions: row.us_maxquestions
     }
+    cache_set(cacheKey, structure_SessionsInfo, caller)
     return structure_SessionsInfo
     //
     //  Errors
