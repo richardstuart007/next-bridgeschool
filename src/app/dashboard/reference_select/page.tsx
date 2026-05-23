@@ -1,5 +1,6 @@
 import Table from '@/src/ui/dashboard/reference/table'
 import { Metadata } from 'next'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -21,7 +22,7 @@ export default async function Page({
   const functionName = 'ReferencePage'
   const urlSearch = await searchParams
   const uq_sbid = String(urlSearch?.uq_sbid) || 'unknown'
-  const rowsPerPage = 20
+  const rowsPerPage = ROWS_PER_PAGE
   const joins: JoinParams[] = [
     { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
     { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }

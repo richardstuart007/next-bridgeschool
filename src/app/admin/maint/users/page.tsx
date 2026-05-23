@@ -1,6 +1,7 @@
 import Table from '@/src/ui/admin/users/table'
 import { table_Users } from '@/src/lib/tables/definitions'
 import { Metadata } from 'next'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const functionName = 'UsersPage'
-  const rowsPerPage = 17
+  const rowsPerPage = ROWS_PER_PAGE
   let initialRows: table_Users[] = []
   let initialTotalPages = 0
 

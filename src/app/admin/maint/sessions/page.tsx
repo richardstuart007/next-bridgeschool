@@ -1,6 +1,7 @@
 import Table from '@/src/ui/admin/sessions/table'
 import { table_SessionsUser } from '@/src/lib/tables/definitions'
 import { Metadata } from 'next'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import type { JoinParams } from 'nextjs-shared/structures'
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const functionName = 'SessionsPage'
-  const rowsPerPage = 35
+  const rowsPerPage = ROWS_PER_PAGE
   const joins: JoinParams[] = [{ table: 'tus_users', on: 'ss_usid = us_usid' }]
   let initialRows: table_SessionsUser[] = []
   let initialTotalPages = 0

@@ -41,12 +41,16 @@ export default async function Page() {
     console.error(`${functionName}: Error fetching initial data`, error)
   }
 
+  const guestEmails = [process.env.GUEST_RICHARD_EMAIL, process.env.GUEST_NZBRIDGE_EMAIL]
+  const isGuest = guestEmails.includes(initialUserData?.us_email)
+
   return (
     <div className='w-full md:p-6'>
       <Form
         initialUsid={si_usid}
         initialUserData={initialUserData}
         initialOwner={initialOwner}
+        isGuest={isGuest}
       />
     </div>
   )

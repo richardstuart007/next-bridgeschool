@@ -19,9 +19,10 @@ interface Props {
   initialUsid?: number
   initialUserData?: table_Users
   initialOwner?: string
+  isGuest?: boolean
 }
 
-export default function Form({ admin_uid, initialUsid, initialUserData, initialOwner }: Props) {
+export default function Form({ admin_uid, initialUsid, initialUserData, initialOwner, isGuest = false }: Props) {
   const functionName = 'Form_User'
   //
   //  User context
@@ -325,18 +326,28 @@ export default function Form({ admin_uid, initialUsid, initialUserData, initialO
           {/*   Owner */}
           {/*  ...................................................................................*/}
           <div className='mt-4'>
-            <MyDropdown
-              label='Owner'
-              selectedOption={ow_owner}
-              setSelectedOption={setow_owner}
-              searchEnabled={false}
-              name='ow_owner'
-              table='tow_owner'
-              optionLabel='ow_owner'
-              optionValue='ow_owner'
-              overrideClass_Dropdown='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
-              includeBlank={false}
-            />
+            {isGuest ? (
+              <>
+                <label className='mb-3 mt-5 block text-xs font-medium text-gray-900'>Owner</label>
+                <MyInput type='hidden' name='ow_owner' value={ow_owner} />
+                <p className='w-72 px-4 rounded-md border border-gray-300 bg-gray-100 py-[9px] text-sm text-gray-500'>
+                  {ow_owner}
+                </p>
+              </>
+            ) : (
+              <MyDropdown
+                label='Owner'
+                selectedOption={ow_owner}
+                setSelectedOption={setow_owner}
+                searchEnabled={false}
+                name='ow_owner'
+                table='tow_owner'
+                optionLabel='ow_owner'
+                optionValue='ow_owner'
+                overrideClass_Dropdown='w-72  px-4 rounded-md border border-blue-500 py-[9px] text-sm '
+                includeBlank={false}
+              />
+            )}
           </div>
           {/*  ...................................................................................*/}
           {/*   Friends Button */}

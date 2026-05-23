@@ -1,6 +1,7 @@
 import Table from 'nextjs-shared/Table_Logging'
 import { table_Logging } from 'nextjs-shared/structures'
 import { Metadata } from 'next'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const functionName = 'LoggingPage'
-  const rowsPerPage = 50
+  const rowsPerPage = ROWS_PER_PAGE
   let initialRows: table_Logging[] = []
   let initialTotalPages = 0
 

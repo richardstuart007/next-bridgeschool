@@ -75,7 +75,7 @@ export async function User_fetch_Average({
     //
     // Return the average percentage
     //
-    const avgPercentage = data.rows[0]?.avg_percentage || 0
+    const avgPercentage = Number(data.rows[0]?.avg_percentage) || 0
 
     // Store in cache
     cache_set(readableSql, avgPercentage, functionName)

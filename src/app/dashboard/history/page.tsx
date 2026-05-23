@@ -1,5 +1,6 @@
 import Table from '@/src/ui/dashboard/history/table'
 import { Metadata } from 'next'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const functionName = 'HistoryPage'
-  const rowsPerPage = 20
+  const rowsPerPage = ROWS_PER_PAGE
   const joins: JoinParams[] = [
     { table: 'tsb_subject', on: 'hs_sbid = sb_sbid' },
     { table: 'tus_users', on: 'hs_usid = us_usid' }

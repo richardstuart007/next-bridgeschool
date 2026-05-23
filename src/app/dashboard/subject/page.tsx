@@ -1,5 +1,6 @@
 import Table from '@/src/ui/dashboard/subject/table'
 import { Metadata } from 'next'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -16,7 +17,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   const functionName = 'SubjectPage'
   const joins: JoinParams[] = [{ table: 'tuo_usersowner', on: 'sb_owner = uo_owner' }]
-  const rowsPerPage = 20
+  const rowsPerPage = ROWS_PER_PAGE
 
   let si_usid = 0
   let ownerRows: { uo_owner: string }[] = []

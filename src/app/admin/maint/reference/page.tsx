@@ -1,5 +1,6 @@
 import Table from '@/src/ui/admin/reference/table'
 import { Metadata } from 'next'
+import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import type { JoinParams } from 'nextjs-shared/structures'
@@ -12,7 +13,7 @@ export const metadata: Metadata = {
 
 export default async function Page() {
   const functionName = 'ReferenceAdminPage'
-  const rowsPerPage = 17
+  const rowsPerPage = ROWS_PER_PAGE
   const joins: JoinParams[] = [
     { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
     { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }

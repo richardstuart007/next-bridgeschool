@@ -210,6 +210,18 @@ export default function Page() {
             Sessions
           </MyLink>
 
+          <MyLink
+            key='cache'
+            href={{
+              pathname: '/admin/maint/cache',
+              reference: 'cache'
+            }}
+            overrideClass='w-36 justify-center'
+            caller={functionName}
+          >
+            Cache
+          </MyLink>
+
           {/* -------------------------------------------------------------------------------------------------------------------- */}
         </div>
       </div>

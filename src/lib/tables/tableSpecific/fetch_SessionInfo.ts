@@ -21,10 +21,10 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
   const cacheKey = `SELECT ss_ssid, us_usid, us_name, us_email, us_admin, us_skipcorrect, us_maxquestions FROM tss_sessions JOIN tus_users ON ss_usid = us_usid WHERE ss_ssid = ${co_ssid}`
 
   try {
-    const cached = cache_get<structure_SessionsInfo>(cacheKey, caller)
+    const cached = cache_get<structure_SessionsInfo[]>(cacheKey, caller)
     if (cached) {
       await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_HIT | ${cacheKey}`, lg_severity: 'I' })
-      return cached
+      return cached[0]
     }
     await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_MISS | ${cacheKey}`, lg_severity: 'I' })
 
@@ -67,7 +67,7 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
       si_maxquestions: row.us_maxquestions
     }
     await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_SAV | ${cacheKey}`, lg_severity: 'I' })
-    cache_set(cacheKey, structure_SessionsInfo, caller)
+    cache_set(cacheKey, [structure_SessionsInfo], caller)
     return structure_SessionsInfo
     //
     //  Errors
