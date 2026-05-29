@@ -14,6 +14,6 @@ export const transtables = [
   'tuo_usersowner',
   'tup_userspwd',
   'tdb_database',
-  'tlg_logging',
+  'xlg_logging',
   'tuf_friends'
 ]

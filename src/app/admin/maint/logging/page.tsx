@@ -21,7 +21,7 @@ export default async function Page() {
     ;[initialRows, initialTotalPages] = await Promise.all([
       fetchFiltered({
         caller: functionName,
-        table: 'tlg_logging',
+        table: 'xlg_logging',
         filters: [],
         orderBy: 'lg_lgid DESC',
         limit: rowsPerPage,
@@ -30,7 +30,7 @@ export default async function Page() {
       }),
       fetchTotalPages({
         caller: functionName,
-        table: 'tlg_logging',
+        table: 'xlg_logging',
         filters: [],
         items_per_page: rowsPerPage,
         skipCache: true

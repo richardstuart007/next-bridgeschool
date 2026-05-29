@@ -1,12 +1,10 @@
-import Table from '@/src/ui/dashboard/reference/table'
+import ReferenceCards from '@/src/ui/dashboard/reference/ReferenceCards'
 import { Metadata } from 'next'
-import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
-import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import type { JoinParams, Filter } from 'nextjs-shared/structures'
-import { table_Subject } from '@/src/lib/tables/definitions'
+import { table_Subject, table_Reference } from '@/src/lib/tables/definitions'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,7 +20,6 @@ export default async function Page({
   const functionName = 'ReferencePage'
   const urlSearch = await searchParams
   const uq_sbid = String(urlSearch?.uq_sbid) || 'unknown'
-  const rowsPerPage = ROWS_PER_PAGE
   const joins: JoinParams[] = [
     { table: 'tuo_usersowner', on: 'rf_owner = uo_owner' },
     { table: 'tsb_subject', on: 'rf_sbid = sb_sbid' }
@@ -30,8 +27,7 @@ export default async function Page({
 
   let si_usid = 0
   let initialSubjectInfo: table_Subject | undefined
-  let initialRows: object[] = []
-  let initialTotalPages = 0
+  let references: table_Reference[] = []
 
   try {
     const sessionInfo = await fetch_SessionInfo({ caller: functionName })
@@ -51,44 +47,32 @@ export default async function Page({
 
       const filters: Filter[] = [
         { column: 'uo_usid', value: si_usid, operator: '=' },
-        ...(sbidNum > 0
-          ? [{ column: 'rf_sbid', value: sbidNum, operator: '=' as const }]
+        ...(Number(uq_sbid) > 0
+          ? [{ column: 'rf_sbid', value: Number(uq_sbid), operator: '=' as const }]
           : [])
       ]
 
-      ;[initialRows, initialTotalPages] = await Promise.all([
-        fetchFiltered({
-          caller: functionName,
-          table: 'trf_reference',
-          joins,
-          filters,
-          orderBy: 'rf_owner, rf_subject, rf_ref',
-          limit: rowsPerPage,
-          offset: 0,
-          distinctColumns: []
-        }),
-        fetchTotalPages({
-          caller: functionName,
-          table: 'trf_reference',
-          joins,
-          filters,
-          items_per_page: rowsPerPage,
-          distinctColumns: []
-        })
-      ])
+      references = (await fetchFiltered({
+        caller: functionName,
+        table: 'trf_reference',
+        joins,
+        filters,
+        orderBy: 'rf_owner, rf_subject, rf_ref',
+        limit: 200,
+        offset: 0,
+        distinctColumns: []
+      })) as table_Reference[]
     }
   } catch (error) {
     console.error(`${functionName}: Error fetching initial data`, error)
   }
 
   return (
-    <div className='w-full md:p-6'>
-      <Table
+    <div className='w-full'>
+      <ReferenceCards
+        subjectInfo={initialSubjectInfo}
+        references={references}
         uq_sbid={uq_sbid}
-        initialUsid={si_usid}
-        initialSubjectInfo={initialSubjectInfo}
-        initialRows={initialRows}
-        initialTotalPages={initialTotalPages}
       />
     </div>
   )

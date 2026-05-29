@@ -754,14 +754,11 @@ export default function Table_Reference({
           <MyLink
             overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}
             href={{
-              pathname: '/dashboard/subject',
-              reference: 'subject',
-              query: {
-                uq_route: 'reference-select'
-              }
+              pathname: '/dashboard',
+              reference: 'dashboard'
             }}
           >
-            Back to Subject
+            Back to Subjects
           </MyLink>
         </div>
         <div className='flex grow justify-center'>

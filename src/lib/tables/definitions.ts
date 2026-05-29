@@ -47,6 +47,7 @@ export type table_Subject = {
   sb_owner: string
   sb_subject: string
   sb_title: string
+  sb_level: string
   sb_cntquestions: number
   sb_cntreference: number
   sb_sbid: number

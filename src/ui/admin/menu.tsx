@@ -3,12 +3,48 @@ import { MyLink } from 'nextjs-shared/MyLink'
 import { fetch_IsAdmin } from '@/src/lib/tables/tableSpecific/fetch_IsAdmin'
 import { user_Logout } from '@/src/lib/user_logout'
 import { useEffect, useState } from 'react'
+
+type MenuItem = { key: string; href: string; label: string } | null
+
+const menuItems: MenuItem[] = [
+  { key: 'owner',             href: '/admin/maint/owner',           label: 'Owner' },
+  { key: 'subject',           href: '/admin/maint/subject',         label: 'Owner Subject' },
+  null,
+  null,
+  // ----
+  null,
+  { key: 'reference',        href: '/admin/maint/reference',       label: 'Reference' },
+  { key: 'who',              href: '/admin/maint/who',             label: 'Who' },
+  { key: 'reftype',          href: '/admin/maint/reftype',         label: 'Reftype' },
+  // ----
+  null,
+  { key: 'questions',        href: '/admin/maint/questions',       label: 'Questions' },
+  null,
+  null,
+  // ----
+  { key: 'users',            href: '/admin/maint/users',           label: 'Users' },
+  { key: 'usersowner',       href: '/admin/maint/usersowner',      label: 'Users Owner' },
+  null,
+  null,
+  // ----
+  null,
+  null,
+  null,
+  null,
+  // ----
+  { key: 'backuptable',      href: '/admin/maint/backuptable',     label: 'Backup-static' },
+  { key: 'backuptabletrans', href: '/admin/maint/backuptabletrans',label: 'Backup-trans' },
+  { key: 'copytable',        href: '/admin/maint/copytable',       label: 'Copy-table' },
+  { key: 'logging',          href: '/admin/maint/logging',         label: 'Logging' },
+  { key: 'sessions',         href: '/admin/maint/sessions',        label: 'Sessions' },
+  { key: 'cache',            href: '/admin/maint/cache',           label: 'Cache' },
+  { key: 'db-tools',         href: '/admin/maint/db-tools',        label: 'DB Tools' },
+]
+
 export default function Page() {
   const functionName = 'Menu_Page'
   const [loading, setLoading] = useState(true)
-  //
-  //  Logoff if not admin
-  //
+
   useEffect(() => {
     const checkAdmin = async () => {
       const admin = await fetch_IsAdmin(functionName)
@@ -20,209 +56,27 @@ export default function Page() {
     }
     checkAdmin()
   }, [])
-  //----------------------------------------------------------------------------------------------
-  // Loading ?
-  //----------------------------------------------------------------------------------------------
+
   if (loading) return <p className='text-xs'>Loading....</p>
-  //----------------------------------------------------------------------------------------------
-  // Data loaded
-  //----------------------------------------------------------------------------------------------
+
   return (
     <>
       <div className='bg-gray-100 p-3 w-max'>
         <div className='inline-grid grid-cols-4 gap-y-6 gap-x-8'>
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <MyLink
-            key='owner'
-            href={{
-              pathname: '/admin/maint/owner',
-              reference: 'owner'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Owner
-          </MyLink>
-
-          <MyLink
-            key='subject'
-            href={{
-              pathname: '/admin/maint/subject',
-              reference: 'subject'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Owner Subject
-          </MyLink>
-
-          <div className='w-36 '></div>
-          <div className='w-36 '></div>
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <div className='w-36 '></div>
-
-          <MyLink
-            key='reference'
-            href={{
-              pathname: '/admin/maint/reference',
-              reference: 'reference'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Reference
-          </MyLink>
-
-          <MyLink
-            key='who'
-            href={{
-              pathname: '/admin/maint/who',
-              reference: 'who'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Who
-          </MyLink>
-
-          <MyLink
-            key='reftype'
-            href={{
-              pathname: '/admin/maint/reftype',
-              reference: 'reftype'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Reftype
-          </MyLink>
-
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
-
-          <div className='w-36 '></div>
-
-          <MyLink
-            key='Questions'
-            href={{
-              pathname: '/admin/maint/questions',
-              reference: 'Questions'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Questions
-          </MyLink>
-
-          <div className='w-36 '></div>
-          <div className='w-36 '></div>
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
-
-          <MyLink
-            key='users'
-            href={{
-              pathname: '/admin/maint/users',
-              reference: 'users'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Users
-          </MyLink>
-
-          <MyLink
-            key='UsersOwner'
-            href={{
-              pathname: '/admin/maint/usersowner',
-              reference: 'UsersOwner'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Users Owner
-          </MyLink>
-
-          <div className='w-36 '></div>
-          <div className='w-36 '></div>
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
-          <div className='w-36 '></div>
-          <div className='w-36 '></div>
-          <div className='w-36 '></div>
-          <div className='w-36 '></div>
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
-
-          <MyLink
-            key='backuptable'
-            href={{
-              pathname: '/admin/maint/backuptable',
-              reference: 'backuptable'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Backup-static
-          </MyLink>
-
-          <MyLink
-            key='backuptabletrans'
-            href={{
-              pathname: '/admin/maint/backuptabletrans',
-              reference: 'backuptabletrans'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Backup-trans
-          </MyLink>
-
-          <MyLink
-            key='copytable'
-            href={{
-              pathname: '/admin/maint/copytable',
-              reference: 'copytable'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Copy-table
-          </MyLink>
-
-          <MyLink
-            key='Logging'
-            href={{
-              pathname: '/admin/maint/logging',
-              reference: 'Logging'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Logging
-          </MyLink>
-
-          <MyLink
-            key='Sessions'
-            href={{
-              pathname: '/admin/maint/sessions',
-              reference: 'Sessions'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Sessions
-          </MyLink>
-
-          <MyLink
-            key='cache'
-            href={{
-              pathname: '/admin/maint/cache',
-              reference: 'cache'
-            }}
-            overrideClass='w-36 justify-center'
-            caller={functionName}
-          >
-            Cache
-          </MyLink>
-
-          {/* -------------------------------------------------------------------------------------------------------------------- */}
+          {menuItems.map((item, i) =>
+            item ? (
+              <MyLink
+                key={item.key}
+                href={{ pathname: item.href, reference: item.key }}
+                overrideClass='w-36 justify-center'
+                caller={functionName}
+              >
+                {item.label}
+              </MyLink>
+            ) : (
+              <div key={i} className='w-36' />
+            )
+          )}
         </div>
       </div>
     </>

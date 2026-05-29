@@ -26,9 +26,18 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
   //
   //  Selection
   //
+  const LEVEL_OPTIONS = [
+    { value: 'Beginner',     label: 'Beginner' },
+    { value: 'Improver',     label: 'Improver' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced',     label: 'Advanced' },
+    { value: 'Random',       label: 'Random' }
+  ]
+
   const [owner, setowner] = useState<string | number>('')
   const [subject, setsubject] = useState<string | number>('')
   const [title, settitle] = useState<string | number>('')
+  const [level, setlevel] = useState<string | number>('')
   //
   //  Data
   //
@@ -55,7 +64,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-  }, [currentPage, shouldFetchData, owner, subject, title])
+  }, [currentPage, shouldFetchData, owner, subject, title, level])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -66,7 +75,8 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
     const filtersToUpdate: Filter[] = [
       { column: 'sb_owner', value: owner, operator: '=' },
       { column: 'sb_subject', value: subject, operator: 'LIKE' },
-      { column: 'sb_title', value: title, operator: 'LIKE' }
+      { column: 'sb_title', value: title, operator: 'LIKE' },
+      { column: 'sb_level', value: level, operator: '=' }
     ]
     //
     // Filter out any entries where `value` is not defined or empty
@@ -247,6 +257,9 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
               <th scope='col' className='text-xs px-2 py-2  text-left'>
                 Title
               </th>
+              <th scope='col' className='text-xs px-2 py-2  text-left'>
+                Level
+              </th>
               <th scope='col' className='text-xs px-2 py-2  text-center'>
                 Reference Count
               </th>
@@ -321,6 +334,21 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   }}
                 />
               </th>
+              {/* ................................................... */}
+              {/* Level                                               */}
+              {/* ................................................... */}
+              <th scope='col' className='text-xs px-2'>
+                <MyDropdown
+                  selectedOption={level}
+                  setSelectedOption={setlevel}
+                  name='level'
+                  tableData={LEVEL_OPTIONS}
+                  optionLabel='label'
+                  optionValue='value'
+                  overrideClass_Dropdown='w-32'
+                  includeBlank={true}
+                />
+              </th>
             </tr>
           </thead>
           {/* ---------------------------------------------------------------------------------- */}
@@ -332,6 +360,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <td className='text-xs px-2 py-1  '>{row.sb_owner}</td>
                 <td className='text-xs px-2 py-1  '>{row.sb_subject}</td>
                 <td className='text-xs px-2 py-1  '>{row.sb_title}</td>
+                <td className='text-xs px-2 py-1  '>{row.sb_level}</td>
                 <td className='text-xs px-2 py-1'>
                   <div className='flex justify-center'>
                     <MyButton

@@ -1,13 +1,13 @@
 export const dynamic = 'force-dynamic'
-import SubjectMenu from '@/src/ui/dashboard/subject_menu'
+import Graph_Summary from '@/src/ui/dashboard/graph/graph_summary'
 import { Suspense } from 'react'
 
 export default async function Page() {
   return (
     <main className='h-screen flex flex-col p-2 md:p-4'>
       <div className='flex-grow'>
-        <Suspense fallback={<div>Loading subjects...</div>}>
-          <SubjectMenu />
+        <Suspense fallback={<div>Loading graphs...</div>}>
+          <Graph_Summary />
         </Suspense>
       </div>
     </main>

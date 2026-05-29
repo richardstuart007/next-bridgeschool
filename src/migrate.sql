@@ -1,3 +1,11 @@
+-- xlg_logging: rename from tlg_logging
+ALTER TABLE IF EXISTS public.tlg_logging RENAME TO xlg_logging;
+ALTER INDEX IF EXISTS tlg_logging_pkey RENAME TO xlg_logging_pkey;
+
+-- tsb_subject: add sb_level column
+ALTER TABLE public.tsb_subject
+  ADD COLUMN IF NOT EXISTS sb_level character varying(16) DEFAULT '';
+
 -- tdb_database: add missing UNIQUE on db_dbid
 ALTER TABLE public.tdb_database
   ADD CONSTRAINT tdb_database_db_dbid_key UNIQUE (db_dbid);

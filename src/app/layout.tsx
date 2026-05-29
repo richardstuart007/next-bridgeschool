@@ -40,18 +40,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     unknown: 'bg-red-100'
   }
 
+  const DatabaseBadgeColors: Record<Database, string> = {
+    prod: 'bg-blue-200 text-blue-800',
+    dev: 'bg-yellow-200 text-yellow-800',
+    local: 'bg-green-200 text-green-800',
+    unknown: 'bg-red-200 text-red-800'
+  }
+
   const backgroundColor = DatabaseColors[DB_LOCATION as Database] ?? 'bg-red-100'
+  const badgeColor = DatabaseBadgeColors[DB_LOCATION as Database] ?? 'bg-red-200 text-red-800'
 
   const classNameColour = `${inter.className} antialiased ${backgroundColor}`
 
   return (
     <html lang='en'>
       <body className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}>
-        {/* Dev / Local watermark */}
         {NEXT_PUBLIC_APPENV_ISDEV && (
-          <div className='absolute top-0 right-0 h-full w-1/3 flex flex-col justify-center items-center pointer-events-none select-none rotate-[-25deg] text-[3rem] font-bold text-red-500/20 text-center leading-[1.2]'>
-            <span className='font-normal text-[1.5rem]'>database</span>
-            <span>{DB_LOCATION}</span>
+          <div className={`fixed top-2 right-2 z-50 rounded ${badgeColor} px-2 py-0.5 text-xxs font-bold opacity-70`}>
+            {DB_LOCATION}
           </div>
         )}
 

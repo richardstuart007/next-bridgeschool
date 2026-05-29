@@ -8,6 +8,7 @@ export type StateSetup = {
     sb_owner?: string[]
     sb_subject?: string[]
     sb_title?: string[]
+    sb_level?: string[]
   }
   message?: string | null
 }

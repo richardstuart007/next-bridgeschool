@@ -20,10 +20,19 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
   //
   //  State and Initial values
   //
+  const LEVEL_OPTIONS = [
+    { value: 'Beginner',     label: 'Beginner' },
+    { value: 'Improver',     label: 'Improver' },
+    { value: 'Intermediate', label: 'Intermediate' },
+    { value: 'Advanced',     label: 'Advanced' },
+    { value: 'Random',       label: 'Random' }
+  ]
+
   const sb_sbid = record?.sb_sbid || 0
   const [sb_owner, setogowner] = useState<string | number>(record?.sb_owner || '')
   const [sb_subject, setsb_subject] = useState(record?.sb_subject || '')
   const [sb_title, setogtitle] = useState(record?.sb_title || '')
+  const [sb_level, setsb_level] = useState<string | number>(record?.sb_level || '')
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -159,6 +168,22 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
                 {error}
               </p>
             ))}
+        </div>
+        {/*  ...................................................................................*/}
+        {/*   Level */}
+        {/*  ...................................................................................*/}
+        <div className='mt-2'>
+          <MyDropdown
+            selectedOption={sb_level}
+            setSelectedOption={setsb_level}
+            name='sb_level'
+            label='Level'
+            tableData={LEVEL_OPTIONS}
+            optionLabel='label'
+            optionValue='value'
+            overrideClass_Dropdown='w-72'
+            includeBlank={true}
+          />
         </div>
         {/*  ...................................................................................*/}
         {/*   Update MyButton */}
