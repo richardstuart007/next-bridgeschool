@@ -2,6 +2,9 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## nextjs-shared reference
+Read `node_modules/nextjs-shared/CONSUMING_PROJECTS.md` before implementing any feature from nextjs-shared. It contains all component APIs, database function signatures, coding conventions, and setup instructions.
+
 ## Commands
 
 ```bash
