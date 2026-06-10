@@ -6,8 +6,8 @@ import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
 import MyPagination from 'nextjs-shared/MyPagination'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
-import { MyButton } from 'nextjs-shared/MyButton'
 import { MyLink } from 'nextjs-shared/MyLink'
+import { MyHelp } from 'nextjs-shared/MyHelp'
 
 interface ReviewFormClientProps {
   history: table_Usershistory
@@ -34,7 +34,6 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   const [currentPage, setCurrentPage] = useState(1)
   const [question, setQuestion] = useState<table_Questions | undefined>(questions[safeInitialIndex])
   const [ans, setAns] = useState<number>(hs_ans[0] ?? 0)
-  const [isHelpVisible, setIsHelpVisible] = useState(true)
   //----------------------------------------------------------------------------------------------
   // Render selection
   //----------------------------------------------------------------------------------------------
@@ -86,30 +85,6 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   }
 
   //...................................................................................
-  //. Help Text
-  //...................................................................................
-  function renderHelpText() {
-    const text = question?.qq_help
-    if (!text) return null
-    const lines = text.split(/\r?\n/)
-    const formattedText = lines.map(line => (line ? line : '\u00A0')).join('<br />')
-    return (
-      <div className='relative'>
-        <MyButton
-          onClick={() => setIsHelpVisible(prev => !prev)}
-          overrideClass='text-white mt-2 h-5'
-        >
-          {isHelpVisible ? 'Hide Help' : 'Show Help'}
-        </MyButton>
-        {isHelpVisible && (
-          <div className='flex flex-col text-xs bg-gray-50 py-2 px-2 rounded-md bg-green-50 border border-green-300 min-w-[300px] max-w-[400px] mt-2'>
-            <div dangerouslySetInnerHTML={{ __html: formattedText }} />
-          </div>
-        )}
-      </div>
-    )
-  }
-  //...................................................................................
   //. Navigation
   //...................................................................................
   function render_nav() {
@@ -142,7 +117,7 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
       {question && <QuizHands question={question} />}
       {question && <QuizReviewChoice question={question} correctAnswer={0} selectedAnswer={ans} />}
       {render_pagination()}
-      {renderHelpText()}
+      {question?.qq_help && <MyHelp text={question.qq_help} label='Help' />}
       {render_nav()}
     </>
   )

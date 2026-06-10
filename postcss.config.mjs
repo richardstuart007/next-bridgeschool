@@ -1,10 +1,7 @@
-// Define the PostCSS configuration object
 const postcssConfig = {
   plugins: {
-    autoprefixer: {},
-    tailwindcss: {}
+    '@tailwindcss/postcss': {}
   }
 }
 
-// Export it as the default export
 export default postcssConfig
