@@ -32,13 +32,9 @@ const menuItems: MenuItem[] = [
   null,
   null,
   // ----
-  { key: 'backuptable',      href: '/admin/maint/backuptable',     label: 'Backup-static' },
-  { key: 'backuptabletrans', href: '/admin/maint/backuptabletrans',label: 'Backup-trans' },
-  { key: 'copytable',        href: '/admin/maint/copytable',       label: 'Copy-table' },
   { key: 'logging',          href: '/admin/maint/logging',         label: 'Logging' },
   { key: 'sessions',         href: '/admin/maint/sessions',        label: 'Sessions' },
   { key: 'cache',            href: '/admin/maint/cache',           label: 'Cache' },
-  { key: 'db-tools',         href: '/admin/maint/db-tools',        label: 'DB Tools' },
 ]
 
 export default function Page() {
