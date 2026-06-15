@@ -1,11 +1,11 @@
-'use server'
+﻿'use server'
 
 import { table_Users } from '@/src/lib/tables/definitions'
 import { structure_ProviderSignInParams } from '@/src/lib/tables/structures'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { write_users } from '@/src/lib/tables/tableSpecific/write_users'
 import { write_sessions } from '@/src/lib/tables/tableSpecific/write_sessions'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 
 export async function providerSignIn(
   { provider, email, name }: structure_ProviderSignInParams,
@@ -30,7 +30,7 @@ export async function providerSignIn(
     return ss_ssid
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

@@ -1,6 +1,7 @@
 import '@/src/root/global.css'
 
 import { inter } from '@/src/root/constants/constants_fonts'
+import { DevHeader } from '@/src/ui/DevHeader'
 import { Metadata } from 'next'
 import { UserProvider } from '@/src/context/UserContext'
 import { URL_current } from '@/src/root/constants/constants_URL'
@@ -40,26 +41,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     unknown: 'bg-red-100'
   }
 
-  const DatabaseBadgeColors: Record<Database, string> = {
-    prod: 'bg-blue-200 text-blue-800',
-    dev: 'bg-yellow-200 text-yellow-800',
-    local: 'bg-green-200 text-green-800',
-    unknown: 'bg-red-200 text-red-800'
-  }
-
   const backgroundColor = DatabaseColors[DB_LOCATION as Database] ?? 'bg-red-100'
-  const badgeColor = DatabaseBadgeColors[DB_LOCATION as Database] ?? 'bg-red-200 text-red-800'
 
   const classNameColour = `${inter.className} antialiased ${backgroundColor}`
 
   return (
     <html lang='en'>
       <body className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}>
-        {NEXT_PUBLIC_APPENV_ISDEV && (
-          <div className={`fixed top-2 right-2 z-50 rounded ${badgeColor} px-2 py-0.5 text-xxs font-bold opacity-70`}>
-            {DB_LOCATION}
-          </div>
-        )}
+        {NEXT_PUBLIC_APPENV_ISDEV && <DevHeader dbLocation={DB_LOCATION} />}
 
         <UserProvider>{children}</UserProvider>
       </body>

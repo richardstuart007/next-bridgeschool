@@ -5,60 +5,48 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "start": "next start",
-    "dev": "next dev --turbopack",
-    "locallocal": "set PORT=3000 && copy /Y .env.locallocal .env && next dev",
-    "localdev": "set PORT=3001 && copy /Y .env.localdev .env && next dev",
-    "localprod": "set PORT=3002 && copy /Y .env.localprod .env && next dev",
+    "locallocal": "copy /Y .env.locallocal .env && next dev --turbopack --port 3000",
+    "localdev": "copy /Y .env.localdev .env && next dev --turbopack --port 3001",
+    "localprod": "copy /Y .env.localprod .env && next dev --turbopack --port 3002",
     "prettier": "prettier --write --ignore-unknown .",
     "prettier:check": "prettier --check --ignore-unknown ."
   },
   "dependencies": {
-    "@heroicons/react": "^2.1.5",
-    "@neondatabase/serverless": "^1.1.0",
-    "@tailwindcss/forms": "^0.5.9",
-    "@tailwindcss/postcss": "^4",
-    "@types/bcryptjs": "^2.4.6",
-    "@types/node": "20.5.7",
-    "bcryptjs": "^2.4.3",
-    "chart.js": "^4.4.7",
-    "clsx": "^2.1.1",
-    "csv-parser": "^3.1.0",
-    "date-fns": "^4.1.0",
-    "date-fns-tz": "^3.2.0",
-    "next": "^16.2.4",
-    "next-auth": "^5.0.0-beta.22",
+    "@heroicons/react": "2.2.0",
+    "@neondatabase/serverless": "1.1.0",
+    "@tailwindcss/forms": "0.5.11",
+    "@tailwindcss/postcss": "4.3.1",
+    "@types/bcryptjs": "3.0.0",
+    "@types/node": "25.9.3",
+    "bcryptjs": "3.0.3",
+    "chart.js": "4.5.1",
+    "clsx": "2.1.1",
+    "csv-parser": "3.2.1",
+    "date-fns": "4.4.0",
+    "date-fns-tz": "3.2.0",
+    "next": "16.2.9",
+    "next-auth": "5.0.0-beta.31",
     "nextjs-shared": "github:richardstuart007/nextjs-shared",
-    "pg": "^8.20.0",
-    "postcss": "8.4.31",
-    "react": "19.2.4",
-    "react-chartjs-2": "^5.2.0",
-    "react-dom": "19.2.4",
-    "react-icons": "^5.3.0",
-    "tailwindcss": "^4",
-    "typescript": "5.2.2",
-    "ws": "^8.20.0",
-    "zod": "^3.23.8"
+    "pg": "8.21.0",
+    "postcss": ">=8.5.10",
+    "react": "19.2.7",
+    "react-chartjs-2": "5.3.1",
+    "react-dom": "19.2.7",
+    "react-icons": "5.6.0",
+    "tailwindcss": "4.3.1",
+    "typescript": "6.0.3",
+    "ws": "8.21.0",
+    "zod": "4.4.3"
   },
   "devDependencies": {
-    "@types/react": "19.2.7",
+    "@types/pg": "8.11.6",
+    "@types/react": "19.2.17",
     "@types/react-dom": "19.2.3",
-    "@types/ws": "^8.18.1",
-    "prettier": "^3.3.3",
-    "prettier-plugin-tailwindcss": "^0.8.0"
+    "@types/ws": "8.18.1",
+    "prettier": "3.8.4",
+    "prettier-plugin-tailwindcss": "0.8.0"
   },
   "main": "next.config.js",
   "author": "Richard Stuart",
-  "license": "ISC",
-  "overrides": {
-    "@types/react": "19.2.7",
-    "@types/react-dom": "19.2.3",
-    "react-chartjs-2": {
-      "react": "19.2.4",
-      "react-dom": "19.2.4"
-    },
-    "chart.js": {
-      "react": "^19.0.0"
-    }
-  }
+  "license": "ISC"
 }

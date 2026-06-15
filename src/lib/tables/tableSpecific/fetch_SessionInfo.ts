@@ -1,8 +1,8 @@
-'use server'
+﻿'use server'
 
 import { sql } from 'nextjs-shared/db'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 import { cache_get, cache_set } from 'nextjs-shared/userCache_store'
 import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
 //---------------------------------------------------------------------
@@ -23,10 +23,10 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
   try {
     const cached = cache_get<structure_SessionsInfo[]>(cacheKey, caller)
     if (cached) {
-      await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_HIT | ${cacheKey}`, lg_severity: 'I' })
+      await write_logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_HIT | ${cacheKey}`, lg_severity: 'I' })
       return cached[0]
     }
-    await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_MISS | ${cacheKey}`, lg_severity: 'I' })
+    await write_logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_MISS | ${cacheKey}`, lg_severity: 'I' })
 
     const sqlQuery = `
     SELECT
@@ -66,7 +66,7 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
       si_skipcorrect: row.us_skipcorrect,
       si_maxquestions: row.us_maxquestions
     }
-    await write_Logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_SAV | ${cacheKey}`, lg_severity: 'I' })
+    await write_logging({ lg_caller: caller, lg_functionname: functionName, lg_msg: `CACHE_SAV | ${cacheKey}`, lg_severity: 'I' })
     cache_set(cacheKey, [structure_SessionsInfo], caller)
     return structure_SessionsInfo
     //
@@ -74,7 +74,7 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

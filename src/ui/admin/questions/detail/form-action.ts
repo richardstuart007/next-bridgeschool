@@ -1,4 +1,4 @@
-'use server'
+﻿'use server'
 
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
@@ -7,7 +7,7 @@ import Validate from '@/src/ui/admin/questions/detail/form-validate'
 import { fetch_NextSeq } from '@/src/lib/tables/tableSpecific/fetch_NextSeq'
 import { update_sb_cntquestions } from '@/src/lib/tables/tableSpecific/update_sb_cntquestions'
 import { update_rf_cntquestions } from '@/src/lib/tables/tableSpecific/update_rf_cntquestions'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
 // ----------------------------------------------------------------------
 //  Update Setup
@@ -164,7 +164,7 @@ export async function Action(
     }
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update.'
-    write_Logging({
+    write_logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: `${errorMessage} ${(error as Error).message}`,

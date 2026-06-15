@@ -1,7 +1,7 @@
-'use server'
+﻿'use server'
 
 import { sql } from 'nextjs-shared/db'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 //---------------------------------------------------------------------
 //  Get next qq_seq
 //---------------------------------------------------------------------
@@ -38,7 +38,7 @@ export async function fetch_NextSeq(qq_owner: string, qq_subject: string, caller
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

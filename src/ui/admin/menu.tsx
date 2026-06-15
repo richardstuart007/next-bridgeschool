@@ -34,7 +34,6 @@ const menuItems: MenuItem[] = [
   // ----
   { key: 'logging',          href: '/admin/maint/logging',         label: 'Logging' },
   { key: 'sessions',         href: '/admin/maint/sessions',        label: 'Sessions' },
-  { key: 'cache',            href: '/admin/maint/cache',           label: 'Cache' },
 ]
 
 export default function Page() {

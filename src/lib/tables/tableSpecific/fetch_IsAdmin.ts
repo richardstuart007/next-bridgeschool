@@ -1,6 +1,6 @@
-'use server'
+﻿'use server'
 
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 // ----------------------------------------------------------------------
@@ -30,7 +30,7 @@ export async function fetch_IsAdmin(caller = '') {
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

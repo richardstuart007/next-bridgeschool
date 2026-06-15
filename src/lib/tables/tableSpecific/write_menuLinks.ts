@@ -1,7 +1,7 @@
-'use server'
+﻿'use server'
 import { table_write } from 'nextjs-shared/table_write'
 import { cookie_fetch } from '@/src/lib/cookie/cookie_fetch'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 //----------------------------------------------------------------------------------------------
 // Write the menu links
 //----------------------------------------------------------------------------------------------
@@ -65,7 +65,7 @@ export default async function write_ml_menuLinks(Props: Props, caller: string = 
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

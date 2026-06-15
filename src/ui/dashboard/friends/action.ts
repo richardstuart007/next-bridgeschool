@@ -1,10 +1,10 @@
-// src/ui/dashboard/friends/action.ts
+﻿// src/ui/dashboard/friends/action.ts
 'use server'
 
 import { z } from 'zod'
 import { table_write } from 'nextjs-shared/table_write'
 import { table_delete } from 'nextjs-shared/table_delete'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 // ----------------------------------------------------------------------
 //  Update Friends Setup
 // ----------------------------------------------------------------------
@@ -93,7 +93,7 @@ export async function action(_prevState: StateFriends, formData: FormData) {
     //
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Friends.'
-    write_Logging({
+    write_logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: `${errorMessage} ${(error as Error).message}`,

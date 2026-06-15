@@ -1,8 +1,8 @@
-'use server'
+﻿'use server'
 
 import { table_update } from 'nextjs-shared/table_update'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 
 interface GraphPrefs {
   us_graph_user_months?: number
@@ -68,7 +68,7 @@ export async function update_tus_GraphPrefs(prefs: GraphPrefs, caller: string = 
     })
 
     // Log the update
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: `Updated graph preferences for user ${us_usid}: ${JSON.stringify(prefs)}`,
@@ -78,7 +78,7 @@ export async function update_tus_GraphPrefs(prefs: GraphPrefs, caller: string = 
     return { success: true }
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error'
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

@@ -1,6 +1,6 @@
-'use server'
+﻿'use server'
 
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 import { table_count } from 'nextjs-shared/table_count'
 import { table_update } from 'nextjs-shared/table_update'
 //---------------------------------------------------------------------
@@ -34,7 +34,7 @@ export async function update_sb_cntquestions(sbid: number, caller: string = '') 
     //
   } catch (error) {
     const errorMessage = (error as Error).message
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

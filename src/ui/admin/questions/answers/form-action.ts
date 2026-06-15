@@ -1,8 +1,8 @@
-'use server'
+﻿'use server'
 
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 // ----------------------------------------------------------------------
 //  Update Setup
 // ----------------------------------------------------------------------
@@ -130,7 +130,7 @@ export async function Action(_prevState: StateSetup, formData: FormData): Promis
     //
   } catch (error) {
     const errorMessage = 'Database Error: Failed to Update Questions.'
-    write_Logging({
+    write_logging({
       lg_caller: '',
       lg_functionname: functionName,
       lg_msg: `${errorMessage} ${(error as Error).message}`,

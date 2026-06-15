@@ -1,4 +1,4 @@
-import Table from 'nextjs-shared/Table_Logging'
+import Table from 'nextjs-shared/OwnerTableLogging'
 import { table_Logging } from 'nextjs-shared/structures'
 import { Metadata } from 'next'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'

@@ -1,5 +1,5 @@
-import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
-import { write_Logging } from 'nextjs-shared/write_logging'
+﻿import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
+import { write_logging } from 'nextjs-shared/write_logging'
 //
 //  Fetch unique owner/subject
 //
@@ -36,7 +36,7 @@ export const fetch_OwnerSubject = async (owner: string, subject: string, caller:
   } catch (error) {
     const errorMessage = `Error fetching subject: owner=(${owner}), subject=(${subject})`
     console.error(`${functionName}: ${errorMessage}`, error)
-    write_Logging({
+    write_logging({
       lg_caller: caller,
       lg_functionname: functionName,
       lg_msg: errorMessage,

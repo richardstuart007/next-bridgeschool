@@ -1,4 +1,4 @@
-import NextAuth from 'next-auth'
+﻿import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { authConfig } from '@/src/root/auth.config'
 import { z } from 'zod'
@@ -9,7 +9,7 @@ import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
 import { table_fetch } from 'nextjs-shared/table_fetch'
 import { userCache_purgeOnSignIn } from '@/src/lib/tables/cache/userCache_purgeOnSignIn'
-import { write_Logging } from 'nextjs-shared/write_logging'
+import { write_logging } from 'nextjs-shared/write_logging'
 
 const functionName = 'auth'
 // ----------------------------------------------------------------------
@@ -97,7 +97,7 @@ export const {
           //  Errors
           //
         } catch (error) {
-          write_Logging({
+          write_logging({
             lg_caller: functionName,
             lg_functionname: 'authorize',
             lg_msg: `Authorization error: ${(error as Error).message}`,
@@ -215,7 +215,7 @@ export const {
         //  Errors
         //
       } catch (error) {
-        write_Logging({
+        write_logging({
           lg_caller: functionName,
           lg_functionname: 'signIn',
           lg_msg: `Provider signIn error: ${(error as Error).message}`,
