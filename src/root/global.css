@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @source "../../node_modules/nextjs-shared/src";
-@plugin "@tailwindcss/forms";
 
 @theme {
   --color-sand-light: #FBBF24;
