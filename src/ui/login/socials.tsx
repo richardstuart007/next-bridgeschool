@@ -22,6 +22,14 @@ function GitHubIcon({ className }: { className?: string }) {
   )
 }
 
+function FacebookIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox='0 0 24 24' fill='currentColor' className={className} xmlns='http://www.w3.org/2000/svg'>
+      <path d='M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z'/>
+    </svg>
+  )
+}
+
 interface SocialsProps {
   setSigningIn: (signingIn: boolean) => void
 }
@@ -30,32 +38,39 @@ export default function Socials({ setSigningIn }: SocialsProps) {
   const NEXT_PUBLIC_APPENV_ISDEV = process.env.NEXT_PUBLIC_APPENV_ISDEV === 'true'
 
   return (
-    <>
-      <label className='mb-0 mt-9 block text-xs font-medium text-gray-900' htmlFor='email'>
-        Socials
-      </label>
-      <div className='flex items-center w-full pt-4 gap-x-6'>
+    <div className='bg-teal-50 rounded-lg p-4 mt-6 border border-teal-200'>
+      <p className='text-xs font-semibold text-white bg-teal-600 -mx-4 -mt-4 px-4 py-2 mb-3 rounded-t-lg'>Socials</p>
+      <div className='flex justify-evenly'>
         <MyButton
-          overrideClass='w-full border border-orange-700 rounded-lg bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center'
+          overrideClass='h-16 md:h-16 w-16 border border-amber-300 rounded-lg bg-amber-100 hover:bg-amber-200 text-gray-700 flex items-center justify-center'
           onClick={function (event) {
             event.preventDefault()
             socials_signin('google', setSigningIn)
           }}
         >
-          <GoogleIcon className='h-8 w-8' />
+          <GoogleIcon className='h-10 w-10' />
+        </MyButton>
+        <MyButton
+          overrideClass='h-16 md:h-16 w-16 border border-[#1877F2] rounded-lg bg-[#1877F2] hover:bg-[#166FE5] text-white flex items-center justify-center'
+          onClick={function (event) {
+            event.preventDefault()
+            socials_signin('facebook', setSigningIn)
+          }}
+        >
+          <FacebookIcon className='h-10 w-10' />
         </MyButton>
         {NEXT_PUBLIC_APPENV_ISDEV && (
           <MyButton
-            overrideClass='w-full border border-orange-700 rounded-lg bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center'
+            overrideClass='h-16 md:h-16 w-16 border border-gray-900 rounded-lg bg-gray-800 hover:bg-gray-900 text-white flex items-center justify-center'
             onClick={function (event) {
               event.preventDefault()
               socials_signin('github', setSigningIn)
             }}
           >
-            <GitHubIcon className='h-8 w-8' />
+            <GitHubIcon className='h-10 w-10' />
           </MyButton>
         )}
       </div>
-    </>
+    </div>
   )
 }

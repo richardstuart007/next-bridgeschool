@@ -3,7 +3,7 @@ import { signIn } from 'next-auth/react'
 import { Routes_AfterLogin_redirect } from '@/src/root/constants/constants_validroutes'
 
 export function socials_signin(
-  provider: 'google' | 'github',
+  provider: 'google' | 'github' | 'facebook',
   setSigningIn: (signingIn: boolean) => void
 ) {
   setSigningIn(true)

@@ -2,6 +2,7 @@
 const config = {
   transpilePackages: ['nextjs-shared'],
   cacheComponents: false,
+  allowedDevOrigins: ['192.168.1.23'],
   env: {
     CUSTOM_ENV: process.env.CUSTOM_ENV,
     POSTGRES_URL: process.env.POSTGRES_URL

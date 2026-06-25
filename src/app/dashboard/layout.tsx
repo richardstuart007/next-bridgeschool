@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <NavSide baseURL='dashboard' />
         </Suspense>
       </div>
-      <div className='flex-grow overflow-hidden'>{children}</div>
+      <div className='flex-grow overflow-y-auto'>{children}</div>
     </div>
   )
 }

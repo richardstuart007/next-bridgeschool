@@ -7,6 +7,7 @@ import bcrypt from 'bcryptjs'
 import { providerSignIn } from '@/src/lib/dataAuth/providerSignIn'
 import Github from 'next-auth/providers/github'
 import Google from 'next-auth/providers/google'
+import Facebook from 'next-auth/providers/facebook'
 import { table_fetch } from 'nextjs-shared/table_fetch'
 import { userCache_purgeOnSignIn } from '@/src/lib/tables/cache/userCache_purgeOnSignIn'
 import { write_logging } from 'nextjs-shared/write_logging'
@@ -40,6 +41,13 @@ export const {
     Google({
       clientId: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET
+    }),
+    //..............................
+    // Facebook
+    //..............................
+    Facebook({
+      clientId: process.env.FACEBOOK_CLIENT_ID,
+      clientSecret: process.env.FACEBOOK_CLIENT_SECRET
     }),
     //..............................
     //  Email & password
@@ -170,11 +178,24 @@ export const {
       //
       if (!provider || !email || !name) return false
       //
+      //  googlemail.com is the same account as gmail.com — normalise before lookup
+      //
+      const lookupEmail = email.toLowerCase().endsWith('@googlemail.com')
+        ? email.slice(0, email.toLowerCase().indexOf('@googlemail.com')) + '@gmail.com'
+        : email
+      //
+      //  Gmail addresses belong to Google regardless of which social provider was used to sign in
+      //
+      const effectiveProvider =
+        provider !== 'credentials' && lookupEmail.toLowerCase().endsWith('@gmail.com')
+          ? 'google'
+          : provider
+      //
       //  Write session information
       //
       const signInData: structure_ProviderSignInParams = {
-        provider: provider,
-        email: email,
+        provider: effectiveProvider,
+        email: lookupEmail,
         name: name
       }
       try {
@@ -184,29 +205,36 @@ export const {
         const fetchParams = {
           caller: functionName,
           table: 'tus_users',
-          whereColumnValuePairs: [{ column: 'us_email', value: email }]
+          whereColumnValuePairs: [{ column: 'us_email', value: lookupEmail }]
         }
         const rows = await table_fetch(fetchParams)
-        const userRecord = rows[0]
+        let userRecord = rows[0]
         //
-        // User must exist in database to sign in
+        //  providerSignIn auto-creates the user if not found, then writes a session
         //
+        const newAuSsid = await providerSignIn(signInData, functionName)
+        //
+        //  Re-fetch if the user was just created
+        //
+        if (!userRecord) {
+          const newRows = await table_fetch(fetchParams)
+          userRecord = newRows[0]
+        }
         if (!userRecord) return false
         //
         //  Extend user
         //
         Object.assign(user, popUserData(userRecord))
         //
-        //  Get au_ssid
+        //  Set au_ssid
         //
-        const newAuSsid = await providerSignIn(signInData, functionName)
         const stringAuSsid = newAuSsid.toString()
         const userTyped = user as au_UserData
         userTyped.au_ssid = stringAuSsid
-
-        //  CLEAR CACHE FOR THIS USER - ADD THIS LINE
+        //
+        //  Clear cache for this user
+        //
         await userCache_purgeOnSignIn(userRecord.us_usid, functionName)
-
         //
         //  All OK
         //

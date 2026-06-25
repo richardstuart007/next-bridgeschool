@@ -10,7 +10,7 @@ interface Props {
 
 export default function TablePopup({ uid, isOpen, onClose }: Props) {
   return (
-    <MyPopup isOpen={isOpen} onClose={onClose} maxWidth='max-w-screen-2xl'>
+    <MyPopup isOpen={isOpen} onClose={onClose} overrideClass='max-w-screen-2xl'>
       <Table selected_uid={uid} />
     </MyPopup>
   )

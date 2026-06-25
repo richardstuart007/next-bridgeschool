@@ -1,6 +1,6 @@
 export const COOKIE_NAME = 'BridgeCookie'
 export const Default_owner = 'Richard'
 export const Default_fedcountry = 'ZZ'
-export type ProviderType = 'email' | 'github' | 'google'
+export type ProviderType = 'email' | 'github' | 'google' | 'facebook'
 export const Guest_richard_email = process.env.GUEST_RICHARD_EMAIL ?? ''
 export const Guest_nzbridge_email = process.env.GUEST_NZBRIDGE_EMAIL ?? ''

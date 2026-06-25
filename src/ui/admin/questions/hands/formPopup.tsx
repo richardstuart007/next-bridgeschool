@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import MyPopup from 'nextjs-shared/MyPopup'
 import Form from '@/src/ui/admin/questions/hands/form'
 import { table_Questions } from '@/src/lib/tables/definitions'
@@ -17,7 +17,7 @@ export default function FormPopup({ record, isOpen, onClose }: Props) {
     onClose()
   }
   return (
-    <MyPopup isOpen={isOpen} onClose={onClose} maxWidth='max-w-screen-2xl'>
+    <MyPopup isOpen={isOpen} onClose={onClose} overrideClass='max-w-screen-2xl'>
       <Form record={record} onSuccess={handleSuccess} shouldCloseOnUpdate={true} />
     </MyPopup>
   )

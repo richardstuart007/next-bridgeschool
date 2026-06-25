@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import MyPopup from 'nextjs-shared/MyPopup'
 import Table from '@/src/ui/admin/questions/table'
 
@@ -12,7 +12,7 @@ interface Props {
 
 export default function MaintPopup({ sbid, owner, subject, isOpen, onClose }: Props) {
   return (
-    <MyPopup isOpen={isOpen} onClose={onClose} maxWidth='max-w-screen-2xl'>
+    <MyPopup isOpen={isOpen} onClose={onClose} overrideClass='max-w-screen-2xl'>
       <Table selected_sbid={sbid} selected_owner={owner} selected_subject={subject} />
     </MyPopup>
   )
