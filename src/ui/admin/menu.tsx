@@ -4,7 +4,7 @@ import { fetch_IsAdmin } from '@/src/lib/tables/tableSpecific/fetch_IsAdmin'
 import { user_Logout } from '@/src/lib/user_logout'
 import { useEffect, useState } from 'react'
 
-type MenuItem = { key: string; href: string; label: string } | null
+type MenuItem = { key: string; href: string; label: string; overrideClass?: string } | null
 
 const menuItems: MenuItem[] = [
   { key: 'owner',             href: '/admin/maint/owner',           label: 'Owner' },
@@ -34,6 +34,18 @@ const menuItems: MenuItem[] = [
   // ----
   { key: 'logging',          href: '/admin/maint/logging',         label: 'Logging' },
   { key: 'sessions',         href: '/admin/maint/sessions',        label: 'Sessions' },
+  null,
+  null,
+  // ----
+  null,
+  null,
+  null,
+  null,
+  // ----
+  { key: 'historyuser', href: '/admin/maint/historyuser', label: 'User History',  overrideClass: 'w-36 justify-center bg-amber-800 hover:bg-amber-900' },
+  { key: 'history',     href: '/admin/maint/history',     label: 'History All',   overrideClass: 'w-36 justify-center bg-amber-800 hover:bg-amber-900' },
+  { key: 'refview',     href: '/admin/maint/refview',     label: 'References',    overrideClass: 'w-36 justify-center bg-amber-800 hover:bg-amber-900' },
+  { key: 'linkcheck',  href: '/admin/maint/linkcheck',   label: 'Link Check',    overrideClass: 'w-36 justify-center bg-amber-800 hover:bg-amber-900' },
 ]
 
 export default function Page() {
@@ -63,7 +75,7 @@ export default function Page() {
               <MyLink
                 key={item.key}
                 href={{ pathname: item.href, reference: item.key }}
-                overrideClass='w-36 justify-center'
+                overrideClass={item.overrideClass ?? 'w-36 justify-center'}
                 caller={functionName}
               >
                 {item.label}

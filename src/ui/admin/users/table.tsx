@@ -288,7 +288,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='name'
                   name='name'
-                  overrideClass={`w-60  py-2  `}
+                  overrideClass={`w-60 text-xxs md:h-6`}
                   type='text'
                   value={name}
                   onChange={e => {
@@ -307,7 +307,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='email'
                   name='email'
-                  overrideClass={`w-60  py-2   `}
+                  overrideClass={`w-60 text-xxs md:h-6`}
                   type='text'
                   value={email}
                   onChange={e => {
@@ -326,7 +326,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='fedid'
                   name='fedid'
-                  overrideClass={`w-24   py-2  `}
+                  overrideClass={`w-24 text-xxs md:h-6`}
                   type='text'
                   value={fedid}
                   onChange={e => {
@@ -345,7 +345,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='admin'
                   name='admin'
-                  overrideClass={`w-8   py-2  `}
+                  overrideClass={`w-8 text-xxs md:h-6`}
                   maxLength={1}
                   type='text'
                   value={admin}
@@ -368,7 +368,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   <MyInput
                     id='country'
                     name='country'
-                    overrideClass={`w-24   py-2  `}
+                    overrideClass={`w-24 text-xxs md:h-6`}
                     type='text'
                     value={country}
                     onChange={e => {
@@ -388,7 +388,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='provider'
                   name='provider'
-                  overrideClass={`w-24   py-2  `}
+                  overrideClass={`w-24 text-xxs md:h-6`}
                   type='text'
                   value={provider}
                   onChange={e => {
@@ -413,51 +413,51 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {users?.map(user => (
-              <tr key={user.us_usid} className='w-full border-b py-2 '>
-                <td className='text-xs px-2 py-1 '>{user.us_usid}</td>
-                <td className='text-xs px-2 py-1 '>{user.us_name}</td>
-                <td className='text-xs px-2 py-1 '>{user.us_email}</td>
-                <td className='text-xs px-2 py-1 '>{user.us_fedid}</td>
-                <td className='text-xs px-2 py-1  text-center'>{user.us_admin ? 'Y' : ''}</td>
-                <td className='text-xs px-2 py-1  text-center'>{user.us_fedcountry}</td>
-                <td className='text-xs px-2 py-1 '>{user.us_provider}</td>
-                <td className='text-xs px-2 py-1 text-center'>
+              <tr key={user.us_usid} className='w-full'>
+                <td className='text-xxs px-2 py-1 '>{user.us_usid}</td>
+                <td className='text-xxs px-2 py-1 '>{user.us_name}</td>
+                <td className='text-xxs px-2 py-1 '>{user.us_email}</td>
+                <td className='text-xxs px-2 py-1 '>{user.us_fedid}</td>
+                <td className='text-xxs px-2 py-1  text-center'>{user.us_admin ? 'Y' : ''}</td>
+                <td className='text-xxs px-2 py-1  text-center'>{user.us_fedcountry}</td>
+                <td className='text-xxs px-2 py-1 '>{user.us_provider}</td>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => handleEditClick(user)}
-                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-blue-500 hover:bg-blue-600'
                     >
                       Edit
                     </MyButton>
                   </div>
                 </td>
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => handleUsersownerClick(user)}
-                      overrideClass=' h-6 px-2 py-2  bg-green-500  hover:bg-green-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-green-500 hover:bg-green-600'
                     >
                       Owners
                     </MyButton>
                   </div>
                 </td>
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     {user.us_provider === 'email' && (
                       <MyButton
                         onClick={() => handlePwdClick(user)}
-                        overrideClass=' h-6 px-2 py-2  bg-yellow-500  hover:bg-yellow-600 px-2 py-1'
+                        overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-yellow-500 hover:bg-yellow-600'
                       >
                         Pwd
                       </MyButton>
                     )}
                   </div>
                 </td>
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => handleDeleteClick(user)}
-                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-red-500 hover:bg-red-600'
                     >
                       Delete
                     </MyButton>

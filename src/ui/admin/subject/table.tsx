@@ -292,7 +292,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   table='tow_owner'
                   optionLabel='ow_owner'
                   optionValue='ow_owner'
-                  overrideClass_Dropdown='w-28'
+                  overrideClass_Dropdown='w-28 text-xxs md:h-6'
                   includeBlank={true}
                 />
               </th>
@@ -306,7 +306,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='subject'
                   name='subject'
-                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
+                  overrideClass={`w-60 rounded-md border border-blue-500 text-xxs md:h-6 font-normal`}
                   type='text'
                   value={subject}
                   onChange={e => {
@@ -325,7 +325,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='title'
                   name='title'
-                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
+                  overrideClass={`w-60 rounded-md border border-blue-500 text-xxs md:h-6 font-normal`}
                   type='text'
                   value={title}
                   onChange={e => {
@@ -345,7 +345,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   tableData={LEVEL_OPTIONS}
                   optionLabel='label'
                   optionValue='value'
-                  overrideClass_Dropdown='w-32'
+                  overrideClass_Dropdown='w-32 text-xxs md:h-6'
                   includeBlank={true}
                 />
               </th>
@@ -356,50 +356,50 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(row => (
-              <tr key={row.sb_sbid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1  '>{row.sb_owner}</td>
-                <td className='text-xs px-2 py-1  '>{row.sb_subject}</td>
-                <td className='text-xs px-2 py-1  '>{row.sb_title}</td>
-                <td className='text-xs px-2 py-1  '>{row.sb_level}</td>
-                <td className='text-xs px-2 py-1'>
+              <tr key={row.sb_sbid} className='w-full'>
+                <td className='text-xxs px-2 py-1  '>{row.sb_owner}</td>
+                <td className='text-xxs px-2 py-1  '>{row.sb_subject}</td>
+                <td className='text-xxs px-2 py-1  '>{row.sb_title}</td>
+                <td className='text-xxs px-2 py-1  '>{row.sb_level}</td>
+                <td className='text-xxs px-2 py-1'>
                   <div className='flex justify-center'>
                     <MyButton
                       onClick={() => handleClickEdit_reference(row)}
-                      overrideClass=' h-6  px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs'
                     >
                       {row.sb_cntreference}
                     </MyButton>
                   </div>
                 </td>
-                <td className='text-xs px-2 py-1  '>
+                <td className='text-xxs px-2 py-1  '>
                   <div className='flex justify-center'>
                     <MyButton
                       onClick={() => handleClickEdit_questions(row)}
-                      overrideClass=' h-6  px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs'
                     >
                       {' '}
                       {row.sb_cntquestions}
                     </MyButton>
                   </div>
                 </td>
-                <td className='text-xs px-2 py-1  '>
+                <td className='text-xxs px-2 py-1  '>
                   <div className='flex justify-center'>{row.sb_sbid}</div>
                 </td>
-                <td className='text-xs px-2 py-1 '>
+                <td className='text-xxs px-2 py-1 '>
                   <div className='flex justify-center'>
                     <MyButton
                       onClick={() => handleClickEdit_subject(row)}
-                      overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-blue-500 hover:bg-blue-600'
                     >
                       Edit
                     </MyButton>
                   </div>
                 </td>
-                <td className='text-xs px-2 py-1 '>
+                <td className='text-xxs px-2 py-1 '>
                   <div className='flex justify-center'>
                     <MyButton
                       onClick={() => handleDeleteClick_subject(row)}
-                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-red-500 hover:bg-red-600'
                     >
                       Delete
                     </MyButton>

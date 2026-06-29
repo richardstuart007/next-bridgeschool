@@ -9,6 +9,7 @@ export type table_Reference = {
   rf_subject: string
   rf_sbid: number
   rf_cntquestions: number
+  rf_pubtype: string
 }
 
 export type table_ReferenceSubject = {
@@ -22,6 +23,7 @@ export type table_ReferenceSubject = {
   rf_subject: string
   rf_sbid: number
   rf_cntquestions: number
+  rf_pubtype: string
   sb_owner: string
   sb_subject: string
   sb_title: string
@@ -36,6 +38,7 @@ export type table_Logging = {
   lg_msg: string
   lg_functionname: string
   lg_severity: string
+  lg_caller: string
 }
 
 export type table_Owner = {

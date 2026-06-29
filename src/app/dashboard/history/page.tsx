@@ -24,6 +24,7 @@ export default async function Page() {
 
   let si_usid = 0
   let initialCountryCode = ''
+  let initialUserName = ''
   let ownerRows: { uo_owner: string }[] = []
   let initialRows: table_UsershistorySubjectUser[] = []
   let initialTotalPages = 0
@@ -46,6 +47,7 @@ export default async function Page() {
         } as table_fetch_Props)
       ])
       initialCountryCode = userRows[0]?.us_fedcountry ?? ''
+      initialUserName = userRows[0]?.us_name ?? ''
       ownerRows = fetchedOwnerRows
 
       const initOwner = ownerRows.length === 1 ? ownerRows[0].uo_owner : ''
@@ -80,6 +82,8 @@ export default async function Page() {
   return (
     <div className='w-full md:p-6'>
       <Table
+        fixedUsid={si_usid}
+        fixedUserName={initialUserName}
         initialUsid={si_usid}
         initialCountryCode={initialCountryCode}
         initialOwners={ownerRows}

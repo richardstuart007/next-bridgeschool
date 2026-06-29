@@ -237,7 +237,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='who'
                   name='who'
-                  overrideClass={`w-60   py-2  `}
+                  overrideClass={`w-60 text-xxs md:h-6`}
                   type='text'
                   value={who}
                   onChange={e => {
@@ -256,7 +256,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='title'
                   name='title'
-                  overrideClass={`w-60  py-2  `}
+                  overrideClass={`w-60 text-xxs md:h-6`}
                   type='text'
                   value={title}
                   onChange={e => {
@@ -272,22 +272,22 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {row?.map(who => (
-              <tr key={who.wh_whid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1  '>{who.wh_who}</td>
-                <td className='text-xs px-2 py-1  '>{who.wh_title}</td>
-                <td className='text-xs px-2 py-1  '>{who.wh_whid}</td>
-                <td className='text-xs px-2 py-1 '>
+              <tr key={who.wh_whid} className='w-full'>
+                <td className='text-xxs px-2 py-1  '>{who.wh_who}</td>
+                <td className='text-xxs px-2 py-1  '>{who.wh_title}</td>
+                <td className='text-xxs px-2 py-1  '>{who.wh_whid}</td>
+                <td className='text-xxs px-2 py-1 '>
                   <MyButton
                     onClick={() => handleClickEdit(who)}
-                    overrideClass=' h-6  bg-blue-500  hover:bg-blue-600 px-2 py-1'
+                    overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-blue-500 hover:bg-blue-600'
                   >
                     Edit
                   </MyButton>
                 </td>
-                <td className='text-xs px-2 py-1 '>
+                <td className='text-xxs px-2 py-1 '>
                   <MyButton
                     onClick={() => handleDeleteClick(who)}
-                    overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                    overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-red-500 hover:bg-red-600'
                   >
                     Delete
                   </MyButton>

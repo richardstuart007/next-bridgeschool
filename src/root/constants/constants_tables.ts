@@ -5,7 +5,6 @@ export const TABLES = {
   DATABASE: 'tdb_database',
   HISTORY: 'ths_history',
   LOGGING: 'xlg_logging',
-  MENULINKS: 'tml_menulinks',
   OWNER: 'tow_owner',
   QUESTIONS: 'tqq_questions',
   REFERENCE: 'trf_reference',

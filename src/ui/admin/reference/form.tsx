@@ -7,6 +7,7 @@ import { Action } from '@/src/ui/admin/reference/form-action'
 import type { table_Reference } from '@/src/lib/tables/definitions'
 import MyDropdown from 'nextjs-shared/MyDropdown'
 import { MyInput } from 'nextjs-shared/MyInput'
+import MySelect from 'nextjs-shared/MySelect'
 
 interface FormProps {
   referenceRecord?: table_Reference | undefined
@@ -63,6 +64,7 @@ export default function Form({
   const [rf_who, setrf_who] = useState<string | number>(referenceRecord?.rf_who || '')
   const [rf_type, setrf_type] = useState<string | number>(referenceRecord?.rf_type || '')
   const [rf_link, setrf_link] = useState(referenceRecord?.rf_link || '')
+  const [rf_pubtype, setrf_pubtype] = useState(referenceRecord?.rf_pubtype || 'Learn')
   //-------------------------------------------------------------------------
   //  Update MyButton
   //-------------------------------------------------------------------------
@@ -252,6 +254,22 @@ export default function Form({
             optionValue='rt_type'
             overrideClass_Dropdown='w-72'
             includeBlank={false}
+          />
+        </div>
+        {/*  ...................................................................................*/}
+        {/*  PubType  */}
+        {/*  ...................................................................................*/}
+        <div className='mt-4'>
+          <label className='text-xs block text-gray-900' htmlFor='rf_pubtype'>
+            Publication Type
+          </label>
+          <MySelect
+            id='rf_pubtype'
+            name='rf_pubtype'
+            value={rf_pubtype}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setrf_pubtype(e.target.value)}
+            options={['Learn', 'Solution']}
+            overrideClass='w-72'
           />
         </div>
         {/*  ...................................................................................*/}

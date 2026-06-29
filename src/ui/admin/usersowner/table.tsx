@@ -227,7 +227,7 @@ export default function Table({ selected_uid, initialRows, initialTotalPages }: 
                     table='tus_users'
                     optionLabel='us_name'
                     optionValue='us_usid'
-                    overrideClass_Dropdown='w-48'
+                    overrideClass_Dropdown='w-48 text-xxs md:h-6'
                     includeBlank={true}
                   />
                 )}
@@ -244,7 +244,7 @@ export default function Table({ selected_uid, initialRows, initialTotalPages }: 
                   table='tow_owner'
                   optionLabel='ow_owner'
                   optionValue='ow_owner'
-                  overrideClass_Dropdown='w-48'
+                  overrideClass_Dropdown='w-48 text-xxs md:h-6'
                   includeBlank={true}
                 />
               </th>
@@ -260,20 +260,20 @@ export default function Table({ selected_uid, initialRows, initialTotalPages }: 
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
-              <tr key={`${tabledata.uo_usid}${tabledata.uo_owner}`} className='w-full border-b'>
+              <tr key={`${tabledata.uo_usid}${tabledata.uo_owner}`} className='w-full'>
                 {/* ---------------------------------------------------------------------------------- */}
                 {/* DATA                                 */}
                 {/* ---------------------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_usid}</td>
-                <td className='text-xs px-2 py-1 text-center'>{tabledata.uo_owner}</td>
+                <td className='text-xxs px-2 py-1 text-center'>{tabledata.uo_usid}</td>
+                <td className='text-xxs px-2 py-1 text-center'>{tabledata.uo_owner}</td>
                 {/* ................................................... */}
                 {/* MyButton                                                  */}
                 {/* ................................................... */}
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => handleDeleteClick(tabledata)}
-                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-red-500 hover:bg-red-600'
                     >
                       Delete
                     </MyButton>

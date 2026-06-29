@@ -4,6 +4,7 @@ import { table_Reference } from '@/src/lib/tables/definitions'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { MyLink } from 'nextjs-shared/MyLink'
 import { QUIZ_COLOR, VIDEO_COLOR, READ_COLOR } from '@/src/root/constants/colours'
+import { PlayCircleIcon, BookOpenIcon } from '@heroicons/react/24/solid'
 
 interface Props {
   reference: table_Reference
@@ -13,33 +14,45 @@ interface Props {
 
 export default function ReferenceCard({ reference, headerColor, headerText = 'text-black' }: Props) {
   const isVideo = reference.rf_type === 'youtube'
+  const isSolution = reference.rf_pubtype === 'Solution'
+
+  const Icon = isVideo ? PlayCircleIcon : BookOpenIcon
+  const resourceLabel = reference.rf_pubtype
+  const resourceColor = isVideo ? VIDEO_COLOR : READ_COLOR
+
+  const resourceButton = (
+    <MyButton
+      onClick={() => window.open(reference.rf_link, '_blank')}
+      overrideClass={`h-7 text-xs flex-1 justify-center gap-1 ${resourceColor}`}
+    >
+      <Icon className='h-8 w-8 shrink-0' />
+      {resourceLabel}
+    </MyButton>
+  )
+
+  const quizButton = reference.rf_cntquestions > 0 ? (
+    <MyLink
+      href={{
+        pathname: '/dashboard/quiz',
+        query: {
+          uq_route: 'reference-select',
+          uq_column: 'qq_rfid',
+          uq_rfid: String(reference.rf_rfid)
+        },
+        reference: 'quiz',
+        segment: String(reference.rf_rfid)
+      }}
+      overrideClass={`h-7 text-xs flex-1 justify-center ${QUIZ_COLOR}`}
+    >
+      Quiz
+    </MyLink>
+  ) : null
 
   const buttons = (
     <div className='flex gap-2 w-full'>
-      <MyButton
-        onClick={() => window.open(reference.rf_link, '_blank')}
-        overrideClass={`h-7 text-xs flex-1 justify-center ${isVideo ? VIDEO_COLOR : READ_COLOR}`}
-      >
-        {isVideo ? 'Video' : 'Read'}
-      </MyButton>
-
-      {reference.rf_cntquestions > 0 && (
-        <MyLink
-          href={{
-            pathname: '/dashboard/quiz',
-            query: {
-              uq_route: 'reference-select',
-              uq_column: 'qq_rfid',
-              uq_rfid: String(reference.rf_rfid)
-            },
-            reference: 'quiz',
-            segment: String(reference.rf_rfid)
-          }}
-          overrideClass={`h-7 text-xs flex-1 justify-center ${QUIZ_COLOR}`}
-        >
-          Quiz
-        </MyLink>
-      )}
+      {isSolution && quizButton}
+      {resourceButton}
+      {!isSolution && quizButton}
     </div>
   )
 

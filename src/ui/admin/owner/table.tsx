@@ -228,7 +228,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='owner'
                   name='owner'
-                  overrideClass={`w-60 py-2`}
+                  overrideClass={`w-60 text-xxs md:h-6`}
                   type='text'
                   value={owner}
                   onChange={e => {
@@ -244,13 +244,13 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {data?.map(row => (
-              <tr key={row.ow_owid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1 '>{row.ow_owner}</td>
-                <td className='text-xs px-2 py-1 '>{row.ow_owid}</td>
-                <td className='text-xs px-2 py-1 '>
+              <tr key={row.ow_owid} className='w-full'>
+                <td className='text-xxs px-2 py-1 '>{row.ow_owner}</td>
+                <td className='text-xxs px-2 py-1 '>{row.ow_owid}</td>
+                <td className='text-xxs px-2 py-1 '>
                   <MyButton
                     onClick={() => handleDeleteClick(row)}
-                    overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                    overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-red-500 hover:bg-red-600'
                   >
                     Delete
                   </MyButton>

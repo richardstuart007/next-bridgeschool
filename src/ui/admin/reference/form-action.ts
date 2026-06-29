@@ -18,7 +18,8 @@ const FormSchemaSetup = z.object({
   rf_desc: z.string().min(1),
   rf_who: z.string(),
   rf_type: z.string(),
-  rf_link: z.string().min(1)
+  rf_link: z.string().min(1),
+  rf_pubtype: z.string()
 })
 //
 //  Errors and Messages
@@ -56,7 +57,8 @@ export async function Action(
     rf_desc: formData.get('rf_desc'),
     rf_who: formData.get('rf_who'),
     rf_type: formData.get('rf_type'),
-    rf_link: formData.get('rf_link')
+    rf_link: formData.get('rf_link'),
+    rf_pubtype: formData.get('rf_pubtype')
   })
   //
   // If form validation fails, return errors early. Otherwise, continue.
@@ -70,7 +72,7 @@ export async function Action(
   //
   // Unpack form data
   //
-  const { rf_desc, rf_link, rf_who, rf_type, rf_owner, rf_ref, rf_subject } = validatedFields.data
+  const { rf_desc, rf_link, rf_who, rf_type, rf_owner, rf_ref, rf_subject, rf_pubtype } = validatedFields.data
   //
   //  Convert hidden fields value to numeric
   //
@@ -88,7 +90,8 @@ export async function Action(
     rf_owner: rf_owner,
     rf_subject: rf_subject,
     rf_sbid: 0,
-    rf_cntquestions: 0
+    rf_cntquestions: 0,
+    rf_pubtype: rf_pubtype
   }
   const errorMessages = await validateReference(table_Reference)
   if (errorMessages.message) {
@@ -119,7 +122,8 @@ export async function Action(
       { column: 'rf_owner', value: rf_owner },
       { column: 'rf_ref', value: rf_ref },
       { column: 'rf_subject', value: rf_subject },
-      { column: 'rf_sbid', value: rf_sbid }
+      { column: 'rf_sbid', value: rf_sbid },
+      { column: 'rf_pubtype', value: rf_pubtype }
     ]
     //
     //  Write

@@ -13,6 +13,7 @@ import { update_sb_cntreference } from '@/src/lib/tables/tableSpecific/update_sb
 import MyDropdown from 'nextjs-shared/MyDropdown'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
+import MySelect from 'nextjs-shared/MySelect'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface FormProps {
@@ -39,6 +40,7 @@ export default function Table({
   const [who, setwho] = useState<string | number>('')
   const [ref, setref] = useState('')
   const [type, settype] = useState<string | number>('')
+  const [pubtype, setpubtype] = useState('')
   const [questions, setquestions] = useState<number | string>('')
   //
   //  Data
@@ -87,7 +89,7 @@ export default function Table({
   useEffect(() => {
     fetchdata()
     setShouldFetchData(false)
-  }, [currentPage, shouldFetchData, owner, subject, who, type, ref, desc, questions])
+  }, [currentPage, shouldFetchData, owner, subject, who, type, pubtype, ref, desc, questions])
   //----------------------------------------------------------------------------------------------
   // fetchdata
   //----------------------------------------------------------------------------------------------
@@ -100,6 +102,7 @@ export default function Table({
       { column: 'rf_subject', value: subject, operator: '=' },
       { column: 'rf_who', value: who, operator: '=' },
       { column: 'rf_type', value: type, operator: '=' },
+      { column: 'rf_pubtype', value: pubtype, operator: '=' },
       { column: 'rf_ref', value: ref, operator: 'LIKE' },
       { column: 'rf_desc', value: desc, operator: 'LIKE' },
       { column: 'rf_cntquestions', value: questions, operator: '>=' }
@@ -281,6 +284,9 @@ export default function Table({
               <th scope='col' className='text-xs   px-2'>
                 Type
               </th>
+              <th scope='col' className='text-xs   px-2'>
+                PubType
+              </th>
               <th scope='col' className='text-xs   px-2 text-center'>
                 Questions
               </th>
@@ -316,7 +322,7 @@ export default function Table({
                     table='tow_owner'
                     optionLabel='ow_owner'
                     optionValue='ow_owner'
-                    overrideClass_Dropdown='w-28'
+                    overrideClass_Dropdown='w-28 text-xxs md:h-6'
                     includeBlank={true}
                   />
                 )}
@@ -337,7 +343,7 @@ export default function Table({
                     tableColumnValue={owner}
                     optionLabel='sb_title'
                     optionValue='sb_subject'
-                    overrideClass_Dropdown='w-72'
+                    overrideClass_Dropdown='w-72 text-xxs md:h-6'
                     includeBlank={true}
                   />
                 )}
@@ -356,7 +362,7 @@ export default function Table({
                 <MyInput
                   id='ref'
                   name='ref'
-                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
+                  overrideClass={`w-60 md:h-6 rounded-md border border-blue-500 py-2 font-normal text-xxs`}
                   type='text'
                   value={ref}
                   onChange={e => {
@@ -375,7 +381,7 @@ export default function Table({
                 <MyInput
                   id='desc'
                   name='desc'
-                  overrideClass={`w-60  rounded-md border border-blue-500  py-2 font-normal `}
+                  overrideClass={`w-60 md:h-6 rounded-md border border-blue-500 py-2 font-normal text-xxs`}
                   type='text'
                   value={desc}
                   onChange={e => {
@@ -395,7 +401,7 @@ export default function Table({
                   table='twh_who'
                   optionLabel='wh_title'
                   optionValue='wh_who'
-                  overrideClass_Dropdown='w-28'
+                  overrideClass_Dropdown='w-28 text-xxs md:h-6'
                   includeBlank={true}
                 />
               </th>
@@ -410,8 +416,19 @@ export default function Table({
                   table='trt_reftype'
                   optionLabel='rt_title'
                   optionValue='rt_type'
-                  overrideClass_Dropdown='w-28'
+                  overrideClass_Dropdown='w-28 text-xxs md:h-6'
                   includeBlank={true}
+                />
+              </th>
+              {/* ................................................... */}
+              {/* pubtype                                              */}
+              {/* ................................................... */}
+              <th scope='col' className='text-xs  px-2'>
+                <MySelect
+                  value={pubtype}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setpubtype(e.target.value)}
+                  options={['', 'Learn', 'Solution']}
+                  overrideClass='w-24 text-xxs md:h-6'
                 />
               </th>
               {/* ................................................... */}
@@ -421,7 +438,7 @@ export default function Table({
                 <MyInput
                   id='questions'
                   name='questions'
-                  overrideClass={`h-8 w-12  rounded-md border border-blue-500  px-2 font-normal  text-center`}
+                  overrideClass={`w-12 md:h-6 rounded-md border border-blue-500 px-2 font-normal text-xxs text-center`}
                   type='text'
                   value={questions}
                   onChange={e => {
@@ -445,36 +462,36 @@ export default function Table({
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white '>
             {tabledata?.map(tabledata => (
-              <tr key={tabledata.rf_rfid} className='w-full border-b'>
-                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_sbid}</td>
-                <td className='text-xs  px-2 pt-2'>{tabledata.rf_owner}</td>
-                <td className='text-xs  px-2 pt-2'>{tabledata.rf_subject}</td>
-                <td className='text-xs  px-2 pt-2 text-left'>{tabledata.rf_rfid}</td>
-                <td className='text-xs  px-2 pt-2'>{tabledata.rf_ref}</td>
-                <td className='text-xs px-2 pt-2'>
+              <tr key={tabledata.rf_rfid} className='w-full'>
+                <td className='text-xxs px-2 pt-2 text-left'>{tabledata.rf_sbid}</td>
+                <td className='text-xxs px-2 pt-2'>{tabledata.rf_owner}</td>
+                <td className='text-xxs px-2 pt-2'>{tabledata.rf_subject}</td>
+                <td className='text-xxs px-2 pt-2 text-left'>{tabledata.rf_rfid}</td>
+                <td className='text-xxs px-2 pt-2'>{tabledata.rf_ref}</td>
+                <td className='text-xxs px-2 pt-2'>
                   {tabledata.rf_desc.length > 40
                     ? `${tabledata.rf_desc.slice(0, 35)}...`
                     : tabledata.rf_desc}
                 </td>
-                <td className='text-xs  px-2 pt-2'>{tabledata.rf_who}</td>
-                <td className='text-xs  px-2 pt-2'>{tabledata.rf_type}</td>
+                <td className='text-xxs px-2 pt-2'>{tabledata.rf_who}</td>
+                <td className='text-xxs px-2 pt-2'>{tabledata.rf_type}</td>
+                <td className='text-xxs px-2 pt-2'>{tabledata.rf_pubtype}</td>
                 {/* ................................................... */}
                 {/* Questions                                            */}
                 {/* ................................................... */}
                 {'rf_cntquestions' in tabledata && (
-                  <td className='text-xs px-2 pt-2 text-center'>
+                  <td className='text-xxs px-2 pt-2 text-center'>
                     {tabledata.rf_cntquestions > 0 ? tabledata.rf_cntquestions : ' '}
                   </td>
                 )}
                 {/* ................................................... */}
                 {/* MyButton  1                                                 */}
                 {/* ................................................... */}
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => handleClickEdit(tabledata)}
-                      overrideClass='h-6 px-2 py-2
-                           bg-blue-500 hover:bg-blue-600'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-blue-500 hover:bg-blue-600'
                     >
                       Edit
                     </MyButton>
@@ -483,11 +500,11 @@ export default function Table({
                 {/* ................................................... */}
                 {/* MyButton  2                                                 */}
                 {/* ................................................... */}
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex justify-center items-center'>
                     <MyButton
                       onClick={() => handleDeleteClick(tabledata)}
-                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-red-500 hover:bg-red-600'
                     >
                       Delete
                     </MyButton>

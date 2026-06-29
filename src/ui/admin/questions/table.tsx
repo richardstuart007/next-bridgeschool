@@ -345,7 +345,7 @@ export default function Table({
                     table='tow_owner'
                     optionLabel='ow_owner'
                     optionValue='ow_owner'
-                    overrideClass_Dropdown='w-28'
+                    overrideClass_Dropdown='w-28 text-xxs md:h-6'
                     includeBlank={true}
                   />
                 )}
@@ -366,7 +366,7 @@ export default function Table({
                     tableColumnValue={owner}
                     optionLabel='sb_title'
                     optionValue='sb_subject'
-                    overrideClass_Dropdown='w-48'
+                    overrideClass_Dropdown='w-48 text-xxs md:h-6'
                     includeBlank={true}
                   />
                 )}
@@ -386,7 +386,7 @@ export default function Table({
                 <MyInput
                   id='detail'
                   name='detail'
-                  overrideClass={`w-96  py-2`}
+                  overrideClass={`w-96 text-xxs md:h-6`}
                   type='text'
                   value={detail}
                   onChange={e => {
@@ -412,13 +412,13 @@ export default function Table({
                     tableData={Comparison_values}
                     optionLabel='optionValue'
                     optionValue='optionValue'
-                    overrideClass_Dropdown='w-12'
+                    overrideClass_Dropdown='w-12 text-xxs md:h-6'
                     includeBlank={true}
                   />
                   <MyInput
                     id='rfid'
                     name='rfid'
-                    overrideClass={`w-16  py-2 text-center`}
+                    overrideClass={`w-16 text-xxs md:h-6 text-center`}
                     type='text'
                     value={rfid}
                     onChange={e => {
@@ -436,19 +436,19 @@ export default function Table({
           {/* ---------------------------------------------------------------------------------- */}
           <tbody className='bg-white'>
             {record?.map(record => (
-              <tr key={record.qq_qqid} className='w-full border-b py-2                    '>
-                <td className='text-xs px-2 py-1  '>{record.qq_owner}</td>
-                <td className='text-xs px-2 py-1  '>{record.qq_subject}</td>
-                <td className='text-xs px-2 py-1 text-center '>{record.qq_sbid}</td>
-                <td className='text-xs px-2 py-1 text-center  '>{record.qq_seq}</td>
-                <td className='text-xs px-2 py-1 text-center '>{record.qq_qqid}</td>
+              <tr key={record.qq_qqid} className='w-full'>
+                <td className='text-xxs px-2 py-1  '>{record.qq_owner}</td>
+                <td className='text-xxs px-2 py-1  '>{record.qq_subject}</td>
+                <td className='text-xxs px-2 py-1 text-center '>{record.qq_sbid}</td>
+                <td className='text-xxs px-2 py-1 text-center  '>{record.qq_seq}</td>
+                <td className='text-xxs px-2 py-1 text-center '>{record.qq_qqid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Detail                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1  '>
+                <td className='text-xxs px-2 py-1  '>
                   <MyButton
                     onClick={() => handleClickEdit_detail(record)}
-                    overrideClass='h-6 w-auto  bg-blue-400  hover:bg-blue-500 px-2 py-1'
+                    overrideClass='h-6 md:h-6 w-auto bg-blue-400 hover:bg-blue-500 px-2 py-0 text-xxs'
                   >
                     {record.qq_detail.length > 100
                       ? `${record.qq_detail.slice(0, 100)}...`
@@ -458,19 +458,19 @@ export default function Table({
                 {/* --------------------------------------------------------------------- */}
                 {/* Help                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center '>{record.qq_help ? 'Y' : 'N'}</td>
+                <td className='text-xxs px-2 py-1 text-center '>{record.qq_help ? 'Y' : 'N'}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Reference ID                                                              */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center '>{record.qq_rfid}</td>
+                <td className='text-xxs px-2 py-1 text-center '>{record.qq_rfid}</td>
                 {/* --------------------------------------------------------------------- */}
                 {/* Answers                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_answers(record)}
-                      overrideClass='flex text-xxs h-6 w-20 bg-blue-400  hover:bg-blue-500 px-2 py-1 text-center justify-center'
+                      overrideClass='flex text-xxs h-6 md:h-6 w-20 bg-blue-400 hover:bg-blue-500 px-2 py-0 text-center justify-center'
                     >
                       {record.qq_ans && record.qq_ans.length > 0
                         ? record.qq_ans[0].slice(0, 8)
@@ -481,11 +481,11 @@ export default function Table({
                 {/* --------------------------------------------------------------------- */}
                 {/* Hands                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_hands(record)}
-                      overrideClass='h-6 bg-blue-400 hover:bg-blue-500 px-2 py-1 text-xxs'
+                      overrideClass='h-6 md:h-6 bg-blue-400 hover:bg-blue-500 px-2 py-0 text-xxs'
                     >
                       {record.qq_north && !record.qq_north.every(card => card === 'n')
                         ? 'N: ' + record.qq_north.join(', ')
@@ -502,11 +502,11 @@ export default function Table({
                 {/* --------------------------------------------------------------------- */}
                 {/* Bidding                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleClickEdit_bidding(record)}
-                      overrideClass=' h-6  bg-blue-400  hover:bg-blue-500 px-2 py-1 text-xxs'
+                      overrideClass='h-6 md:h-6 bg-blue-400 hover:bg-blue-500 px-2 py-0 text-xxs'
                     >
                       {record.qq_rounds?.[0]
                         ?.filter(card => card !== 'N' && card !== 'n')
@@ -517,11 +517,11 @@ export default function Table({
                 {/* --------------------------------------------------------------------- */}
                 {/* Delete                                                               */}
                 {/* --------------------------------------------------------------------- */}
-                <td className='text-xs px-2 py-1 text-center'>
+                <td className='text-xxs px-2 py-1 text-center'>
                   <div className='inline-flex'>
                     <MyButton
                       onClick={() => handleDeleteClick(record)}
-                      overrideClass=' h-6 px-2 py-2  bg-red-500  hover:bg-red-600 px-2 py-1'
+                      overrideClass='h-6 md:h-6 px-2 py-0 text-xxs bg-red-500 hover:bg-red-600'
                     >
                       Delete
                     </MyButton>

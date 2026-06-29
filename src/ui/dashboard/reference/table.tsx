@@ -76,7 +76,6 @@ export default function Table_Reference({
   //
   //  Initialisation
   //
-  //
   //  Shrink/Detail
   //
   const [shrink, setshrink] = useState(false)
@@ -389,8 +388,7 @@ export default function Table_Reference({
   function render_selection() {
     return (
       <div
-        className={`px-3 py-1 flex items-center justify-between bg-blue-200 border-b
-              rounded-t-lg ${shrink_Text}`}
+        className={`px-3 py-1 flex items-center justify-between bg-blue-200 border-b rounded-t-lg ${shrink_Text}`}
       >
         <div className='font-semibold text-red-600 tracking-wide'>Subject References</div>
 
@@ -501,7 +499,7 @@ export default function Table_Reference({
               optionLabel='uo_owner'
               optionValue='uo_owner'
               overrideClass_Dropdown={
-                shrink ? `h-5 w-24 ${shrink_Text}` : `h-6 w-28 ${shrink_Text}`
+                shrink ? `h-5 md:h-5 w-24 ${shrink_Text}` : `h-6 md:h-6 w-28 ${shrink_Text}`
               }
               includeBlank={true}
             />
@@ -523,7 +521,7 @@ export default function Table_Reference({
                 optionLabel='sb_title'
                 optionValue='sb_subject'
                 overrideClass_Dropdown={
-                  shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-36 ${shrink_Text}`
+                  shrink ? `h-5 md:h-5 w-32 ${shrink_Text}` : `h-6 md:h-6 w-36 ${shrink_Text}`
                 }
                 includeBlank={true}
               />
@@ -541,7 +539,7 @@ export default function Table_Reference({
             <MyInput
               id='ref'
               name='ref'
-              overrideClass={shrink ? `h-5 w-32 ${shrink_Text}` : `h-6 w-40 ${shrink_Text}`}
+              overrideClass={shrink ? `h-5 md:h-5 w-32 ${shrink_Text}` : `h-6 md:h-6 w-40 ${shrink_Text}`}
               type='text'
               value={ref}
               onChange={e => {
@@ -561,7 +559,7 @@ export default function Table_Reference({
           <MyInput
             id='desc'
             name='desc'
-            overrideClass={shrink ? `h-5 w-40 ${shrink_Text}` : `h-6 w-48 ${shrink_Text}`}
+            overrideClass={shrink ? `h-5 md:h-5 w-40 ${shrink_Text}` : `h-6 md:h-6 w-48 ${shrink_Text}`}
             type='text'
             value={desc}
             onChange={e => {
@@ -583,7 +581,7 @@ export default function Table_Reference({
               optionLabel='wh_title'
               optionValue='wh_who'
               overrideClass_Dropdown={
-                shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-32 ${shrink_Text}`
+                shrink ? `h-5 md:h-5 w-28 ${shrink_Text}` : `h-6 md:h-6 w-32 ${shrink_Text}`
               }
               includeBlank={true}
             />
@@ -603,7 +601,7 @@ export default function Table_Reference({
               optionLabel='rt_title'
               optionValue='rt_type'
               overrideClass_Dropdown={
-                shrink ? `h-5 w-20 ${shrink_Text}` : `h-6 w-24 ${shrink_Text}`
+                shrink ? `h-5 md:h-5 w-20 ${shrink_Text}` : `h-6 md:h-6 w-24 ${shrink_Text}`
               }
               includeBlank={true}
             />
@@ -617,7 +615,7 @@ export default function Table_Reference({
             <MyInput
               id='questions'
               name='questions'
-              overrideClass={`text-center ${shrink ? 'h-5 w-10' : 'h-6 w-12'} ${shrink_Text}`}
+              overrideClass={`text-center ${shrink ? 'h-5 md:h-5 w-10' : 'h-6 md:h-6 w-12'} ${shrink_Text}`}
               type='text'
               value={questions}
               onChange={e => {
@@ -644,7 +642,7 @@ export default function Table_Reference({
     return (
       <tbody className='bg-white text-xs'>
         {tabledata?.map(tabledata => (
-          <tr key={tabledata.rf_rfid} className='w-full border-b'>
+          <tr key={tabledata.rf_rfid} className='w-full'>
             {/* ................................................... */}
             {/* Owner                                          */}
             {/* ................................................... */}
@@ -692,7 +690,7 @@ export default function Table_Reference({
               <div className='inline-flex justify-center items-center'>
                 <MyButton
                   onClick={() => window.open(`${tabledata.rf_link}`, '_blank')}
-                  overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text} ${
+                  overrideClass={`text-white ${shrink ? 'h-4 md:h-4' : 'h-5 md:h-5'} ${shrink_Text} ${
                     tabledata.rf_type === 'youtube'
                       ? 'bg-orange-500 hover:bg-orange-600'
                       : 'bg-green-500 hover:bg-green-600'
@@ -728,7 +726,7 @@ export default function Table_Reference({
                         reference: 'quiz',
                         segment: String(tabledata.rf_rfid)
                       }}
-                      overrideClass={`text-white ${shrink ? 'h-5' : 'h-6'} ${shrink_Text}`}
+                      overrideClass={`text-white ${shrink ? 'h-4 md:h-4' : 'h-5 md:h-5'} ${shrink_Text}`}
                       caller={functionName}
                     >
                       Quiz

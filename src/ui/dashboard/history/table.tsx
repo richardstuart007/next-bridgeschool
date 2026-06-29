@@ -16,6 +16,8 @@ import { getWidthNumber } from 'nextjs-shared/widthUtils'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface TableProps {
+  fixedUsid?: number
+  fixedUserName?: string
   initialUsid?: number
   initialCountryCode?: string
   initialOwners?: { uo_owner: string }[]
@@ -24,6 +26,8 @@ interface TableProps {
 }
 
 export default function Table_History({
+  fixedUsid,
+  fixedUserName,
   initialUsid,
   initialCountryCode,
   initialOwners,
@@ -43,7 +47,7 @@ export default function Table_History({
   //
   //  Input selection
   //
-  const [usid, setusid] = useState<number | string>(initialUsid || '')
+  const [usid, setusid] = useState<number | string>(fixedUsid ?? initialUsid ?? '')
   const [owner, setowner] = useState<string | number>(initOwner)
   const [subject, setsubject] = useState<string | number>('')
   const [title, settitle] = useState('')
@@ -107,10 +111,6 @@ export default function Table_History({
           setshrink_Text('text-xxs md:text-xs')
         }
         //
-        //  Default curent user
-        //
-        setusid(sessionContext.cx_usid)
-        //
         //  Get users country code
         //
         if (!initialisationCompleted) {
@@ -136,7 +136,7 @@ export default function Table_History({
         //
         //  Update Columns and rows
         //
-        updateColumns(cx_detail)
+        updateColumns(cx_detail, !!fixedUsid)
         //
         //  Allow fetch of data
         //
@@ -372,7 +372,7 @@ export default function Table_History({
   //----------------------------------------------------------------------------------------------
   //  Width - update columns
   //----------------------------------------------------------------------------------------------
-  function updateColumns(cx_detail: boolean) {
+  function updateColumns(cx_detail: boolean, isFixedUser: boolean) {
     const w = getWidthNumber()
     setshow_title(false)
     setshow_datetime(false)
@@ -394,17 +394,19 @@ export default function Table_History({
       setshow_correct(true)
       setref_to_dateFormat('yy-MMM-dd HH:mm')
     }
-    if (w >= 3 && cx_detail) setshow_name(true)
+    if (w >= 3 && cx_detail && !isFixedUser) setshow_name(true)
     if (w >= 4) {
       if (!ref_selected_uoowner.current) setshow_owner(true)
       if (cx_detail) setshow_subject(true)
     }
     if (w >= 5 && cx_detail) {
       setshow_questions(true)
-      setshow_hsid(true)
-      setshow_sbid(true)
-      setshow_rfid(true)
-      setshow_usid(true)
+      if (!isFixedUser) {
+        setshow_hsid(true)
+        setshow_sbid(true)
+        setshow_rfid(true)
+        setshow_usid(true)
+      }
     }
   }
   //----------------------------------------------------------------------------------------------
@@ -416,7 +418,9 @@ export default function Table_History({
         className={`px-4 py-2 flex items-center justify-between bg-blue-200 border-b
               rounded-t-lg ${shrink_Text}`}
       >
-        <div className='font-semibold text-red-600 tracking-wide'>Quiz History</div>
+        <div className='font-semibold text-red-600 tracking-wide'>
+          Quiz History{fixedUserName ? ` — ${fixedUserName}` : ''}
+        </div>
 
         {show_h_owner && (
           <div>
@@ -519,7 +523,7 @@ export default function Table_History({
               optionLabel='uo_owner'
               optionValue='uo_owner'
               overrideClass_Dropdown={
-                shrink ? `h-5 w-24 ${shrink_Text}` : `h-6 w-28 ${shrink_Text}`
+                shrink ? `h-5 w-24 ${shrink_Text}` : `h-6 md:h-6 w-28 ${shrink_Text}`
               }
               includeBlank={true}
             />
@@ -541,7 +545,7 @@ export default function Table_History({
                 optionLabel='sb_title'
                 optionValue='sb_subject'
                 overrideClass_Dropdown={
-                  shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 w-36 ${shrink_Text}`
+                  shrink ? `h-5 w-28 ${shrink_Text}` : `h-6 md:h-6 w-36 ${shrink_Text}`
                 }
                 includeBlank={true}
               />
@@ -556,7 +560,7 @@ export default function Table_History({
             <MyInput
               id='sbid'
               name='sbid'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-6 md:h-6 w-12 md:w-12`}`}
               type='text'
               value={sbid}
               onChange={e => {
@@ -576,7 +580,7 @@ export default function Table_History({
             <MyInput
               id='rfid'
               name='rfid'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-6 md:h-6 w-12 md:w-12`}`}
               type='text'
               value={rfid}
               onChange={e => {
@@ -596,7 +600,7 @@ export default function Table_History({
             <MyInput
               id='hsid'
               name='hsid'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-6 md:h-6 w-12 md:w-12`}`}
               type='text'
               value={hsid}
               onChange={e => {
@@ -620,7 +624,7 @@ export default function Table_History({
             <MyInput
               id='title'
               name='title'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-28` : `h-5 md:h6 w-28 md:w-36`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-28` : `h-6 md:h-6 w-28 md:w-36`}`}
               type='text'
               value={title}
               onChange={e => {
@@ -638,7 +642,7 @@ export default function Table_History({
             <MyInput
               id='usid'
               name='usid'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-6 md:h-6 w-12 md:w-12`}`}
               type='text'
               value={usid}
               onChange={e => {
@@ -659,7 +663,7 @@ export default function Table_History({
             <MyInput
               id='name'
               name='name'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-28` : `h-5 md:h6 w-28 md:w-36`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-28` : `h-6 md:h-6 w-28 md:w-36`}`}
               type='text'
               value={name}
               onChange={e => {
@@ -678,7 +682,7 @@ export default function Table_History({
             <MyInput
               id='questions'
               name='questions'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-6 md:h-6 w-12 md:w-12`}`}
               type='text'
               value={questions}
               onChange={e => {
@@ -698,7 +702,7 @@ export default function Table_History({
             <MyInput
               id='correct'
               name='correct'
-              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-5 md:h6 w-12 md:w-12`}`}
+              overrideClass={`rounded-md border border-blue-500  px-2 font-normal text-center  ${shrink_Text} ${shrink ? `h-5 w-10` : `h-6 md:h-6 w-12 md:w-12`}`}
               type='text'
               value={correct}
               onChange={e => {
@@ -726,24 +730,24 @@ export default function Table_History({
       <tbody className='bg-white text-xxs md:text-xs'>
         {tabledata && tabledata.length > 0 ? (
           tabledata?.map((tabledata, index) => (
-            <tr key={`${tabledata.hs_hsid}-${index}`} className='w-full border-b'>
-              {show_owner && <td className={`px-2 ${shrink_Text}`}>{tabledata.hs_owner}</td>}
-              {show_subject && <td className={`px-2 ${shrink_Text}`}>{tabledata.hs_subject}</td>}
+            <tr key={`${tabledata.hs_hsid}-${index}`} className='w-full'>
+              {show_owner && <td className={`px-2 py-1 ${shrink_Text}`}>{tabledata.hs_owner}</td>}
+              {show_subject && <td className={`px-2 py-1 ${shrink_Text}`}>{tabledata.hs_subject}</td>}
               {show_sbid && (
-                <td className={`px-2 text-center  ${shrink_Text}`}>
+                <td className={`px-2 py-1 text-center ${shrink_Text}`}>
                   {tabledata.sb_sbid > 0 ? tabledata.sb_sbid : ' '}
                 </td>
               )}
               {show_rfid && (
-                <td className={`px-2 text-center  ${shrink_Text}`}>
+                <td className={`px-2 py-1 text-center ${shrink_Text}`}>
                   {tabledata.hs_rfid > 0 ? tabledata.hs_rfid : ' '}
                 </td>
               )}
               {show_hsid && (
-                <td className={`px-2 text-center  ${shrink_Text}`}>{tabledata.hs_hsid}</td>
+                <td className={`px-2 py-1 text-center ${shrink_Text}`}>{tabledata.hs_hsid}</td>
               )}
               {show_datetime && (
-                <td className={`px-2 text-left  ${shrink_Text}`}>
+                <td className={`px-2 py-1 text-left ${shrink_Text}`}>
                   {convertUTCtoLocal({
                     datetimeUTC: tabledata.hs_datetime,
                     to_localcountryCode: countryCode,
@@ -752,7 +756,7 @@ export default function Table_History({
                 </td>
               )}
               {show_title && (
-                <td className={`px-2 ${shrink_Text}`}>
+                <td className={`px-2 py-1 ${shrink_Text}`}>
                   {tabledata.sb_title
                     ? tabledata.sb_title.length > 35
                       ? `${tabledata.sb_title.slice(0, 30)}...`
@@ -761,21 +765,21 @@ export default function Table_History({
                 </td>
               )}
               {show_usid && (
-                <td className={`px-2 text-center  ${shrink_Text}`}>{tabledata.hs_usid}</td>
+                <td className={`px-2 py-1 text-center ${shrink_Text}`}>{tabledata.hs_usid}</td>
               )}
-              {show_name && <td className={`px-2   ${shrink_Text}`}>{tabledata.us_name}</td>}
+              {show_name && <td className={`px-2 py-1 ${shrink_Text}`}>{tabledata.us_name}</td>}
               {show_questions && (
-                <td className={`px-2 text-center  ${shrink_Text}`}>{tabledata.hs_questions}</td>
+                <td className={`px-2 py-1 text-center ${shrink_Text}`}>{tabledata.hs_questions}</td>
               )}
               {show_correct && (
-                <td className={`px-2   text-center ${shrink_Text}`}>
+                <td className={`px-2 py-1 text-center ${shrink_Text}`}>
                   {tabledata.hs_correctpercent}
                 </td>
               )}
               {/* ................................................... */}
               {/* Review                                          */}
               {/* ................................................... */}
-              <td className='px-2  text-center'>
+              <td className='px-2 py-1 text-center'>
                 <div className='inline-flex justify-center items-center'>
                   <MyLink
                     href={{
@@ -786,7 +790,7 @@ export default function Table_History({
                         uq_route: 'history'
                       }
                     }}
-                    overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
+                    overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center  ${shrink_Text} ${shrink ? `h-4 md:h-4 w-10` : `h-5 md:h-5 w-12 md:w-16`}`}
                     caller={functionName}
                   >
                     Review
@@ -796,7 +800,7 @@ export default function Table_History({
               {/* ................................................... */}
               {/* Quiz                                             */}
               {/* ................................................... */}
-              <td className='px-2 text-center'>
+              <td className='px-2 py-1 text-center'>
                 <div className='inline-flex justify-center items-center'>
                   <MyLink
                     href={
@@ -822,7 +826,7 @@ export default function Table_History({
                             segment: String(tabledata.hs_sbid)
                           }
                     }
-                    overrideClass={`text-white justify-center  ${shrink_Text} ${shrink ? `h-5 w-12` : `h-5 md:h6 w-12 md:w-16`}`}
+                    overrideClass={`text-white justify-center  ${shrink_Text} ${shrink ? `h-4 md:h-4 w-10` : `h-5 md:h-5 w-12 md:w-16`}`}
                     caller={functionName}
                   >
                     Quiz
@@ -848,7 +852,7 @@ export default function Table_History({
       <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
         <div className='flex justify-start'>
           <MyLink
-            overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-5 ${!shrink ? 'md:h-6' : ''}`}
+            overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-6 md:h-6`}
             href={{
               pathname: '/dashboard',
               reference: 'dashboard',

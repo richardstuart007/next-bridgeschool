@@ -171,7 +171,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   <MyInput
                     id='id'
                     name='id'
-                    overrideClass={`w-16  rounded-md border border-blue-500   font-normal text-xs text-center `}
+                    overrideClass={`w-16 rounded-md border border-blue-500 font-normal text-xxs md:h-6 text-center`}
                     type='number'
                     value={id || ''}
                     onChange={e => {
@@ -190,7 +190,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   <MyInput
                     id='uid'
                     name='uid'
-                    overrideClass={`w-16  rounded-md border border-blue-500   font-normal text-xs text-center `}
+                    overrideClass={`w-16 rounded-md border border-blue-500 font-normal text-xxs md:h-6 text-center`}
                     type='number'
                     value={uid || ''}
                     onChange={e => {
@@ -207,7 +207,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='name'
                   name='name'
-                  overrideClass={`w-72  rounded-md border border-blue-500   font-normal text-xs`}
+                  overrideClass={`w-72 rounded-md border border-blue-500 font-normal text-xxs md:h-6`}
                   type='text'
                   value={name}
                   onChange={e => {
@@ -223,7 +223,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                 <MyInput
                   id='email'
                   name='email'
-                  overrideClass={`w-72  rounded-md border border-blue-500   font-normal text-xs`}
+                  overrideClass={`w-72 rounded-md border border-blue-500 font-normal text-xxs md:h-6`}
                   type='text'
                   value={email}
                   onChange={e => {
@@ -240,7 +240,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
                   <MyInput
                     id='provider'
                     name='provider'
-                    overrideClass={`w-32  rounded-md border border-blue-500   font-normal text-xs text-center `}
+                    overrideClass={`w-32 rounded-md border border-blue-500 font-normal text-xxs md:h-6 text-center`}
                     type='text'
                     value={provider}
                     onChange={e => {
@@ -255,10 +255,10 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
           {/* ---------------------------------------------------------------------------------- */}
           {/* BODY                                 */}
           {/* ---------------------------------------------------------------------------------- */}
-          <tbody className='bg-white text-xs'>
+          <tbody className='bg-white text-xxs'>
             {tabledata && tabledata.length > 0 ? (
               tabledata?.map(tabledata => (
-                <tr key={tabledata.ss_ssid} className='w-full border-b'>
+                <tr key={tabledata.ss_ssid} className='w-full'>
                   <td className='px-2 text-center'>{tabledata.ss_ssid}</td>
                   <td className='px-2 text-center'>
                     {convertUTCtoLocal({
