@@ -59,17 +59,17 @@ export default function NavLinks(props: Props) {
   //
   const overrideClass_mylinkButton = [
     'justify-center',
-    shrink ? 'h-5' : 'h-5 md:h-6',
+    shrink ? 'h-8 md:h-8' : 'h-10 md:h-10',
     'bg-yellow-300',
     'hover:bg-yellow-400 hover:text-red-600',
-    'md:flex-none md:p-2 px-1 md:px-2'
+    'w-full p-2'
   ].join(' ')
   //
   //  Text
   //
   const overrideClass_mylinkText = [
     'text-black',
-    shrink ? 'text-xxs' : 'text-xxs md:text-xs',
+    shrink ? 'text-xs' : 'text-sm',
     'hover:text-red-600'
   ].join(' ')
   //--------------------------------------------------------------------------------
@@ -81,10 +81,7 @@ export default function NavLinks(props: Props) {
             key={link.name}
             href={{
               pathname: String(link.href),
-              reference: String(link.reference),
-              query: {
-                uq_route: 'dashboard'
-              }
+              reference: String(link.reference)
             }}
             overrideClass={overrideClass_mylinkButton}
             caller={functionName}

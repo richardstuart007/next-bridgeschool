@@ -409,7 +409,6 @@ export default function Table_Reference({
                     href={{
                       pathname: `/dashboard/quiz`,
                       query: {
-                        uq_route: 'reference-select',
                         uq_column: 'qq_sbid',
                         uq_sbid: String(uq_sbid)
                       },
@@ -719,7 +718,6 @@ export default function Table_Reference({
                       href={{
                         pathname: `/dashboard/quiz`,
                         query: {
-                          uq_route: 'reference-select',
                           uq_column: 'qq_rfid',
                           uq_rfid: String(tabledata.rf_rfid)
                         },

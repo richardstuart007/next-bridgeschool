@@ -785,10 +785,7 @@ export default function Table_History({
                     href={{
                       pathname: `/dashboard/quiz-review/${tabledata.hs_hsid}`,
                       reference: 'quiz-review',
-                      segment: String(tabledata.hs_hsid),
-                      query: {
-                        uq_route: 'history'
-                      }
+                      segment: String(tabledata.hs_hsid)
                     }}
                     overrideClass={`bg-green-500 hover:bg-green-600 text-white justify-center  ${shrink_Text} ${shrink ? `h-4 md:h-4 w-10` : `h-5 md:h-5 w-12 md:w-16`}`}
                     caller={functionName}
@@ -808,7 +805,6 @@ export default function Table_History({
                         ? {
                             pathname: `/dashboard/quiz`,
                             query: {
-                              uq_route: 'history',
                               uq_column: 'qq_rfid',
                               uq_rfid: String(tabledata.hs_rfid)
                             },
@@ -818,7 +814,6 @@ export default function Table_History({
                         : {
                             pathname: `/dashboard/quiz`,
                             query: {
-                              uq_route: 'history',
                               uq_column: 'qq_sbid',
                               uq_sbid: String(tabledata.hs_sbid)
                             },
@@ -850,21 +845,6 @@ export default function Table_History({
   function render_pagination() {
     return (
       <div className='mt-5 flex w-full justify-center text-xxs md:text-xs'>
-        <div className='flex justify-start'>
-          <MyLink
-            overrideClass={`bg-yellow-600 hover:bg-yellow-700 text-white ${shrink_Text} h-6 md:h-6`}
-            href={{
-              pathname: '/dashboard',
-              reference: 'dashboard',
-              query: {
-                uq_route: 'history'
-              }
-            }}
-            caller={functionName}
-          >
-            Back to Dashboard
-          </MyLink>
-        </div>
         <div className='flex grow justify-center'>
           <MyPagination
             totalPages={totalPages}

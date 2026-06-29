@@ -17,7 +17,7 @@ export default function NavSession(props: FormProps) {
     <>
       {/*  Desktop  */}
       <div
-        className={`mb-2 rounded-md bg-green-600 py-1 flex flex-col ${shrink ? `h-22 w-24 text-xxs` : `h-22 w-24 text-xs`}`}
+        className={`mb-2 rounded-md bg-green-600 py-1 flex flex-col w-full ${shrink ? `h-22 text-xxs` : `h-22 text-xs`}`}
       >
         <div
           className={`text-white text-xs mb-1 text-center ${shrink ? `text-xxs` : `text-xs`}`}

@@ -47,7 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <html lang='en'>
-      <body className={`${classNameColour} px-2 py-1 overflow-hidden max-w-full`}>
+      <body className={`${classNameColour} px-2 pt-1 pb-2 overflow-hidden max-w-full flex flex-col h-dvh`}>
         {NEXT_PUBLIC_APPENV_ISDEV && <DevHeader dbLocation={DB_LOCATION} />}
 
         <UserProvider>{children}</UserProvider>

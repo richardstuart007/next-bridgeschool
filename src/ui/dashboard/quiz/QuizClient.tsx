@@ -79,10 +79,7 @@ export default function QuizClient({ questions: initialQuestions, rfid }: QuizCl
               href={{
                 reference: 'quiz-review',
                 pathname: `/dashboard/quiz-review/${hs_hsid}`,
-                segment: String(hs_hsid),
-                query: {
-                  uq_route: 'quiz'
-                }
+                segment: String(hs_hsid)
               }}
               overrideClass='h-5 bg-green-500 hover:bg-green-600 text-white justify-center px-2 rounded-md'
               caller={functionName}

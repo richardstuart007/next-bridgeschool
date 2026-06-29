@@ -6,7 +6,6 @@ import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
 import QuizHands from '@/src/ui/dashboard/quiz-question/hands'
 import MyPagination from 'nextjs-shared/MyPagination'
 import QuizReviewChoice from '@/src/ui/dashboard/quizreview/choices'
-import { MyLink } from 'nextjs-shared/MyLink'
 import { MyHelp } from 'nextjs-shared/MyHelp'
 
 interface ReviewFormClientProps {
@@ -15,7 +14,6 @@ interface ReviewFormClientProps {
 }
 
 export default function ReviewFormClient(props: ReviewFormClientProps) {
-  const functionName = 'ReviewFormClient'
   const { questions, history } = props
   const { hs_hsid, hs_ans, hs_qqid, hs_correctpercent } = history
 
@@ -85,28 +83,6 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   }
 
   //...................................................................................
-  //. Navigation
-  //...................................................................................
-  function render_nav() {
-    return (
-      <div className='mt-2 flex justify-start'>
-        <MyLink
-          href={{
-            pathname: '/dashboard/history',
-            reference: 'history',
-            query: {
-              uq_route: 'quiz-review'
-            }
-          }}
-          overrideClass='text-white h-5 bg-yellow-600 hover:bg-yellow-700'
-          caller={functionName}
-        >
-          History
-        </MyLink>
-      </div>
-    )
-  }
-  //...................................................................................
   //. Render everything
   //...................................................................................
   return (
@@ -118,7 +94,6 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
       {question && <QuizReviewChoice question={question} correctAnswer={0} selectedAnswer={ans} />}
       {render_pagination()}
       {question?.qq_help && <MyHelp text={question.qq_help} label='Help' />}
-      {render_nav()}
     </>
   )
 }

@@ -32,27 +32,27 @@ export function GraphSummaryWrapper({
 
   const handlePointClick = (clickData: { key: number; keyType: string }) => {
     if (clickData.keyType === 'hsid') {
-      router.push(`/dashboard/quiz-review/${clickData.key}?uq_route=history`)
+      router.push(`/dashboard/quiz-review/${clickData.key}`)
     }
   }
 
   return (
     <>
       {/* First Graph - User Results Line Chart */}
-      <div className='flex-none h-[30vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
+      <div className='flex-1 min-h-0 flex flex-col'>
+        <div className='w-full max-w-2xl bg-gray-100 flex-1 min-h-0 p-3 flex flex-col justify-between'>
           <User_Header averagePercentage={safeDataUserAverage} initialMonths={userMonths} />
-          <div className='flex-grow overflow-hidden'>
+          <div className='flex-grow min-h-0 overflow-hidden'>
             <MyLineChart LineGraphData={UserLineGraph} onPointClick={handlePointClick} />
           </div>
         </div>
       </div>
 
       {/* Top Results Graph - Bar Chart */}
-      <div className='flex-none h-[30vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
+      <div className='flex-1 min-h-0 flex flex-col'>
+        <div className='w-full max-w-2xl bg-gray-100 flex-1 min-h-0 p-3 flex flex-col justify-between'>
           <Top_Header initialMonths={topMonths} />
-          <div className='flex-grow overflow-hidden'>
+          <div className='flex-grow min-h-0 overflow-hidden'>
             <MyBarChart
               StackedGraphData={TopGraphData}
               onPointClick={handlePointClick} // Added click handler
@@ -62,10 +62,10 @@ export function GraphSummaryWrapper({
       </div>
 
       {/* Recent Results Graph - Bar Chart */}
-      <div className='flex-none h-[30vh]'>
-        <div className='w-full max-w-2xl bg-gray-100 h-full p-3 flex flex-col justify-between'>
+      <div className='flex-1 min-h-0 flex flex-col'>
+        <div className='w-full max-w-2xl bg-gray-100 flex-1 min-h-0 p-3 flex flex-col justify-between'>
           <Recent_Header initialUsersReturned={recentUsers} initialUsersAverage={recentAvg} />
-          <div className='flex-grow overflow-hidden'>
+          <div className='flex-grow min-h-0 overflow-hidden'>
             <MyBarChart
               StackedGraphData={RecentGraphData}
               onPointClick={handlePointClick} // Added click handler
