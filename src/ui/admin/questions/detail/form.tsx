@@ -282,11 +282,11 @@ export default function Form({
             Help
           </label>
           <div className='relative'>
-            <textarea
-              className='w-96  px-4 pt-2 rounded-md border border-blue-500 text-xs  '
+            <MyTextarea
+              overrideClass='w-96  px-4 pt-2 rounded-md border border-blue-500 text-xs  '
               id='qq_help'
-              name='qq_help'
               rows={4}
+              name='qq_help'
               value={qq_help}
               onChange={e => setqq_help(e.target.value)}
             />

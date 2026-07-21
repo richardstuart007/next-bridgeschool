@@ -6,6 +6,7 @@ import { useFormStatus } from 'react-dom'
 import { Action } from '@/src/ui/admin/questions/answers/form-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
 import { MyInput } from 'nextjs-shared/MyInput'
+import { MyTextarea } from 'nextjs-shared/MyTextarea'
 
 interface FormProps {
   record: table_Questions | null
@@ -89,8 +90,8 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
           {[0, 1, 2, 3].map(index => (
             <div key={index} className='flex items-center space-x-4 mb-2'>
               {/* Answer Input */}
-              <textarea
-                className='w-full px-4 rounded-md border border-blue-500 py-[9px] text-xs '
+              <MyTextarea
+                overrideClass='w-full h-auto px-4 md:px-4 py-[9px]'
                 id={`qq_ans${index}`}
                 name={`qq_ans${index}`}
                 value={qq_ans[index] || ''}

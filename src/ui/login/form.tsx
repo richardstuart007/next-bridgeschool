@@ -263,13 +263,13 @@ export default function LoginForm() {
         )}
         {!signingIn && (
           <div className='mt-4 flex justify-center'>
-            <button
+            <MyButton
               type='button'
               onClick={function () { router.push('/register') }}
-              className='text-xs italic font-bold text-black hover:text-gray-700'
+              overrideClass='h-auto md:h-auto px-0 md:px-0 bg-transparent hover:bg-transparent italic font-bold text-black hover:text-gray-700'
             >
               not Registered click here
-            </button>
+            </MyButton>
           </div>
         )}
       </div>

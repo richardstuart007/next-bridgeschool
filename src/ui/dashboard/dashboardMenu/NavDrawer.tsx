@@ -88,13 +88,13 @@ export default function NavDrawer(props: Props) {
       >
         {/* Header row with close button */}
         <div className='flex items-center justify-end border-b border-gray-200 px-4 py-2'>
-          <button
+          <MyButton
             onClick={onClose}
-            className='flex h-10 w-10 items-center justify-center rounded hover:bg-gray-100'
             aria-label='Close menu'
+            overrideClass='h-10 md:h-10 w-10 px-0 md:px-0 rounded bg-transparent hover:bg-gray-100'
           >
             <XMarkIcon className='h-5 w-5 text-gray-700' />
-          </button>
+          </MyButton>
         </div>
         {/* Nav content — only rendered once session is loaded */}
         {sessionInfo && (
