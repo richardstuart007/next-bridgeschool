@@ -1,50 +1,22 @@
-﻿'use server'
+'use server'
 
-import { sql } from 'nextjs-shared/db'
-import { write_logging } from 'nextjs-shared/write_logging'
+import { table_fetch } from 'nextjs-shared/table_fetch'
 //---------------------------------------------------------------------
 //  Get next qq_seq
 //---------------------------------------------------------------------
 export async function fetch_NextSeq(qq_owner: string, qq_subject: string, caller: string = '') {
   const functionName = 'fetch_NextSeq'
-  try {
-    const sqlQuery = `
-      SELECT COALESCE(MAX(qq_seq) + 1, 1) AS next_qq_seq
-      FROM tqq_questions
-      WHERE qq_owner = $1
-        AND qq_subject = $2
-    `
-    //
-    //  Logging
-    //
-    const values = [qq_owner, qq_subject]
-    //
-    //  Run sql Query
-    //
-    const db = await sql()
-    const data = await db.query({
-      caller: caller,
-      query: sqlQuery,
-      params: values,
-      functionName: functionName
-    })
-    //
-    //  Return results
-    //
-    const next_qq_seq = data.rows[0]?.next_qq_seq ?? null
-    return next_qq_seq
-    //
-    //  Errors
-    //
-  } catch (error) {
-    const errorMessage = (error as Error).message
-    write_logging({
-      lg_caller: caller,
-      lg_functionname: functionName,
-      lg_msg: errorMessage,
-      lg_severity: 'E'
-    })
-    console.error('Error:', errorMessage)
-    throw new Error(`${functionName}: Failed`)
-  }
+  const rows = await table_fetch({
+    caller,
+    table: 'tqq_questions',
+    columns: ['COALESCE(MAX(qq_seq) + 1, 1) AS next_qq_seq'],
+    whereColumnValuePairs: [
+      { column: 'qq_owner', value: qq_owner },
+      { column: 'qq_subject', value: qq_subject }
+    ],
+    skipCache: true
+  })
+  const next_qq_seq = rows[0]?.next_qq_seq ?? null
+  if (next_qq_seq === null) throw new Error(`${functionName}: Failed`)
+  return next_qq_seq
 }
