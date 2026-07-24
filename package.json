@@ -1,6 +1,6 @@
 {
   "name": "next-bridgeschool",
-  "version": "2.1.8",
+  "version": "2.1.9",
   "type": "module",
   "private": true,
   "main": "next.config.js",
@@ -8,9 +8,9 @@
   "license": "ISC",
   "scripts": {
     "build": "next build",
-    "locallocal": "copy /Y .env.locallocal .env && next dev --turbopack --port 3000",
-    "localdev": "copy /Y .env.localdev .env && next dev --turbopack --port 3001",
-    "localprod": "copy /Y .env.localprod .env && next dev --turbopack --port 3002"
+    "locallocal": "copy /Y .env.locallocal .env && next dev --turbopack --port 4030",
+    "localdev": "copy /Y .env.localdev .env && next dev --turbopack --port 4031",
+    "localprod": "copy /Y .env.localprod .env && next dev --turbopack --port 4032"
   },
   "dependencies": {
     "@heroicons/react": "2.2.0",

@@ -18,9 +18,9 @@ npm run prettier
 npm run prettier:check
 
 # Development — three environments, each copies a different .env file
-npm run locallocal   # port 3000, local DB
-npm run localdev     # port 3001, dev DB
-npm run localprod    # port 3002, prod DB
+npm run locallocal   # port 4030, local DB
+npm run localdev     # port 4031, dev DB
+npm run localprod    # port 4032, prod DB
 
 # Build / start
 npm run build
