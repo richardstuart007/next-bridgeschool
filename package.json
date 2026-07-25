@@ -1,6 +1,6 @@
 {
   "name": "next-bridgeschool",
-  "version": "2.1.9",
+  "version": "2.1.10",
   "type": "module",
   "private": true,
   "main": "next.config.js",

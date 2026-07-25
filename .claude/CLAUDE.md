@@ -2,9 +2,6 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## nextjs-shared reference
-Read `node_modules/nextjs-shared/CONSUMING_PROJECTS.md` before implementing any feature from nextjs-shared. It contains all component APIs, database function signatures, coding conventions, and setup instructions.
-
 ## Commands
 
 ```bash
@@ -116,10 +113,6 @@ overrideClass='h-16 md:h-16 w-16 ...'
 ```
 
 Without `md:h-16`, the button will render correctly on mobile but collapse to 32px on iPad/desktop.
-
-## Schema file
-
-`scripts/schema.sql` is the single source of truth for the database structure. Every new table and index must be added here.
 
 ### Environment
 Three `.env` variants exist (`.env.locallocal`, `.env.localdev`, `.env.localprod`). The dev scripts copy the right one to `.env` before starting. Required variables: `POSTGRES_URL`, `AUTH_SECRET`, `GITHUB_CLIENT_ID/SECRET`, `GOOGLE_CLIENT_ID/SECRET`, `GUEST_*_EMAIL/PASSWORD`.

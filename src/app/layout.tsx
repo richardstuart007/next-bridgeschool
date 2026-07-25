@@ -1,7 +1,7 @@
 import '@/src/root/global.css'
 
 import { inter } from '@/src/root/constants/constants_fonts'
-import { DevHeader } from '@/src/ui/DevHeader'
+import { DevLayoutHeader } from 'nextjs-shared/DevLayoutHeader'
 import { Metadata } from 'next'
 import { UserProvider } from '@/src/context/UserContext'
 import { URL_current } from '@/src/root/constants/constants_URL'
@@ -48,7 +48,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body className={`${classNameColour} px-2 pt-1 pb-2 overflow-hidden max-w-full flex flex-col h-dvh`}>
-        {NEXT_PUBLIC_APPENV_ISDEV && <DevHeader dbLocation={DB_LOCATION} />}
+        {NEXT_PUBLIC_APPENV_ISDEV && <DevLayoutHeader dbLocation={DB_LOCATION} />}
 
         <UserProvider>{children}</UserProvider>
       </body>
