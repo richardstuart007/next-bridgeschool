@@ -5,7 +5,8 @@ import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Action } from '@/src/ui/admin/subject/form-action'
 import type { table_Subject } from '@/src/lib/tables/definitions'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelect from 'nextjs-shared/MySelect'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { MyInput } from 'nextjs-shared/MyInput'
 
 interface FormProps {
@@ -75,7 +76,7 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*   Owner */}
         {/*  ...................................................................................*/}
         {sb_sbid === 0 ? (
-          <MyDropdown
+          <MySelectTable
             selectedOption={sb_owner}
             setSelectedOption={setogowner}
             name='sb_owner'
@@ -173,15 +174,14 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
         {/*   Level */}
         {/*  ...................................................................................*/}
         <div className='mt-2'>
-          <MyDropdown
-            selectedOption={sb_level}
-            setSelectedOption={setsb_level}
+          <MySelect
+            id='sb_level'
             name='sb_level'
             label='Level'
-            tableData={LEVEL_OPTIONS}
-            optionLabel='label'
-            optionValue='value'
-            overrideClass_Dropdown='w-72'
+            options={LEVEL_OPTIONS}
+            value={sb_level}
+            onChange={e => setsb_level(e.target.value)}
+            overrideClass='w-72'
             includeBlank={true}
           />
         </div>

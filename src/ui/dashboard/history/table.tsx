@@ -5,7 +5,7 @@ import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import type { Filter, JoinParams } from 'nextjs-shared/structures'
 import MyPagination from 'nextjs-shared/MyPagination'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyLink } from 'nextjs-shared/MyLink'
 import { MyInput } from 'nextjs-shared/MyInput'
@@ -512,14 +512,13 @@ export default function Table_History({
         {/* ................................................... */}
         {show_owner && (
           <th scope='col' className='px-2'>
-            <MyDropdown
+            <MySelectTable
               selectedOption={owner}
               setSelectedOption={setowner}
               searchEnabled={false}
               name='owner'
               table='tuo_usersowner'
-              tableColumn='uo_usid'
-              tableColumnValue={sessionContext.cx_usid}
+              whereColumnValuePairs={[{ column: 'uo_usid', value: sessionContext.cx_usid }]}
               optionLabel='uo_owner'
               optionValue='uo_owner'
               overrideClass_Dropdown={
@@ -535,13 +534,12 @@ export default function Table_History({
         {show_subject && (
           <th scope='col' className=' px-2'>
             {owner === undefined || owner === '' ? null : (
-              <MyDropdown
+              <MySelectTable
                 selectedOption={subject}
                 setSelectedOption={setsubject}
                 name='subject'
                 table='tsb_subject'
-                tableColumn='sb_owner'
-                tableColumnValue={owner}
+                whereColumnValuePairs={[{ column: 'sb_owner', value: owner }]}
                 optionLabel='sb_title'
                 optionValue='sb_subject'
                 overrideClass_Dropdown={

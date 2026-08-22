@@ -10,10 +10,10 @@ import type { Filter, JoinParams } from 'nextjs-shared/structures'
 import MyPagination from 'nextjs-shared/MyPagination'
 import { table_delete } from 'nextjs-shared/table_delete'
 import { update_sb_cntreference } from '@/src/lib/tables/tableSpecific/update_sb_cntreference'
-import MyDropdown from 'nextjs-shared/MyDropdown'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { MyInput } from 'nextjs-shared/MyInput'
 import MySelect from 'nextjs-shared/MySelect'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
 interface FormProps {
@@ -314,7 +314,7 @@ export default function Table({
                 {selected_owner ? (
                   <h1>{selected_owner}</h1>
                 ) : (
-                  <MyDropdown
+                  <MySelectTable
                     selectedOption={owner}
                     setSelectedOption={setowner}
                     searchEnabled={false}
@@ -334,13 +334,12 @@ export default function Table({
                 {selected_subject ? (
                   <h1>{selected_subject}</h1>
                 ) : owner === '' ? null : (
-                  <MyDropdown
+                  <MySelectTable
                     selectedOption={subject}
                     setSelectedOption={setsubject}
                     name='subject'
                     table='tsb_subject'
-                    tableColumn='sb_owner'
-                    tableColumnValue={owner}
+                    whereColumnValuePairs={[{ column: 'sb_owner', value: owner }]}
                     optionLabel='sb_title'
                     optionValue='sb_subject'
                     overrideClass_Dropdown='w-72 text-xxs md:h-6'
@@ -394,7 +393,7 @@ export default function Table({
               {/* WHO                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                <MyDropdown
+                <MySelectTable
                   selectedOption={who}
                   setSelectedOption={setwho}
                   name='who'
@@ -409,7 +408,7 @@ export default function Table({
               {/* type                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs  px-2'>
-                <MyDropdown
+                <MySelectTable
                   selectedOption={type}
                   setSelectedOption={settype}
                   name='type'

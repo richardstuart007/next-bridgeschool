@@ -4,7 +4,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Action } from '@/src/ui/admin/usersowner/form-action'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 
 interface FormProps {
   onSuccess: () => void
@@ -49,7 +49,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         {/* USER                                                 */}
         {/* ................................................... */}
         <div className='px-2'>
-          <MyDropdown
+          <MySelectTable
             selectedOption={uid}
             setSelectedOption={setuid}
             searchEnabled={true}
@@ -66,7 +66,7 @@ export default function Form({ onSuccess, shouldCloseOnUpdate = true }: FormProp
         {/*   Owner */}
         {/*  ...................................................................................*/}
         <div className='px-2'>
-          <MyDropdown
+          <MySelectTable
             selectedOption={owner}
             setSelectedOption={setowner}
             searchEnabled={true}

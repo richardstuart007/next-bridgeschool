@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelect from 'nextjs-shared/MySelect'
 import {
   Recent_usersReturned_Options,
   Recent_usersReturned_Default,
@@ -64,31 +64,29 @@ export function Recent_Header({
   return (
     <div className='flex items-center flex-wrap gap-2'>
       <h2 className='text-sm whitespace-nowrap'>Recent Averages</h2>
-      <MyDropdown
-        selectedOption={usersReturned}
-        setSelectedOption={handleUsersReturnedChange}
+      <MySelect
+        id='users-returned'
         name='users-returned'
-        tableData={Recent_usersReturned_Options.map(opt => ({
-          value: opt.value,
+        options={Recent_usersReturned_Options.map(opt => ({
+          value: String(opt.value),
           label: opt.label
         }))}
-        optionLabel='label'
-        optionValue='value'
-        overrideClass_Dropdown='w-16 px-2 py-0.5 text-sm border-gray-300'
+        value={usersReturned}
+        onChange={e => handleUsersReturnedChange(e.target.value)}
+        overrideClass='w-16 px-2 py-0.5 text-sm border-gray-300'
         includeBlank={false}
       />
       <span className='text-sm font-medium mr-2'>Users</span>
-      <MyDropdown
-        selectedOption={usersAverage}
-        setSelectedOption={handleUsersAverageChange}
+      <MySelect
+        id='users-average'
         name='users-average'
-        tableData={Recent_usersAverage_Options.map(opt => ({
-          value: opt.value,
+        options={Recent_usersAverage_Options.map(opt => ({
+          value: String(opt.value),
           label: opt.label
         }))}
-        optionLabel='label'
-        optionValue='value'
-        overrideClass_Dropdown='w-16 px-2 py-0.5 text-sm border-gray-300'
+        value={usersAverage}
+        onChange={e => handleUsersAverageChange(e.target.value)}
+        overrideClass='w-16 px-2 py-0.5 text-sm border-gray-300'
         includeBlank={false}
       />
       <span className='text-sm font-medium'>Results</span>

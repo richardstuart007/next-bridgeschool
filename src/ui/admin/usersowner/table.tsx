@@ -9,7 +9,7 @@ import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
 import type { Filter } from 'nextjs-shared/structures'
 import MyPagination from 'nextjs-shared/MyPagination'
 import { table_delete } from 'nextjs-shared/table_delete'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { MyButton } from 'nextjs-shared/MyButton'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
@@ -219,7 +219,7 @@ export default function Table({ selected_uid, initialRows, initialTotalPages }: 
                 {selected_uid ? (
                   <h1>{selected_uid}</h1>
                 ) : (
-                  <MyDropdown
+                  <MySelectTable
                     selectedOption={uid}
                     setSelectedOption={setuid}
                     searchEnabled={true}
@@ -236,7 +236,7 @@ export default function Table({ selected_uid, initialRows, initialTotalPages }: 
               {/* OWNER                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs px-2 text-center'>
-                <MyDropdown
+                <MySelectTable
                   selectedOption={owner}
                   setSelectedOption={setowner}
                   searchEnabled={false}

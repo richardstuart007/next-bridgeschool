@@ -5,7 +5,8 @@ import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { action } from '@/src/ui/dashboard/users/action'
 import { notFound } from 'next/navigation'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelect from 'nextjs-shared/MySelect'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { COUNTRIES } from '@/src/root/constants/constants_Countries'
 import { useUserContext } from '@/src/context/UserContext'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
@@ -240,16 +241,15 @@ export default function Form({ admin_uid, initialUsid, initialUserData, initialO
           {/*  FEDCOUNTRY  */}
           {/*  ...................................................................................*/}
           <div className='mt-4'>
-            <MyDropdown
-              selectedOption={us_fedcountry}
-              setSelectedOption={setus_fedcountry}
-              searchEnabled={true}
+            <MySelect
+              id='us_fedcountry'
               name='us_fedcountry'
               label={`Bridge Federation Country (${us_fedcountry})`}
-              tableData={formattedCountries}
-              optionLabel='label'
-              optionValue='value'
-              overrideClass_Dropdown='w-72'
+              searchEnabled={true}
+              options={formattedCountries}
+              value={us_fedcountry}
+              onChange={e => setus_fedcountry(e.target.value)}
+              overrideClass='w-72'
               includeBlank={false}
             />
           </div>
@@ -335,7 +335,7 @@ export default function Form({ admin_uid, initialUsid, initialUserData, initialO
                 </p>
               </>
             ) : (
-              <MyDropdown
+              <MySelectTable
                 label='Owner'
                 selectedOption={ow_owner}
                 setSelectedOption={setow_owner}

@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelect from 'nextjs-shared/MySelect'
 import {
   User_limitMonths_Average_Options,
   User_limitMonths_Average_Default
@@ -43,17 +43,16 @@ export function User_Header({ averagePercentage, initialMonths }: User_HeaderPro
       <h2 className='text-sm whitespace-nowrap'>
         {`Your Results: ${averagePercentage}% average over`}
       </h2>
-      <MyDropdown
-        selectedOption={months}
-        setSelectedOption={handleMonthsChange}
+      <MySelect
+        id='user-months-selector'
         name='user-months-selector'
-        tableData={User_limitMonths_Average_Options.map(opt => ({
-          value: opt.value,
+        options={User_limitMonths_Average_Options.map(opt => ({
+          value: String(opt.value),
           label: opt.label
         }))}
-        optionLabel='label'
-        optionValue='value'
-        overrideClass_Dropdown='w-16 px-2 py-0.5 text-sm border-gray-300'
+        value={months}
+        onChange={e => handleMonthsChange(e.target.value)}
+        overrideClass='w-16 px-2 py-0.5 text-sm border-gray-300'
         includeBlank={false}
       />
       <span className='text-sm'>months</span>

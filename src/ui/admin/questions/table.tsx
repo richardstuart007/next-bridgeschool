@@ -15,7 +15,8 @@ import { table_delete } from 'nextjs-shared/table_delete'
 import { update_sb_cntquestions } from '@/src/lib/tables/tableSpecific/update_sb_cntquestions'
 import { update_rf_cntquestions } from '@/src/lib/tables/tableSpecific/update_rf_cntquestions'
 import { MyButton } from 'nextjs-shared/MyButton'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelect from 'nextjs-shared/MySelect'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { Comparison_operator, Comparison_values } from 'nextjs-shared/table_comparison_values'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
@@ -337,7 +338,7 @@ export default function Table({
                 {selected_owner ? (
                   <h1>{selected_owner}</h1>
                 ) : (
-                  <MyDropdown
+                  <MySelectTable
                     selectedOption={owner}
                     setSelectedOption={setowner}
                     searchEnabled={false}
@@ -357,13 +358,12 @@ export default function Table({
                 {selected_subject ? (
                   <h1>{selected_subject}</h1>
                 ) : owner === '' ? null : (
-                  <MyDropdown
+                  <MySelectTable
                     selectedOption={subject}
                     setSelectedOption={setsubject}
                     name='subject'
                     table='tsb_subject'
-                    tableColumn='sb_owner'
-                    tableColumnValue={owner}
+                    whereColumnValuePairs={[{ column: 'sb_owner', value: owner }]}
                     optionLabel='sb_title'
                     optionValue='sb_subject'
                     overrideClass_Dropdown='w-48 text-xxs md:h-6'
@@ -405,14 +405,13 @@ export default function Table({
                   {/* ................................................... */}
                   {/* Comparison                                                */}
                   {/* ................................................... */}
-                  <MyDropdown
-                    selectedOption={rfid_cmp}
-                    setSelectedOption={handleOperatorChange}
+                  <MySelect
+                    id='rfid_cmp'
                     name='rfid_cmp'
-                    tableData={Comparison_values}
-                    optionLabel='optionValue'
-                    optionValue='optionValue'
-                    overrideClass_Dropdown='w-12 text-xxs md:h-6'
+                    value={rfid_cmp}
+                    onChange={e => handleOperatorChange(e.target.value)}
+                    options={Comparison_values.map(o => ({ value: o.optionValue, label: o.optionValue }))}
+                    overrideClass='w-12 text-xxs md:h-6'
                     includeBlank={true}
                   />
                   <MyInput

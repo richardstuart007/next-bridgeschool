@@ -13,7 +13,8 @@ import MyPagination from 'nextjs-shared/MyPagination'
 import { table_check } from 'nextjs-shared/table_check'
 import { table_delete } from 'nextjs-shared/table_delete'
 import { MyButton } from 'nextjs-shared/MyButton'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelect from 'nextjs-shared/MySelect'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
 
@@ -284,7 +285,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
               {/* OWNER                                                 */}
               {/* ................................................... */}
               <th scope='col' className='text-xs px-2'>
-                <MyDropdown
+                <MySelectTable
                   selectedOption={owner}
                   setSelectedOption={setowner}
                   searchEnabled={false}
@@ -338,14 +339,13 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
               {/* Level                                               */}
               {/* ................................................... */}
               <th scope='col' className='text-xs px-2'>
-                <MyDropdown
-                  selectedOption={level}
-                  setSelectedOption={setlevel}
+                <MySelect
+                  id='level'
                   name='level'
-                  tableData={LEVEL_OPTIONS}
-                  optionLabel='label'
-                  optionValue='value'
-                  overrideClass_Dropdown='w-32 text-xxs md:h-6'
+                  options={LEVEL_OPTIONS}
+                  value={level}
+                  onChange={e => setlevel(e.target.value)}
+                  overrideClass='w-32 text-xxs md:h-6'
                   includeBlank={true}
                 />
               </th>

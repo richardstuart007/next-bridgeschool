@@ -5,9 +5,9 @@ import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Action } from '@/src/ui/admin/reference/form-action'
 import type { table_Reference } from '@/src/lib/tables/definitions'
-import MyDropdown from 'nextjs-shared/MyDropdown'
 import { MyInput } from 'nextjs-shared/MyInput'
 import MySelect from 'nextjs-shared/MySelect'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 
 interface FormProps {
   referenceRecord?: table_Reference | undefined
@@ -106,7 +106,7 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='mt-4'>
           {rf_rfid === 0 && !selected_owner ? (
-            <MyDropdown
+            <MySelectTable
               selectedOption={rf_owner}
               setSelectedOption={setLrowner}
               name='rf_owner'
@@ -135,14 +135,13 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='mt-4'>
           {rf_rfid === 0 && !selected_subject && rf_owner ? (
-            <MyDropdown
+            <MySelectTable
               selectedOption={rf_subject}
               setSelectedOption={setrf_subject}
               name='rf_subject'
               label='Subject'
               table='tsb_subject'
-              tableColumn='sb_owner'
-              tableColumnValue={rf_owner}
+              whereColumnValuePairs={[{ column: 'sb_owner', value: rf_owner }]}
               optionLabel='sb_subject'
               optionValue='sb_subject'
               overrideClass_Dropdown='w-72'
@@ -228,7 +227,7 @@ export default function Form({
         {/*  Who  */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <MyDropdown
+          <MySelectTable
             selectedOption={rf_who}
             setSelectedOption={setrf_who}
             name='rf_who'
@@ -244,7 +243,7 @@ export default function Form({
         {/*  Type  */}
         {/*  ...................................................................................*/}
         <div className='mt-4'>
-          <MyDropdown
+          <MySelectTable
             selectedOption={rf_type}
             setSelectedOption={setrf_type}
             name='rf_type'

@@ -5,7 +5,7 @@ import { MyButton } from 'nextjs-shared/MyButton'
 import { useFormStatus } from 'react-dom'
 import { Action } from '@/src/ui/admin/questions/detail/form-action'
 import type { table_Questions } from '@/src/lib/tables/definitions'
-import MyDropdown from 'nextjs-shared/MyDropdown'
+import MySelectTable from 'nextjs-shared/MySelectTable'
 import { MyInput } from 'nextjs-shared/MyInput'
 import { MyTextarea } from 'nextjs-shared/MyTextarea'
 import { fetch_OwnerSubject } from '@/src/lib/tables/tableSpecific/fetch_OwnerSubject'
@@ -124,7 +124,7 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='pt-2'>
           {qq_qqid === 0 && !selected_owner ? (
-            <MyDropdown
+            <MySelectTable
               selectedOption={qq_owner}
               setSelectedOption={setqq_owner}
               name='qq_owner'
@@ -160,14 +160,13 @@ export default function Form({
         {/*  ...................................................................................*/}
         <div className='pt-2'>
           {qq_qqid === 0 && !selected_subject && qq_owner ? (
-            <MyDropdown
+            <MySelectTable
               selectedOption={qq_subject}
               setSelectedOption={setqq_subject}
               name='qq_subject'
               label='Subject'
               table='tsb_subject'
-              tableColumn='sb_owner'
-              tableColumnValue={qq_owner}
+              whereColumnValuePairs={[{ column: 'sb_owner', value: qq_owner }]}
               optionLabel='sb_subject'
               optionValue='sb_subject'
               overrideClass_Dropdown='w-72'
@@ -245,7 +244,7 @@ export default function Form({
         {/*  rfid */}
         {/*  ...................................................................................*/}
         <div className='pt-2'>
-          <MyDropdown
+          <MySelectTable
             overrideClass_Label='font-semibold pt-2'
             selectedOption={qq_rfid}
             setSelectedOption={setqq_rfid}
@@ -253,8 +252,7 @@ export default function Form({
             name='qq_rfid'
             label='Reference'
             table='trf_reference'
-            tableColumn='rf_sbid'
-            tableColumnValue={qq_sbid}
+            whereColumnValuePairs={[{ column: 'rf_sbid', value: qq_sbid }]}
             optionLabel='rf_desc'
             optionValue='rf_rfid'
             overrideClass_Dropdown='w-96'
