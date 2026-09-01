@@ -1,5 +1,16 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Table — paginated, per-column-filtered admin list of tuo_usersowner (user/owner links). Server-side
+//    pagination via fetchFiltered / fetchTotalPages (skipCache); Add / Edit open the
+//    matching FormPopup; Delete runs table_check for FK references first, then table_delete.
+//
+//    Parameters:
+//      initialRows / initialTotalPages — first page pre-fetched on the server (optional)
+//      selected_uid                   — when set, scopes the list to one user
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import FormPopup from '@/src/ui/admin/usersowner/formPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
@@ -93,7 +104,7 @@ export default function Table({ selected_uid, initialRows, initialTotalPages }: 
       //
       //  Get data
       //
-      const data = await fetchFiltered({
+      const dataResult = await fetchFiltered({
         caller: functionName,
         table,
         filters,
@@ -102,18 +113,20 @@ export default function Table({ selected_uid, initialRows, initialTotalPages }: 
         offset,
         skipCache: true
       })
-      setTabledata(data)
+      if (!dataResult.ok) throw new Error(dataResult.error ?? 'fetchFiltered failed')
+      setTabledata(dataResult.data)
       //
       //  Total number of pages
       //
-      const fetchedTotalPages = await fetchTotalPages({
+      const totalPagesResult = await fetchTotalPages({
         caller: functionName,
         table,
         filters,
         items_per_page: ROWS_PER_PAGE,
         skipCache: true
       })
-      setTotalPages(fetchedTotalPages)
+      if (!totalPagesResult.ok) throw new Error(totalPagesResult.error ?? 'fetchTotalPages failed')
+      setTotalPages(totalPagesResult.data)
       //
       //  Errors
       //

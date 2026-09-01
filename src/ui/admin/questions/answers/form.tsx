@@ -1,4 +1,17 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Form — the question "Answers and Points" editor (client). Holds qq_ans / qq_points as
+//    4-element string arrays, drives useActionState(Action), and calls onSuccess() once the
+//    action reports databaseUpdated (when shouldCloseOnUpdate).
+//
+//    Parameters:
+//      record              — the question row being edited (null for add)
+//      onSuccess           — called after a successful update (used to close the popup)
+//      shouldCloseOnUpdate — defaults to true
+//==============================================================================================
+
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'
@@ -26,43 +39,11 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
     (record?.qq_points || ['', '', '', '']).map(point => point.toString())
   )
   //-------------------------------------------------------------------------
-  //  Update MyButton
-  //-------------------------------------------------------------------------
-  function UpdateMyButton() {
-    //
-    //  Display the button
-    //
-    const { pending } = useFormStatus()
-    return (
-      <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
-        {' '}
-        {qq_qqid === 0 ? 'Create' : 'Update'}
-      </MyButton>
-    )
-  }
-  //-------------------------------------------------------------------------
   // Close the popup if the update was successful
   //-------------------------------------------------------------------------
   if (formState.databaseUpdated && shouldCloseOnUpdate) {
     onSuccess()
     return null
-  }
-  //-------------------------------------------------------------------------
-  // Handle answer change for a specific index
-  //-------------------------------------------------------------------------
-  const handleAnswerChange = (index: number, value: string) => {
-    const updated = [...qq_ans]
-    updated[index] = value
-    setqq_ans(updated)
-  }
-  //-------------------------------------------------------------------------
-  // Handle points change for a specific index
-  //-------------------------------------------------------------------------
-  const handlePointsChange = (index: number, value: string) => {
-    const newValue = value === '' ? '0' : value
-    const updated = [...qq_points]
-    updated[index] = newValue
-    setqq_points(updated)
   }
   //-------------------------------------------------------------------------
   return (
@@ -150,4 +131,37 @@ export default function Form({ record, onSuccess, shouldCloseOnUpdate = true }: 
       </div>
     </form>
   )
+  //--------------------------------------------------------------------------------------------
+  //  handleAnswerChange — replace the answer text at one row index in qq_ans state
+  //--------------------------------------------------------------------------------------------
+  function handleAnswerChange(index: number, value: string) {
+    const updated = [...qq_ans]
+    updated[index] = value
+    setqq_ans(updated)
+  }
+  //--------------------------------------------------------------------------------------------
+  //  handlePointsChange — replace the points value at one row index in qq_points state
+  //  ('' is stored as '0')
+  //--------------------------------------------------------------------------------------------
+  function handlePointsChange(index: number, value: string) {
+    const newValue = value === '' ? '0' : value
+    const updated = [...qq_points]
+    updated[index] = newValue
+    setqq_points(updated)
+  }
+  //--------------------------------------------------------------------------------------------
+  //  UpdateMyButton — submit button showing "Create"/"Update", disabled while the form is pending
+  //--------------------------------------------------------------------------------------------
+  function UpdateMyButton() {
+    //
+    //  Display the button
+    //
+    const { pending } = useFormStatus()
+    return (
+      <MyButton overrideClass='mt-2 w-72  px-4 justify-center' aria-disabled={pending}>
+        {' '}
+        {qq_qqid === 0 ? 'Create' : 'Update'}
+      </MyButton>
+    )
+  }
 }

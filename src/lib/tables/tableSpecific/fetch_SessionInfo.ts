@@ -1,11 +1,22 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    fetch_SessionInfo — joins tss_sessions + tus_users for the current session cookie and
+//    returns the user's session info.
+//
+//    Parameters:
+//      caller — logging caller identity
+//
+//    Returns:
+//      a structure_SessionsInfo (si_ssid, si_usid, si_name, si_email, si_admin,
+//      si_skipcorrect, si_maxquestions); throws when the query fails or no row is found
+//==============================================================================================
+
 import { table_query } from 'nextjs-shared/table_query'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { getAuthServer_au_ssid } from '@/src/lib/authServer_au_ssid'
-//---------------------------------------------------------------------
-//  Fetch structure_SessionsInfo data by ID
-//---------------------------------------------------------------------
+
 export type Props = {
   caller?: string
 }
@@ -16,8 +27,9 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
   //
   const co_ssid = await getAuthServer_au_ssid()
 
-  const rows = await table_query({
+  const queryResult = await table_query({
     caller,
+    table: 'tss_sessions',
     query: `
       SELECT ss_ssid, us_usid, us_name, us_email, us_admin, us_skipcorrect, us_maxquestions
       FROM tss_sessions
@@ -26,6 +38,8 @@ export async function fetch_SessionInfo({ caller = '' }: Props) {
     `,
     params: [co_ssid]
   })
+  if (!queryResult.ok) throw new Error(`${functionName}: ` + (queryResult.error ?? 'Failed'))
+  const rows = queryResult.data
   if (rows.length === 0) throw new Error(`${functionName}: Failed`)
   const row = rows[0]
   //

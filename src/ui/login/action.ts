@@ -1,5 +1,19 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    action — the email/password sign-in server action: Zod-parses formData and calls NextAuth
+//    signIn('credentials').
+//
+//    Parameters:
+//      _prevState — previous StateLogin from useActionState (unused)
+//      formData   — email + password
+//
+//    Returns:
+//      a StateLogin with an error message on invalid input or a failed sign-in; redirects on
+//      success
+//==============================================================================================
+
 import { z } from 'zod'
 import { signIn } from '@/auth'
 import { AuthError } from 'next-auth'

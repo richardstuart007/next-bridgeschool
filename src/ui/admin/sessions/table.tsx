@@ -1,5 +1,15 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Table — paginated, per-column-filtered admin list of tss_sessions (sessions). Server-side
+//    pagination via fetchFiltered / fetchTotalPages (skipCache); Add / Edit open the
+//    matching FormPopup; Delete runs table_check for FK references first, then table_delete.
+//
+//    Parameters:
+//      initialRows / initialTotalPages — first page pre-fetched on the server (optional)
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import { table_SessionsUser } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -94,7 +104,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       //
       //  Get data
       //
-      const data = await fetchFiltered({
+      const dataResult = await fetchFiltered({
         caller: functionName,
         table,
         joins,
@@ -104,11 +114,12 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         offset,
         skipCache: true
       })
-      settabledata(data)
+      if (!dataResult.ok) throw new Error(dataResult.error ?? 'fetchFiltered failed')
+      settabledata(dataResult.data)
       //
       //  Total number of pages
       //
-      const fetchedTotalPages = await fetchTotalPages({
+      const totalPagesResult = await fetchTotalPages({
         caller: functionName,
         table,
         joins,
@@ -116,7 +127,8 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         items_per_page: ROWS_PER_PAGE,
         skipCache: true
       })
-      setTotalPages(fetchedTotalPages)
+      if (!totalPagesResult.ok) throw new Error(totalPagesResult.error ?? 'fetchTotalPages failed')
+      setTotalPages(totalPagesResult.data)
       //
       //  Errors
       //

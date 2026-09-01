@@ -1,4 +1,11 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    NavShrink — a toggle button that flips the `cx_shrink` flag in UserContext (controls the
+//    compact/normal text size used across the dashboard tables).
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from 'nextjs-shared/MyButton'

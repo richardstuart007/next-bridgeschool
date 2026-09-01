@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /dashboard/graphs: force-dynamic route that renders <Graph_Summary> inside a
+//    Suspense boundary.
+//==============================================================================================
+
 export const dynamic = 'force-dynamic'
 import Graph_Summary from '@/src/ui/dashboard/graph/graph_summary'
 import { Suspense } from 'react'

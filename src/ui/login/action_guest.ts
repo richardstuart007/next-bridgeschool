@@ -1,5 +1,14 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    action_guest — signs in as a guest: ensures the guest user rows exist
+//    (ensureGuestUsers) then calls NextAuth signIn('credentials') with the guest credentials.
+//
+//    Returns:
+//      a StateGuestLogin with an error message on failure; redirects on success
+//==============================================================================================
+
 import { signIn } from '@/auth'
 import { AuthError } from 'next-auth'
 import { ensureGuestUsers } from '@/src/lib/dataAuth/ensureGuestUsers'

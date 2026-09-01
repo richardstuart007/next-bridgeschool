@@ -1,5 +1,17 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Table_Reference — paginated, per-column-filtered list of trf_reference (joined to
+//    tuo_usersowner + tsb_subject). Server-side pagination via fetchFiltered / fetchTotalPages
+//    (skipCache). When scoped to a subject (uq_sbid) it locks the owner/subject filters to
+//    that subject's row.
+//
+//    Parameters:
+//      uq_sbid                         — optional subject id to scope the list to
+//      initialRows / initialTotalPages — first page pre-fetched on the server
+//==============================================================================================
+
 import { useState, useEffect, useRef } from 'react'
 import { table_Reference, table_ReferenceSubject, table_Subject } from '@/src/lib/tables/definitions'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
@@ -110,7 +122,7 @@ export default function Table_Reference({
     //
     //  Initialisation
     //
-    const initialize = async () => {
+    async function initialize() {
       //
       //  Set the selected values
       //
@@ -256,11 +268,13 @@ export default function Table_Reference({
       //  Get the subject id
       //
       const sb_sbid = Number(uq_sbid)
-      const rows = await table_fetch({
+      const result = await table_fetch({
         caller: functionName,
         table: 'tsb_subject',
         whereColumnValuePairs: [{ column: 'sb_sbid', value: sb_sbid }]
       } as table_fetch_Props)
+      if (!result.ok) throw new Error(result.error ?? 'table_fetch failed')
+      const rows = result.data
       const row = rows[0]
       //
       //  Restrict to owner/subject
@@ -348,7 +362,7 @@ export default function Table_Reference({
       //
       //  Get data
       //
-      const data = await fetchFiltered({
+      const dataResult = await fetchFiltered({
         caller: functionName,
         table,
         joins,
@@ -358,11 +372,12 @@ export default function Table_Reference({
         offset,
         distinctColumns
       })
-      setTabledata(data)
+      if (!dataResult.ok) throw new Error(dataResult.error ?? 'fetchFiltered failed')
+      setTabledata(dataResult.data)
       //
       //  Total number of pages
       //
-      const fetchedTotalPages = await fetchTotalPages({
+      const totalPagesResult = await fetchTotalPages({
         caller: functionName,
         table,
         joins,
@@ -370,7 +385,8 @@ export default function Table_Reference({
         items_per_page: ROWS_PER_PAGE,
         distinctColumns
       })
-      setTotalPages(fetchedTotalPages)
+      if (!totalPagesResult.ok) throw new Error(totalPagesResult.error ?? 'fetchTotalPages failed')
+      setTotalPages(totalPagesResult.data)
       //
       // Reset message after debounce completes
       //

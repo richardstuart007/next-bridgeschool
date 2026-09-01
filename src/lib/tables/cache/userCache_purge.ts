@@ -1,5 +1,17 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    userCache_purge — clears every cache entry belonging to one user and logs the count.
+//
+//    Parameters:
+//      userId — the user whose cache entries to clear
+//      caller — logging caller identity
+//
+//    Returns:
+//      { userId, clearedCount, timestamp? } — clearedCount is 0 when userId is missing/0
+//==============================================================================================
+
 import { cache_clearUser } from 'nextjs-shared/userCache_store'
 import { write_logging } from 'nextjs-shared/write_logging'
 

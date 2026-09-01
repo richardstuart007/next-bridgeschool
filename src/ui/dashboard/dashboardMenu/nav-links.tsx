@@ -1,4 +1,15 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    NavLinks — the section link list for the nav rail/drawer (Home, quiz history, user, admin
+//    cog when the session user is an admin), highlighting the active route via usePathname.
+//
+//    Parameters:
+//      sessionInfo — the current structure_SessionsInfo (drives the admin link)
+//      baseURL     — 'dashboard' | 'admin'
+//==============================================================================================
+
 import { useEffect, useState } from 'react'
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 import { MyLink } from 'nextjs-shared/MyLink'

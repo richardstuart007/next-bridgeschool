@@ -1,4 +1,14 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Form — the admin "edit user password" form (client). Drives useActionState(Action) and
+//    submits a new plaintext password for the given user (hashed server-side into tup_userspwd).
+//
+//    Parameters:
+//      UserRecord — the tus_users row whose password is being set (us_usid / us_email shown)
+//==============================================================================================
+
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'
@@ -13,18 +23,6 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
   const [uppwd, setUppwd] = useState('')
   const up_usid = UserRecord.us_usid
   const up_email = UserRecord.us_email
-  //-------------------------------------------------------------------------
-  //  Update MyButton
-  //-------------------------------------------------------------------------
-  function UpdateMyButton() {
-    const { pending } = useFormStatus()
-    return (
-      <MyButton overrideClass='mt-4 w-72  px-4' aria-disabled={pending}>
-        Update
-      </MyButton>
-    )
-  }
-  //-------------------------------------------------------------------------
   return (
     <form action={formAction} className='space-y-3 '>
       <div className='flex-1 rounded-lg bg-gray-50 px-4 pb-2 pt-2 max-w-md'>
@@ -86,4 +84,15 @@ export default function Form({ UserRecord }: { UserRecord: table_Users }) {
       </div>
     </form>
   )
+  //--------------------------------------------------------------------------------------------
+  //  UpdateMyButton — the "Update" submit button, disabled while the form action is pending
+  //--------------------------------------------------------------------------------------------
+  function UpdateMyButton() {
+    const { pending } = useFormStatus()
+    return (
+      <MyButton overrideClass='mt-4 w-72  px-4' aria-disabled={pending}>
+        Update
+      </MyButton>
+    )
+  }
 }

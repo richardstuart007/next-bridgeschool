@@ -1,5 +1,15 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Table — paginated, per-column-filtered admin list of trt_reftype (reftypes). Server-side
+//    pagination via fetchFiltered / fetchTotalPages (skipCache); Add / Edit open the
+//    matching FormPopup; Delete runs table_check for FK references first, then table_delete.
+//
+//    Parameters:
+//      initialRows / initialTotalPages — first page pre-fetched on the server (optional)
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import FormPopup from '@/src/ui/admin/reftype/formPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
@@ -80,7 +90,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       //
       //  Get data
       //
-      const data = await fetchFiltered({
+      const dataResult = await fetchFiltered({
         caller: functionName,
         table,
         filters,
@@ -89,18 +99,20 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         offset,
         skipCache: true
       })
-      setrecord(data)
+      if (!dataResult.ok) throw new Error(dataResult.error ?? 'fetchFiltered failed')
+      setrecord(dataResult.data)
       //
       //  Total number of pages
       //
-      const fetchedTotalPages = await fetchTotalPages({
+      const totalPagesResult = await fetchTotalPages({
         caller: functionName,
         table,
         filters,
         items_per_page: ROWS_PER_PAGE,
         skipCache: true
       })
-      setTotalPages(fetchedTotalPages)
+      if (!totalPagesResult.ok) throw new Error(totalPagesResult.error ?? 'fetchTotalPages failed')
+      setTotalPages(totalPagesResult.data)
       //
       //  Errors
       //
@@ -149,8 +161,8 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
           }
         ]
         const exists = await table_check(tableColumnValuePairs)
-        if (exists.found) {
-          setMessage(exists.message)
+        if (!exists.ok || exists.data.found) {
+          setMessage(exists.ok ? exists.data.message : (exists.error ?? 'Check failed'))
           setConfirmDialog({ ...confirmDialog, isOpen: false })
 
           // Automatically clear the message after some seconds

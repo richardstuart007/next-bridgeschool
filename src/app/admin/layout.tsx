@@ -1,4 +1,14 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Layout — /admin layout shell: a fixed <NavSide baseURL='admin'> rail plus the routed
+//    content area.
+//
+//    Parameters:
+//      children — the routed admin page
+//==============================================================================================
+
 import NavSide from '@/src/ui/dashboard/dashboardMenu/nav-side'
 import { Suspense } from 'react'
 

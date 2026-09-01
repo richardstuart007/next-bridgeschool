@@ -1,4 +1,11 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Form — the friends multi-select form (client): drives useActionState(action) over the
+//    friend checkbox list and calls onSuccess() once the action reports databaseUpdated.
+//==============================================================================================
+
 import { useState, useActionState, useEffect } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'

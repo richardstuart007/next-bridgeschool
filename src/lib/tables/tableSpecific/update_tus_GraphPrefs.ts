@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    update_tus_GraphPrefs — updates the current user's graph-preference columns on tus_users,
+//    writing only the fields present in `prefs`.
+//
+//    Parameters:
+//      prefs  — any of us_graph_user_months / us_graph_top_months / us_graph_recent_users /
+//               us_graph_recent_avg; only defined keys are written
+//      caller — logging caller identity
+//
+//    Returns:
+//      { success: true } (also when there are no changes to write); { success: false, error }
+//      on failure (logged 'E')
+//==============================================================================================
+
 import { table_update } from 'nextjs-shared/table_update'
 import { getAuthSession } from '@/src/lib/dataAuth/getAuthSession'
 import { write_logging } from 'nextjs-shared/write_logging'
@@ -60,12 +75,13 @@ export async function update_tus_GraphPrefs(prefs: GraphPrefs, caller: string = 
     }
 
     // Update the user record using table_update
-    await table_update({
+    const updateResult = await table_update({
       caller: functionName,
       table: 'tus_users',
       columnValuePairs,
       whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
     })
+    if (!updateResult.ok) throw new Error(updateResult.error ?? 'table_update failed')
 
     // Log the update
     write_logging({

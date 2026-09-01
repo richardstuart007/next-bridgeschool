@@ -1,4 +1,16 @@
 ﻿'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    MaintPopup — modal wrapper that renders the questions <Table> (scoped by sbid / owner /
+//    subject) inside <MyPopup>.
+//
+//    Parameters:
+//      sbid / owner / subject — passed through to <Table> as selected_* to scope the list
+//      isOpen                 — whether the modal is shown
+//      onClose                — called to close the modal
+//==============================================================================================
+
 import MyPopup from 'nextjs-shared/MyPopup'
 import Table from '@/src/ui/admin/questions/table'
 

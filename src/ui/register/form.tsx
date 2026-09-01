@@ -1,5 +1,11 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    RegisterForm — the /register form (client). Drives useActionState(action) for name / email
+//    / password, shows validation + server errors, and links back to /login.
+//==============================================================================================
+
 import { lusitana } from '@/src/root/constants/constants_fonts'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'

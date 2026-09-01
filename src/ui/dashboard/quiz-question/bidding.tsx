@@ -1,3 +1,12 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    QuizBidding — renders the bidding table for a quiz question (returns null when the
+//    question has no bidding data).
+//
+//    Parameters:
+//      question — the table_Questions row
+//==============================================================================================
+
 import { useEffect, useState, type JSX } from 'react'
 import Image from 'next/image'
 import { table_Questions } from '@/src/lib/tables/definitions'

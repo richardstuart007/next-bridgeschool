@@ -1,3 +1,8 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    LoginPage — public /login route: split-screen marketing panel + <LoginForm>.
+//==============================================================================================
+
 import Image from 'next/image'
 import LoginForm from '@/src/ui/login/form'
 import { Metadata } from 'next'

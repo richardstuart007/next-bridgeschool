@@ -1,3 +1,10 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /dashboard/history: for the signed-in user (fetch_SessionInfo -> si_usid), fetches
+//    their country + owner rows and the first page of ths_history (joined to tsb_subject +
+//    tus_users), then hands them to the client <Table>.
+//==============================================================================================
+
 import Table from '@/src/ui/dashboard/history/table'
 import { Metadata } from 'next'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
@@ -34,7 +41,7 @@ export default async function Page() {
     si_usid = sessionInfo?.si_usid ?? 0
 
     if (si_usid) {
-      const [userRows, fetchedOwnerRows] = await Promise.all([
+      const [userResult, ownerResult] = await Promise.all([
         table_fetch({
           caller: functionName,
           table: 'tus_users',
@@ -46,6 +53,10 @@ export default async function Page() {
           whereColumnValuePairs: [{ column: 'uo_usid', value: si_usid }]
         } as table_fetch_Props)
       ])
+      if (!userResult.ok) throw new Error(userResult.error ?? 'table_fetch failed')
+      if (!ownerResult.ok) throw new Error(ownerResult.error ?? 'table_fetch failed')
+      const userRows = userResult.data
+      const fetchedOwnerRows = ownerResult.data
       initialCountryCode = userRows[0]?.us_fedcountry ?? ''
       initialUserName = userRows[0]?.us_name ?? ''
       ownerRows = fetchedOwnerRows
@@ -56,7 +67,7 @@ export default async function Page() {
         ...(initOwner ? [{ column: 'hs_owner', value: initOwner, operator: '=' as const }] : [])
       ]
 
-      ;[initialRows, initialTotalPages] = await Promise.all([
+      const [rowsResult, pagesResult] = await Promise.all([
         fetchFiltered({
           caller: functionName,
           table: 'ths_history',
@@ -74,6 +85,10 @@ export default async function Page() {
           items_per_page: rowsPerPage
         })
       ])
+      if (!rowsResult.ok) throw new Error(rowsResult.error ?? 'fetchFiltered failed')
+      if (!pagesResult.ok) throw new Error(pagesResult.error ?? 'fetchTotalPages failed')
+      initialRows = rowsResult.data
+      initialTotalPages = pagesResult.data
     }
   } catch (error) {
     console.error(`${functionName}: Error fetching initial data`, error)

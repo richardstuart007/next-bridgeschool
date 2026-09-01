@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Action — server action for the subject form: parses formData with a Zod schema, runs the
+//    form's Validate() for business rules, then INSERTs (new record) or UPDATEs (existing)
+//    tsb_subject.
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated } ; databaseUpdated is true only
+//      after a successful write
+//==============================================================================================
+
 import { z } from 'zod'
 import Validate from '@/src/ui/admin/subject/form-validate'
 import { table_update } from 'nextjs-shared/table_update'
@@ -86,7 +101,8 @@ export async function Action(_prevState: StateSetup, formData: FormData): Promis
         { column: 'sb_level', value: sb_level }
       ]
     }
-    await (sb_sbid === 0 ? table_write(writeParams) : table_update(updateParams))
+    const writeResult = await (sb_sbid === 0 ? table_write(writeParams) : table_update(updateParams))
+    if (!writeResult.ok) throw new Error(writeResult.error ?? 'table write failed')
 
     return { message: 'Database updated successfully.', errors: undefined, databaseUpdated: true }
   } catch (error) {

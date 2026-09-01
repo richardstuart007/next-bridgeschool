@@ -1,4 +1,17 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    NavDrawer — the slide-in menu opened from <NavTop>: school logo, <NavLinks>, <NavSession>
+//    and a close button. Loads the db name + session info on mount and pushes it into
+//    UserContext.
+//
+//    Parameters:
+//      isOpen  — whether the drawer is shown
+//      onClose — closes the drawer
+//      baseURL — 'dashboard' | 'admin'
+//==============================================================================================
+
 import { useEffect, useState } from 'react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import NavLinks from '@/src/ui/dashboard/dashboardMenu/nav-links'
@@ -44,11 +57,13 @@ export default function NavDrawer(props: Props) {
   //  getSessionInfo — loads db name, auth session and user session row into state and context
   //----------------------------------------------------------------------------------------------
   async function getSessionInfo() {
-    const rows = await table_fetch({
+    const result = await table_fetch({
       caller: functionName,
       table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'db_dbid', value: 1 }]
     } as table_fetch_Props)
+    if (!result.ok) console.error(`${functionName}: table_fetch failed:`, result.error)
+    const rows = result.data
     const row = rows[0]
     const tdb_database = row?.db_name ?? 'unknown'
     setDbName(tdb_database)

@@ -1,5 +1,18 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    GraphSummaryWrapper — client view for /dashboard/graphs: renders the User line chart plus
+//    the Top and Recent bar charts, each under its own header (User_Header / Top_Header /
+//    Recent_Header). Clicking a history point navigates to that quiz-review page.
+//
+//    Parameters:
+//      UserLineGraph / TopGraphData / RecentGraphData — the three GraphStructure datasets
+//      safeDataUserAverage — average % shown in the User header
+//      userMonths / topMonths / recentUsers / recentAvg — current preference values for the
+//        three headers
+//==============================================================================================
+
 import { useRouter } from 'next/navigation'
 import { MyLineChart, MyBarChart } from './graph_charts'
 import { GraphStructure } from './graph_types'
@@ -29,12 +42,6 @@ export function GraphSummaryWrapper({
   recentAvg
 }: GraphSummaryWrapperProps) {
   const router = useRouter()
-
-  const handlePointClick = (clickData: { key: number; keyType: string }) => {
-    if (clickData.keyType === 'hsid') {
-      router.push(`/dashboard/quiz-review/${clickData.key}`)
-    }
-  }
 
   return (
     <>
@@ -75,4 +82,12 @@ export function GraphSummaryWrapper({
       </div>
     </>
   )
+  //----------------------------------------------------------------------------------------------
+  //  handlePointClick — navigate to the quiz-review page when a history point is clicked
+  //----------------------------------------------------------------------------------------------
+  function handlePointClick(clickData: { key: number; keyType: string }) {
+    if (clickData.keyType === 'hsid') {
+      router.push(`/dashboard/quiz-review/${clickData.key}`)
+    }
+  }
 }

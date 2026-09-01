@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    RadioSubject — read-only answer list for the quiz review: shows each option with a
+//    smile/frown icon marking the correct answer and the user's pick.
+//==============================================================================================
+
 import { FaceFrownIcon, FaceSmileIcon } from '@heroicons/react/24/outline'
 
 import type { JSX } from 'react'

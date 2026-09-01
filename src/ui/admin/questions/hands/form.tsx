@@ -1,4 +1,17 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Form — the question hands editor (client). Drives useActionState(Action), edits the four
+//    hands (N/E/S/W) for a question, and calls onSuccess() once the action reports
+//    databaseUpdated (when shouldCloseOnUpdate).
+//
+//    Parameters:
+//      record              — the question row being edited (null for add)
+//      onSuccess           — called after a successful update (used to close the popup)
+//      shouldCloseOnUpdate — defaults to true
+//==============================================================================================
+
 import Image from 'next/image'
 import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'

@@ -1,3 +1,14 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    validate — business-rule validation for the subject form: for a new subject checks tsb_subject for a duplicate owner + subject.
+//
+//    Parameters:
+//      the form record (or bare field) to validate
+//
+//    Returns:
+//      a StateSetup — { errors?, message } ; message is null when validation passes
+//==============================================================================================
+
 import { table_Subject } from '@/src/lib/tables/definitions'
 import { table_check } from 'nextjs-shared/table_check'
 //
@@ -33,7 +44,8 @@ export default async function validateSubject(record: table_Subject): Promise<St
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists.found) errors.sb_subject = ['Owner/Subject must be unique']
+    if (!exists.ok) errors.sb_subject = [exists.error ?? 'Validation check failed']
+    else if (exists.data.found) errors.sb_subject = ['Owner/Subject must be unique']
   }
   //
   // Return error messages

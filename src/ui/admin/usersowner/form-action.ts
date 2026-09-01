@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Action — server action for the user/owner-link form: parses formData with a Zod schema, runs the
+//    form's Validate() for business rules, then INSERTs (new record) or UPDATEs (existing)
+//    tuo_usersowner.
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated } ; databaseUpdated is true only
+//      after a successful write
+//==============================================================================================
+
 import { z } from 'zod'
 import Validate from '@/src/ui/admin/usersowner/form-validate'
 import { table_write } from 'nextjs-shared/table_write'
@@ -86,7 +101,8 @@ export async function Action(
         { column: 'uo_owner', value: owner }
       ]
     }
-    await table_write(writeParams)
+    const writeResult = await table_write(writeParams)
+    if (!writeResult.ok) throw new Error(writeResult.error ?? 'table_write failed')
     return {
       message: `Database updated successfully.`,
       errors: undefined,

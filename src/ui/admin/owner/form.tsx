@@ -1,4 +1,16 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Form — the owner add/edit form (client). Drives useActionState(Action), renders the
+//    fields and the submit button, and calls onSuccess() once the action reports
+//    databaseUpdated (when shouldCloseOnUpdate).
+//
+//    Parameters:
+//      onSuccess           — called after a successful update (used to close the popup)
+//      shouldCloseOnUpdate — defaults to true
+//==============================================================================================
+
 import { useState, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'

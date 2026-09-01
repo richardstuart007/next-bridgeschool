@@ -1,3 +1,12 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    QuizHands — renders the four bridge hands (N/E/S/W) for a quiz question as a suit-columned
+//    table. Returns null when the question has no hand data or every hand is empty.
+//
+//    Parameters:
+//      question — the table_Questions row
+//==============================================================================================
+
 import { table_Questions } from '@/src/lib/tables/definitions'
 import Image from 'next/image'
 import type { JSX } from 'react'
@@ -17,12 +26,7 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
     !Array.isArray(question.qq_west)
   )
     return null
-  //
-  // Helper function to check if all values in the hand are 'n' or 'N'
-  //
   type Hand = string[]
-  const isEmptyHand = (hand: Hand) =>
-    !Array.isArray(hand) || hand.length === 0 || hand.every(card => card === 'n' || card === 'N')
   //
   //  Build Hand Data for Positions
   //
@@ -82,4 +86,12 @@ export default function QuizHands({ question }: QuizHandsProps): JSX.Element | n
       </table>
     </div>
   )
+  //----------------------------------------------------------------------------------------------
+  //  isEmptyHand — true when a hand is missing, empty, or entirely placeholder ('n'/'N') cards
+  //----------------------------------------------------------------------------------------------
+  function isEmptyHand(hand: Hand) {
+    return (
+      !Array.isArray(hand) || hand.length === 0 || hand.every(card => card === 'n' || card === 'N')
+    )
+  }
 }

@@ -1,4 +1,16 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — the /admin landing menu: a 4-column grid of <MyLink> buttons to each maintenance
+//    route. On mount it checks fetch_IsAdmin and signs the user out (user_Logout) if they are
+//    not an admin, otherwise clears the loading state.
+//
+//  2) NOTES
+//    `menuItems` is a fixed layout list where `null` entries are empty grid cells used to
+//    position the buttons.
+//==============================================================================================
+
 import { MyLink } from 'nextjs-shared/MyLink'
 import { fetch_IsAdmin } from '@/src/lib/tables/tableSpecific/fetch_IsAdmin'
 import { user_Logout } from '@/src/lib/user_logout'
@@ -53,7 +65,7 @@ export default function Page() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    const checkAdmin = async () => {
+    async function checkAdmin() {
       const admin = await fetch_IsAdmin(functionName)
       if (!admin) {
         await user_Logout()

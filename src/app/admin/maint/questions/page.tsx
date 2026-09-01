@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /admin/maint/questions: server component; fetches the first page of tqq_questions
+//    plus the total page count and hands them to the client <Table>.
+//==============================================================================================
+
 import Table from '@/src/ui/admin/questions/table'
 import { Metadata } from 'next'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
@@ -17,7 +23,7 @@ export default async function Page() {
   let initialTotalPages = 0
 
   try {
-    ;[initialRows, initialTotalPages] = await Promise.all([
+    const [rowsResult, pagesResult] = await Promise.all([
       fetchFiltered({
         caller: functionName,
         table: 'tqq_questions',
@@ -35,6 +41,10 @@ export default async function Page() {
         skipCache: true
       })
     ])
+    if (!rowsResult.ok) throw new Error(rowsResult.error ?? 'fetchFiltered failed')
+    if (!pagesResult.ok) throw new Error(pagesResult.error ?? 'fetchTotalPages failed')
+    initialRows = rowsResult.data
+    initialTotalPages = pagesResult.data
   } catch (error) {
     console.error(`${functionName}: Error fetching initial data`, error)
   }

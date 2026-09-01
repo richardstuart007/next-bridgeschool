@@ -1,5 +1,19 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Recent_fetch_Averages — fetches the most recent uq_graph_recent_usersAverage ths_history rows for each of the given
+//    userIds (window function, rn <= N).
+//
+//    Parameters:
+//      userIds — the users to fetch history for
+//      caller  — logging caller identity
+//      uq_graph_recent_usersAverage — rows per user to include
+//
+//    Returns:
+//      the rows (an empty array on a failed query, logged to the console)
+//==============================================================================================
+
 import { table_query } from 'nextjs-shared/table_query'
 
 interface AveragesProps {
@@ -19,8 +33,9 @@ export async function Recent_fetch_Averages({
   const placeholders = userIds.map((_, index) => `$${index + 1}`).join(', ')
   const averagePlaceholderIndex = userIds.length + 1
 
-  const rows = await table_query({
+  const result = await table_query({
     caller,
+    table: 'ths_history',
     query: `
       SELECT hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent
       FROM (
@@ -35,5 +50,10 @@ export async function Recent_fetch_Averages({
     `,
     params: [...userIds, uq_graph_recent_usersAverage]
   })
+  if (!result.ok) {
+    console.error('Recent_fetch_Averages failed:', result.error)
+    return []
+  }
+  const rows = result.data
   return rows
 }

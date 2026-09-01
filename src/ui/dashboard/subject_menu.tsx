@@ -1,3 +1,14 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    SubjectMenu — server component for the /dashboard home: for the signed-in user, fetches
+//    their subjects (with at least one question) and all their references, groups the
+//    references by subject id, and renders a <SubjectSection> per LEVEL.
+//
+//  2) NOTES
+//    On any fetch failure it logs to the console and renders with empty data rather than
+//    throwing.
+//==============================================================================================
+
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import type { JoinParams, Filter } from 'nextjs-shared/structures'
@@ -21,7 +32,7 @@ export default async function SubjectMenu() {
         { column: 'sb_cntquestions', value: 1, operator: '>=' }
       ]
 
-      subjects = (await fetchFiltered({
+      const subjectsResult = await fetchFiltered({
         caller: functionName,
         table: 'tsb_subject',
         joins: subjectJoins,
@@ -30,12 +41,14 @@ export default async function SubjectMenu() {
         limit: 100,
         offset: 0,
         distinctColumns: []
-      })) as table_Subject[]
+      })
+      if (!subjectsResult.ok) throw new Error(subjectsResult.error ?? 'fetchFiltered failed')
+      subjects = subjectsResult.data as table_Subject[]
 
       const refJoins: JoinParams[] = [{ table: 'tuo_usersowner', on: 'rf_owner = uo_owner' }]
       const refFilters: Filter[] = [{ column: 'uo_usid', value: si_usid, operator: '=' }]
 
-      const allRefs = (await fetchFiltered({
+      const allRefsResult = await fetchFiltered({
         caller: functionName,
         table: 'trf_reference',
         joins: refJoins,
@@ -44,7 +57,9 @@ export default async function SubjectMenu() {
         limit: 500,
         offset: 0,
         distinctColumns: []
-      })) as table_Reference[]
+      })
+      if (!allRefsResult.ok) throw new Error(allRefsResult.error ?? 'fetchFiltered failed')
+      const allRefs = allRefsResult.data as table_Reference[]
 
       for (const ref of allRefs) {
         const existing = refsBySbid.get(ref.rf_sbid) ?? []

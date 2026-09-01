@@ -1,5 +1,15 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Error — Next.js route error boundary: logs the error and shows a "Try again" button that
+//    calls `reset()`.
+//
+//    Parameters:
+//      error — the thrown error (with optional `digest`)
+//      reset — re-renders the route segment
+//==============================================================================================
+
 import { useEffect } from 'react'
 import { MyButton } from 'nextjs-shared/MyButton'
 

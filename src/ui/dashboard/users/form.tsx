@@ -1,4 +1,19 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Form — the dashboard "my profile" form (client). Loads the user + owner rows for the
+//    current usid, drives useActionState(action) over name / fed id / country / max questions /
+//    skip-correct, and (for admins) owner.
+//
+//    Parameters:
+//      admin_uid       — admin override for whose profile to edit
+//      initialUsid     — the user id being edited
+//      initialUserData — the pre-fetched tus_users row
+//      initialOwner    — the pre-fetched owner
+//      isGuest         — defaults to false; guests get a read-only / limited form
+//==============================================================================================
+
 import { useState, useEffect, useActionState } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'
@@ -135,11 +150,13 @@ export default function Form({ admin_uid, initialUsid, initialUserData, initialO
       //---------------------------------
       //  Get User Info
       //---------------------------------
-      const rows = await table_fetch({
+      const result = await table_fetch({
         caller: functionName,
         table: 'tus_users',
         whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
       } as table_fetch_Props)
+      if (!result.ok) throw new Error(result.error ?? 'table_fetch failed')
+      const rows = result.data
       const data = rows[0]
       if (!data) notFound()
       //
@@ -155,11 +172,13 @@ export default function Form({ admin_uid, initialUsid, initialUserData, initialO
       //---------------------------------
       //  Get Usersowner
       //---------------------------------
-      const rows_usersowner = await table_fetch({
+      const result_usersowner = await table_fetch({
         caller: functionName,
         table: 'tuo_usersowner',
         whereColumnValuePairs: [{ column: 'uo_usid', value: us_usid }]
       } as table_fetch_Props)
+      if (!result_usersowner.ok) throw new Error(result_usersowner.error ?? 'table_fetch failed')
+      const rows_usersowner = result_usersowner.data
       const data_usersowner = rows_usersowner[0]
       //
       // Set initial state with fetched data

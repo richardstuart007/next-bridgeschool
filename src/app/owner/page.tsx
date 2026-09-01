@@ -1,4 +1,10 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /owner: nextjs-shared <OwnerPage> with Logging, Cache and Session Storage tabs.
+//==============================================================================================
+
 import OwnerPage from 'nextjs-shared/OwnerPage'
 import OwnerTableLogging from 'nextjs-shared/OwnerTableLogging'
 import OwnerTableCache from 'nextjs-shared/OwnerTableCache'

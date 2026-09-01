@@ -1,4 +1,13 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    NavTop — the dashboard top bar: a hamburger that opens <NavDrawer> plus a back arrow.
+//
+//    Parameters:
+//      baseURL — 'dashboard' | 'admin' — which section the drawer links belong to
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Bars3Icon, ArrowLeftIcon } from '@heroicons/react/24/outline'

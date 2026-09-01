@@ -1,3 +1,14 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    validateUsersowner — business-rule validation for the user/owner-link form: checks tuo_usersowner for a duplicate user + owner combination.
+//
+//    Parameters:
+//      the form record (or bare field) to validate
+//
+//    Returns:
+//      a StateSetup — { errors?, message } ; message is null when validation passes
+//==============================================================================================
+
 import { table_Usersowner } from '@/src/lib/tables/definitions'
 import { table_check } from 'nextjs-shared/table_check'
 //
@@ -27,7 +38,8 @@ export default async function validateUsersowner(record: table_Usersowner): Prom
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
-  if (exists.found) errors.owner = ['User/Owner combination already exists']
+  if (!exists.ok) errors.owner = [exists.error ?? 'Validation check failed']
+  else if (exists.data.found) errors.owner = ['User/Owner combination already exists']
   //
   // Return error messages
   //

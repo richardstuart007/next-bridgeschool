@@ -1,10 +1,22 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    convertUTCtoLocal — converts a UTC Date to a formatted local date/time string, using the
+//    timezone looked up from the given country code.
+//
+//    Parameters:
+//      datetimeUTC         — the UTC Date to convert
+//      to_localcountryCode — ISO country code used to look up the timezone; defaults to 'GB'
+//      to_dateFormat       — date-fns format string; defaults to 'yy-MMM-dd HH:mm'
+//
+//    Returns:
+//      the formatted local date/time string
+//==============================================================================================
+
 import { format } from 'date-fns'
 import { toZonedTime } from 'date-fns-tz'
 import { COUNTRIES } from '@/src/root/constants/constants_Countries'
 import { structure_Country } from '@/src/lib/tables/structures'
-//--------------------------------------------------------------------------------
-//  Convert GMT date/time to local
-//--------------------------------------------------------------------------------
+
 interface Params {
   datetimeUTC: Date
   to_localcountryCode?: string

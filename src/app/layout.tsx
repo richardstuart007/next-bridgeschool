@@ -1,3 +1,16 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    RootLayout — the app's root <html>/<body>: sets the DB-location background colour, renders
+//    the dev header (dev only) and wraps children in <UserProvider>.
+//
+//    Parameters:
+//      children — the routed page tree
+//
+//  2) NOTES
+//    Must stay static (cacheComponents). DB_LOCATION → body background colour via
+//    DatabaseColors; unknown/unmapped falls back to red.
+//==============================================================================================
+
 import '@/src/root/global.css'
 
 import { inter } from '@/src/root/constants/constants_fonts'

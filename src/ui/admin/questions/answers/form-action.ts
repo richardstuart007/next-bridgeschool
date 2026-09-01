@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Action — server action for the question answers form: parses formData with a Zod schema, runs the
+//    form's Validate() for business rules, then INSERTs (new record) or UPDATEs (existing)
+//    tqq_questions (qq_ans / qq_points).
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated } ; databaseUpdated is true only
+//      after a successful write
+//==============================================================================================
+
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
 import { write_logging } from 'nextjs-shared/write_logging'
@@ -118,7 +133,8 @@ export async function Action(_prevState: StateSetup, formData: FormData): Promis
       ],
       whereColumnValuePairs: [{ column: 'qq_qqid', value: qq_qqid }]
     }
-    await table_update(updateParams)
+    const updateResult = await table_update(updateParams)
+    if (!updateResult.ok) throw new Error(updateResult.error ?? 'table_update failed')
 
     return {
       message: `Database updated successfully.`,

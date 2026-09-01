@@ -1,4 +1,11 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    NavDev — a toggle button that flips the `cx_detail` flag in UserContext (controls whether
+//    extra detail columns are shown across the dashboard tables).
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import { useUserContext } from '@/src/context/UserContext'
 import { MyButton } from 'nextjs-shared/MyButton'

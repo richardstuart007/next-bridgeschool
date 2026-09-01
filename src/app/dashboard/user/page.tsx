@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /dashboard/user: for the signed-in user, fetches their tus_users + tuo_usersowner
+//    rows, works out whether they are a guest account, and renders the profile <Form>.
+//==============================================================================================
+
 import Form from '@/src/ui/dashboard/users/form'
 import { Metadata } from 'next'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
@@ -22,7 +28,7 @@ export default async function Page() {
     si_usid = sessionInfo?.si_usid ?? 0
 
     if (si_usid) {
-      const [userRows, ownerRows] = await Promise.all([
+      const [userResult, ownerResult] = await Promise.all([
         table_fetch({
           caller: functionName,
           table: 'tus_users',
@@ -34,6 +40,10 @@ export default async function Page() {
           whereColumnValuePairs: [{ column: 'uo_usid', value: si_usid }]
         } as table_fetch_Props)
       ])
+      if (!userResult.ok) throw new Error(userResult.error ?? 'table_fetch failed')
+      if (!ownerResult.ok) throw new Error(ownerResult.error ?? 'table_fetch failed')
+      const userRows = userResult.data
+      const ownerRows = ownerResult.data
       initialUserData = userRows[0] as table_Users | undefined
       initialOwner = ownerRows[0]?.uo_owner ?? ''
     }

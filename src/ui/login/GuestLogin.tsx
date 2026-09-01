@@ -1,5 +1,14 @@
 'use client';
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    GuestLogin — a button that signs in as the shared guest account via the action_guest
+//    server action, then routes to the post-login page.
+//
+//    Parameters:
+//      setSigningIn — lets the parent show a "signing in" state while the request runs
+//==============================================================================================
+
 import { useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { MyButton } from 'nextjs-shared/MyButton';

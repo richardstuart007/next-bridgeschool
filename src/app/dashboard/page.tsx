@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /dashboard home: force-dynamic route that renders <SubjectMenu> inside a Suspense
+//    boundary.
+//==============================================================================================
+
 export const dynamic = 'force-dynamic'
 import SubjectMenu from '@/src/ui/dashboard/subject_menu'
 import { Suspense } from 'react'

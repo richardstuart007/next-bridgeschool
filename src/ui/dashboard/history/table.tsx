@@ -1,5 +1,19 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Table_History — paginated, per-column-filtered list of ths_history (joined to tsb_subject
+//    + tus_users). Server-side pagination via fetchFiltered / fetchTotalPages (skipCache);
+//    shows/hides detail columns from UserContext (cx_detail / cx_shrink); rows link to the
+//    quiz-review page. When `fixedUsid` is set the list is locked to one user.
+//
+//    Parameters:
+//      fixedUsid / fixedUserName          — lock the list to one user (admin "user history")
+//      initialUsid / initialCountryCode   — starting user + country for date formatting
+//      initialOwners                      — the user's owner rows (for the owner filter)
+//      initialRows / initialTotalPages    — first page pre-fetched on the server
+//==============================================================================================
+
 import { useState, useEffect, useRef } from 'react'
 import { fetchFiltered } from 'nextjs-shared/fetchFiltered'
 import { fetchTotalPages } from 'nextjs-shared/fetchTotalPages'
@@ -94,7 +108,7 @@ export default function Table_History({
     //
     //  Initialisation
     //
-    const initialiseData = async () => {
+    async function initialiseData() {
       //
       //  Get user from context
       //
@@ -115,11 +129,13 @@ export default function Table_History({
         //
         if (!initialisationCompleted) {
           if (!initialCountryCode) {
-            const rows = await table_fetch({
+            const result = await table_fetch({
               caller: functionName,
               table: 'tus_users',
               whereColumnValuePairs: [{ column: 'us_usid', value: ref_selected_cx_usid.current }]
             } as table_fetch_Props)
+            if (!result.ok) console.error(`${functionName}: table_fetch failed:`, result.error)
+            const rows = result.data
             const userRecord = rows[0]
             setcountryCode(userRecord.us_fedcountry)
           }
@@ -273,11 +289,13 @@ export default function Table_History({
       //
       //  Set the owner if only 1
       //
-      const rows = await table_fetch({
+      const result = await table_fetch({
         caller: functionName,
         table: 'tuo_usersowner',
         whereColumnValuePairs: [{ column: 'uo_usid', value: ref_selected_cx_usid.current }]
       } as table_fetch_Props)
+      if (!result.ok) throw new Error(result.error ?? 'table_fetch failed')
+      const rows = result.data
       if (rows.length === 1) {
         const uo_owner = rows[0].uo_owner
         ref_selected_uoowner.current = uo_owner
@@ -337,7 +355,7 @@ export default function Table_History({
       //
       //  Get data
       //
-      const data = await fetchFiltered({
+      const dataResult = await fetchFiltered({
         caller: functionName,
         table,
         joins,
@@ -346,18 +364,20 @@ export default function Table_History({
         limit: ROWS_PER_PAGE,
         offset
       })
-      settabledata(data)
+      if (!dataResult.ok) throw new Error(dataResult.error ?? 'fetchFiltered failed')
+      settabledata(dataResult.data)
       //
       //  Total number of pages
       //
-      const fetchedTotalPages = await fetchTotalPages({
+      const totalPagesResult = await fetchTotalPages({
         caller: functionName,
         table,
         joins,
         filters,
         items_per_page: ROWS_PER_PAGE
       })
-      setTotalPages(fetchedTotalPages)
+      if (!totalPagesResult.ok) throw new Error(totalPagesResult.error ?? 'fetchTotalPages failed')
+      setTotalPages(totalPagesResult.data)
       //
       // Reset message after debounce completes
       //

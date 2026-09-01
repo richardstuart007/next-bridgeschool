@@ -1,20 +1,33 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    update_rf_cntquestions — recounts tqq_questions for a reference and writes the count to
+//    trf_reference.rf_cntquestions.
+//
+//    Parameters:
+//      rfid   — the reference id
+//      caller — logging caller identity
+//
+//    Returns:
+//      the new count; logs 'E' and throws on failure
+//==============================================================================================
+
 import { write_logging } from 'nextjs-shared/write_logging'
 import { table_count } from 'nextjs-shared/table_count'
 import { table_update } from 'nextjs-shared/table_update'
-//---------------------------------------------------------------------
-//  subject - Questions Count
-//---------------------------------------------------------------------
+
 export async function update_rf_cntquestions(rfid: number, caller: string = '') {
   const functionName = 'update_rf_cntquestions'
 
   try {
-    const rowCount = await table_count({
+    const countResult = await table_count({
       table: 'tqq_questions',
       whereColumnValuePairs: [{ column: 'qq_rfid', value: rfid }],
       caller: functionName
     })
+    if (!countResult.ok) throw new Error(`${functionName}: ` + (countResult.error ?? 'table_count failed'))
+    const rowCount = countResult.data
     //
     //  update Subject
     //
@@ -24,7 +37,8 @@ export async function update_rf_cntquestions(rfid: number, caller: string = '') 
       columnValuePairs: [{ column: 'rf_cntquestions', value: rowCount }],
       whereColumnValuePairs: [{ column: 'rf_rfid', value: rfid }]
     }
-    await table_update(updateParams)
+    const updateResult = await table_update(updateParams)
+    if (!updateResult.ok) throw new Error(`${functionName}: ` + (updateResult.error ?? 'table_update failed'))
     //
     //  Updated value
     //

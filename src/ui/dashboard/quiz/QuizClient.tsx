@@ -1,5 +1,16 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    QuizClient — runs an interactive quiz over the questions passed from QuizServer: shows one
+//    question at a time (info / bidding / hands / choices), tallies points, writes the result
+//    row to ths_history via table_write on completion, then routes to the review page.
+//
+//    Parameters:
+//      questions — the questions to run (renamed internally to initialQuestions)
+//      rfid      — the reference id the quiz was launched from
+//==============================================================================================
+
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { table_Questions } from '@/src/lib/tables/definitions'
@@ -157,8 +168,12 @@ export default function QuizClient({ questions: initialQuestions, rfid }: QuizCl
       ]
     }
 
-    const historyRecords = await table_write(writeParams)
-    const historyRecord = historyRecords[0]
+    const historyResult = await table_write(writeParams)
+    if (!historyResult.ok) {
+      console.error(`${functionName}: table_write failed:`, historyResult.error)
+      return
+    }
+    const historyRecord = historyResult.data[0]
 
     setShowSubmit(false)
     seths_hsid(historyRecord.hs_hsid)

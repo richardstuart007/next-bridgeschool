@@ -1,3 +1,21 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    proxy — Next.js middleware entry: decides whether to allow, block, or redirect a request
+//    based on the co_ssid session cookie and the requested vs. referring path.
+//
+//    Parameters:
+//      req — the incoming NextRequest
+//
+//    Returns:
+//      null to allow the request through, or a Response.redirect (to /login when a
+//      dashboard/admin route is hit while logged out, or to the post-login route when a
+//      logged-in user requests login/register)
+//
+//  2) NOTES
+//    Auth is judged only from the co_ssid cookie, not the NextAuth session. `config.matcher`
+//    below scopes which paths run this middleware.
+//==============================================================================================
+
 import { NextRequest } from 'next/server'
 import {
   Routes_App,

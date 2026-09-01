@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    MySchoolLogo — the branded "Bridge School" logo block shown on the register page (hidden
+//    on mobile).
+//==============================================================================================
+
 import Image from 'next/image'
 import { lusitana } from '@/src/root/constants/constants_fonts'
 

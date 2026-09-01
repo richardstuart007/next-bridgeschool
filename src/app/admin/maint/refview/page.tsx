@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /admin/maint/refview: server component; fetches the first page of trf_reference
+//    plus the total page count and hands them to the dashboard reference <Table> (read view).
+//==============================================================================================
+
 import Table from '@/src/ui/dashboard/reference/table'
 import { Metadata } from 'next'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
@@ -25,7 +31,7 @@ export default async function Page() {
     const sessionInfo = await fetch_SessionInfo({ caller: functionName })
     si_usid = sessionInfo?.si_usid ?? 0
 
-    ;[initialRows, initialTotalPages] = await Promise.all([
+    const [rowsResult, pagesResult] = await Promise.all([
       fetchFiltered({
         caller: functionName,
         table: 'trf_reference',
@@ -43,6 +49,10 @@ export default async function Page() {
         items_per_page: rowsPerPage
       })
     ])
+    if (!rowsResult.ok) throw new Error(rowsResult.error ?? 'fetchFiltered failed')
+    if (!pagesResult.ok) throw new Error(pagesResult.error ?? 'fetchTotalPages failed')
+    initialRows = rowsResult.data
+    initialTotalPages = pagesResult.data
   } catch (error) {
     console.error(`${functionName}: Error fetching initial data`, error)
   }

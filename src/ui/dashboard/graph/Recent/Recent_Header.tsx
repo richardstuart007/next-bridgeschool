@@ -1,5 +1,18 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Recent_Header — header row for the "Recent Averages" graph: two <MySelect>s (users
+//    returned, users averaged) that each persist the choice to the user's graph preferences
+//    and refresh the route.
+//
+//    Parameters:
+//      initialUsersReturned — starting "users returned" value; defaults to
+//                             Recent_usersReturned_Default
+//      initialUsersAverage  — starting "users averaged" value; defaults to
+//                             Recent_usersAverage_Default
+//==============================================================================================
+
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import MySelect from 'nextjs-shared/MySelect'
@@ -33,34 +46,6 @@ export function Recent_Header({
     setUsersAverage(initialUsersAverage)
   }, [initialUsersAverage])
 
-  const handleUsersReturnedChange = async (value: string | number) => {
-    const numericValue = Number(value)
-    setUsersReturned(numericValue)
-
-    await update_tus_GraphPrefs(
-      {
-        us_graph_recent_users: numericValue
-      },
-      functionName
-    )
-
-    router.refresh()
-  }
-
-  const handleUsersAverageChange = async (value: string | number) => {
-    const numericValue = Number(value)
-    setUsersAverage(numericValue)
-
-    await update_tus_GraphPrefs(
-      {
-        us_graph_recent_avg: numericValue
-      },
-      functionName
-    )
-
-    router.refresh()
-  }
-
   return (
     <div className='flex items-center flex-wrap gap-2'>
       <h2 className='text-sm whitespace-nowrap'>Recent Averages</h2>
@@ -92,4 +77,36 @@ export function Recent_Header({
       <span className='text-sm font-medium'>Results</span>
     </div>
   )
+  //----------------------------------------------------------------------------------------------
+  //  handleUsersReturnedChange — persist the chosen "users returned" value and refresh
+  //----------------------------------------------------------------------------------------------
+  async function handleUsersReturnedChange(value: string | number) {
+    const numericValue = Number(value)
+    setUsersReturned(numericValue)
+
+    await update_tus_GraphPrefs(
+      {
+        us_graph_recent_users: numericValue
+      },
+      functionName
+    )
+
+    router.refresh()
+  }
+  //----------------------------------------------------------------------------------------------
+  //  handleUsersAverageChange — persist the chosen "users averaged" value and refresh
+  //----------------------------------------------------------------------------------------------
+  async function handleUsersAverageChange(value: string | number) {
+    const numericValue = Number(value)
+    setUsersAverage(numericValue)
+
+    await update_tus_GraphPrefs(
+      {
+        us_graph_recent_avg: numericValue
+      },
+      functionName
+    )
+
+    router.refresh()
+  }
 }

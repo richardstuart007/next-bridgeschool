@@ -1,3 +1,10 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /admin/maint/history: server component; fetches the first page of ths_history
+//    (joined to tsb_subject + tus_users) plus the total page count and hands them to the client
+//    <Table>.
+//==============================================================================================
+
 import Table from '@/src/ui/dashboard/history/table'
 import { Metadata } from 'next'
 import { ROWS_PER_PAGE } from '@/src/lib/tableUtils'
@@ -24,7 +31,7 @@ export default async function Page() {
   let initialTotalPages = 0
 
   try {
-    ;[initialRows, initialTotalPages] = await Promise.all([
+    const [rowsResult, pagesResult] = await Promise.all([
       fetchFiltered({
         caller: functionName,
         table: 'ths_history',
@@ -42,6 +49,10 @@ export default async function Page() {
         items_per_page: rowsPerPage
       })
     ])
+    if (!rowsResult.ok) throw new Error(rowsResult.error ?? 'fetchFiltered failed')
+    if (!pagesResult.ok) throw new Error(pagesResult.error ?? 'fetchTotalPages failed')
+    initialRows = rowsResult.data
+    initialTotalPages = pagesResult.data
   } catch (error) {
     console.error(`${functionName}: Error fetching initial data`, error)
   }

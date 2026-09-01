@@ -1,5 +1,19 @@
 'use server';
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    ensureGuestUsers — for each configured guest (from GUEST_* env vars), creates the
+//    tus_users / tup_userspwd / tuo_usersowner rows if the user does not already exist.
+//
+//    Returns:
+//      void; throws on any failed fetch/insert. Guests with a missing email or password env
+//      var are skipped.
+//
+//  2) NOTES
+//    `ensureGuest` is the per-guest worker: it no-ops when a user row already exists for the
+//    guest's email, otherwise inserts the three rows and bcrypt-hashes the password.
+//==============================================================================================
+
 import bcrypt from 'bcryptjs';
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch';
 import { table_write } from 'nextjs-shared/table_write';
@@ -39,21 +53,31 @@ export async function ensureGuestUsers(): Promise<void> {
   }
 }
 
+//----------------------------------------------------------------------------------
+//  ensureGuest — create one guest's tus_users / tup_userspwd / tuo_usersowner rows
+//                if that email has no user row yet; no-op otherwise
+//    Params:
+//      guest  — { email, password, name, owner } for this guest
+//      caller — logging caller identity
+//----------------------------------------------------------------------------------
 async function ensureGuest(
   guest: { email: string; password: string; name: string; owner: string },
   caller: string,
 ): Promise<void> {
-  const rows = await table_fetch({
+  const fetchResult = await table_fetch({
     caller,
     table: 'tus_users',
     whereColumnValuePairs: [{ column: 'us_email', value: guest.email }],
   } as table_fetch_Props);
+  if (!fetchResult.ok)
+    throw new Error(`${caller}: ${fetchResult.error ?? 'table_fetch failed'}`);
+  const rows = fetchResult.data;
 
   if (rows[0]) return;
 
   const UTC_datetime = new Date().toISOString();
 
-  const userRecords = await table_write({
+  const writeResult = await table_write({
     caller,
     table: 'tus_users',
     columnValuePairs: [
@@ -74,14 +98,16 @@ async function ensureGuest(
     ],
   });
 
-  const userRecord = userRecords[0];
+  if (!writeResult.ok)
+    throw new Error(`${caller}: ${writeResult.error ?? 'table_write failed'}`);
+  const userRecord = writeResult.data[0];
   if (!userRecord)
     throw new Error(`${caller}: failed to create guest user ${guest.email}`);
 
   const us_usid = userRecord.us_usid;
   const hash = await bcrypt.hash(guest.password, 10);
 
-  await table_write({
+  const pwdResult = await table_write({
     caller,
     table: 'tup_userspwd',
     columnValuePairs: [
@@ -90,8 +116,10 @@ async function ensureGuest(
       { column: 'up_hash', value: hash },
     ],
   });
+  if (!pwdResult.ok)
+    throw new Error(`${caller}: ${pwdResult.error ?? 'table_write failed'}`);
 
-  await table_write({
+  const ownerResult = await table_write({
     caller,
     table: 'tuo_usersowner',
     columnValuePairs: [
@@ -99,4 +127,6 @@ async function ensureGuest(
       { column: 'uo_owner', value: guest.owner },
     ],
   });
+  if (!ownerResult.ok)
+    throw new Error(`${caller}: ${ownerResult.error ?? 'table_write failed'}`);
 }

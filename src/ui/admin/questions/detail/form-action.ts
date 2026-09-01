@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Action — server action for the question detail form: parses formData with a Zod schema, runs the
+//    form's Validate() for business rules, then INSERTs (new record) or UPDATEs (existing)
+//    tqq_questions.
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated } ; databaseUpdated is true only
+//      after a successful write
+//==============================================================================================
+
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
 import { table_write } from 'nextjs-shared/table_write'
@@ -115,7 +130,8 @@ export async function Action(
         ],
         whereColumnValuePairs: [{ column: 'qq_qqid', value: qq_qqid }]
       }
-      await table_update(updateParams)
+      const updateResult = await table_update(updateParams)
+      if (!updateResult.ok) throw new Error(updateResult.error ?? 'table_update failed')
     }
     //
     //  Write
@@ -147,7 +163,8 @@ export async function Action(
           { column: 'qq_rfid', value: qq_rfid }
         ]
       }
-      await table_write(writeParams)
+      const writeResult = await table_write(writeParams)
+      if (!writeResult.ok) throw new Error(writeResult.error ?? 'table_write failed')
       //
       //  update Questions counts in Subject
       //

@@ -1,3 +1,13 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /dashboard/quiz: parses uq_column / uq_sbid / uq_rfid from the query string and
+//    renders <QuizServer> with the validated values.
+//
+//    Parameters:
+//      searchParams — query string promise (uq_column defaults to 'qq_rfid'; uq_sbid/uq_rfid
+//                     default to 0 when absent or non-numeric)
+//==============================================================================================
+
 import QuizServer from '@/src/ui/dashboard/quiz/QuizServer'
 
 export default async function Page({

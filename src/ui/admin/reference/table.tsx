@@ -1,5 +1,15 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Table — paginated, per-column-filtered admin list of trf_reference (references). Server-side
+//    pagination via fetchFiltered / fetchTotalPages (skipCache); Add / Edit open the
+//    matching FormPopup; Delete runs table_check for FK references first, then table_delete.
+//
+//    Parameters:
+//      initialRows / initialTotalPages — first page pre-fetched on the server (optional)
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import FormPopup from '@/src/ui/admin/reference/formPopup'
 import { MyConfirmDialog, ConfirmDialogInt } from 'nextjs-shared/MyConfirmDialog'
@@ -138,7 +148,7 @@ export default function Table({
       //
       //  Get data
       //
-      const data = await fetchFiltered({
+      const dataResult = await fetchFiltered({
         caller: functionName,
         table,
         joins,
@@ -148,11 +158,12 @@ export default function Table({
         offset,
         distinctColumns
       })
-      setTabledata(data)
+      if (!dataResult.ok) throw new Error(dataResult.error ?? 'fetchFiltered failed')
+      setTabledata(dataResult.data)
       //
       //  Total number of pages
       //
-      const fetchedTotalPages = await fetchTotalPages({
+      const totalPagesResult = await fetchTotalPages({
         caller: functionName,
         table,
         joins,
@@ -160,7 +171,8 @@ export default function Table({
         items_per_page: ROWS_PER_PAGE,
         distinctColumns
       })
-      setTotalPages(fetchedTotalPages)
+      if (!totalPagesResult.ok) throw new Error(totalPagesResult.error ?? 'fetchTotalPages failed')
+      setTotalPages(totalPagesResult.data)
       //
       //  Errors
       //

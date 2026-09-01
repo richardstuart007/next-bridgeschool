@@ -1,3 +1,14 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    ReferenceCards — the /dashboard/reference_select view: a level-coloured heading for the
+//    selected subject and a <ReferenceCard> per reference.
+//
+//    Parameters:
+//      subjectInfo — the selected tsb_subject row (undefined when none)
+//      references  — the trf_reference rows to list
+//      uq_sbid     — the selected subject id from the URL (unused here, kept for parity)
+//==============================================================================================
+
 import { table_Reference, table_Subject } from '@/src/lib/tables/definitions'
 import ReferenceCard from '@/src/ui/dashboard/reference/ReferenceCard'
 import { getLevelColor, getLevelText } from '@/src/root/constants/colours'

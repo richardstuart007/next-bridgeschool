@@ -1,3 +1,8 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    RegisterPage — public /register route: school logo + <RegisterForm>.
+//==============================================================================================
+
 import MySchoolLogo from '@/src/ui/components/mySchool-logo'
 import RegisterForm from '@/src/ui/register/form'
 import { Metadata } from 'next'

@@ -1,5 +1,15 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Table — paginated, per-column-filtered admin list of tus_users (users). Server-side
+//    pagination via fetchFiltered / fetchTotalPages (skipCache); Add / Edit open the
+//    matching FormPopup; Delete runs table_check for FK references first, then table_delete.
+//
+//    Parameters:
+//      initialRows / initialTotalPages — first page pre-fetched on the server (optional)
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import UserEditPopup from '@/src/ui/dashboard/users/formPopup'
 import PwdEditPopup from '@/src/ui/admin/users/pwdedit/formPopup'
@@ -104,7 +114,7 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
       //
       //  Get data
       //
-      const data = await fetchFiltered({
+      const dataResult = await fetchFiltered({
         caller: functionName,
         table,
         filters,
@@ -113,18 +123,20 @@ export default function Table({ initialRows, initialTotalPages }: TableProps = {
         offset,
         skipCache: true
       })
-      setUsers(data)
+      if (!dataResult.ok) throw new Error(dataResult.error ?? 'fetchFiltered failed')
+      setUsers(dataResult.data)
       //
       //  Total number of pages
       //
-      const fetchedTotalPages = await fetchTotalPages({
+      const totalPagesResult = await fetchTotalPages({
         caller: functionName,
         table,
         filters,
         items_per_page: ROWS_PER_PAGE,
         skipCache: true
       })
-      setTotalPages(fetchedTotalPages)
+      if (!totalPagesResult.ok) throw new Error(totalPagesResult.error ?? 'fetchTotalPages failed')
+      setTotalPages(totalPagesResult.data)
       //
       //  Errors
       //

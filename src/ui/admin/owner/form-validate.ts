@@ -1,3 +1,15 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    validateOwner — business-rule validation for the owner form: checks tow_owner for a
+//    duplicate ow_owner name.
+//
+//    Parameters:
+//      the form record (or bare field) to validate
+//
+//    Returns:
+//      a StateSetup — { errors?, message } ; message is null when validation passes
+//==============================================================================================
+
 import { table_check } from 'nextjs-shared/table_check'
 //
 //  Errors and Messages
@@ -23,7 +35,8 @@ export default async function validateOwner(ow_owner: string): Promise<StateSetu
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
-  if (exists.found) errors.ow_owner = ['Owner must be unique']
+  if (!exists.ok) errors.ow_owner = [exists.error ?? 'Validation check failed']
+  else if (exists.data.found) errors.ow_owner = ['Owner must be unique']
   //
   // Return error messages
   //

@@ -1,4 +1,17 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    MainWrapper — friends dialog controller: on open, fetches all other users + the current
+//    user's tuf_friends rows, holds the selection state, and renders <FormPopup>. `action`
+//    (the server action) persists the change on submit.
+//
+//    Parameters:
+//      isOpen  — whether the dialog is shown
+//      onClose — closes the dialog
+//      uid     — optional admin override for whose friends to edit (defaults to the session user)
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import FormPopup from './formPopup'
 import { useUserContext } from '@/src/context/UserContext'
@@ -49,11 +62,13 @@ export default function MainWrapper({ isOpen, onClose, uid }: Props) {
       //---------------------------------
       //  Get all users except current user
       //---------------------------------
-      const allUsers = await table_fetch({
+      const allUsersResult = await table_fetch({
         caller: functionName,
         table: 'tus_users',
         whereColumnValuePairs: [{ column: 'us_usid', value: uf_usid, operator: '<>' }]
       } as table_fetch_Props)
+      if (!allUsersResult.ok) throw new Error(allUsersResult.error ?? 'table_fetch failed')
+      const allUsers = allUsersResult.data
 
       // Format options for checkbox
       const options = allUsers.map(user => ({
@@ -66,11 +81,13 @@ export default function MainWrapper({ isOpen, onClose, uid }: Props) {
       //---------------------------------
       //  Get current user's friends
       //---------------------------------
-      const friends = await table_fetch({
+      const friendsResult = await table_fetch({
         caller: functionName,
         table: 'tuf_friends',
         whereColumnValuePairs: [{ column: 'uf_usid', value: uf_usid }]
       } as table_fetch_Props)
+      if (!friendsResult.ok) throw new Error(friendsResult.error ?? 'table_fetch failed')
+      const friends = friendsResult.data
 
       // Extract friend IDs
       const friendIds = friends.map(f => f.uf_frid)

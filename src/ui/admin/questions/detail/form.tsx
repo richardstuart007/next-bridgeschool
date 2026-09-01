@@ -1,4 +1,22 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Form — the question detail add/edit form (client). Drives useActionState(Action), manages
+//    the owner / subject / reference selects and the question text fields, and calls onSuccess()
+//    once the action reports databaseUpdated (when shouldCloseOnUpdate).
+//
+//    Parameters:
+//      questionRecord      — the question row being edited (undefined for add)
+//      selected_owner /
+//        selected_subject  — pre-selected owner / subject for a new question
+//      onSuccess           — called after a successful update (used to close the popup)
+//      shouldCloseOnUpdate — defaults to true
+//
+//  2) NOTES
+//    A `useCallback`-wrapped helper stays an arrow (can't become a hoisted declaration).
+//==============================================================================================
+
 import { useState, useActionState, useEffect, useCallback } from 'react'
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline'
 import { MyButton } from 'nextjs-shared/MyButton'

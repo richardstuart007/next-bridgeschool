@@ -1,13 +1,23 @@
 ﻿// src/ui/dashboard/friends/action.ts
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    action — server action for the friends dialog: Zod-parses formData, deletes the user's
+//    existing tuf_friends rows, then inserts one row per selected friend id.
+//
+//    Parameters:
+//      _prevState — previous StateFriends from useActionState (unused)
+//      formData   — the submitted form fields (uf_usid, uf_frid as a JSON array)
+//
+//    Returns:
+//      a StateFriends — { errors?, message, databaseUpdated }
+//==============================================================================================
+
 import { z } from 'zod'
 import { table_write } from 'nextjs-shared/table_write'
 import { table_delete } from 'nextjs-shared/table_delete'
 import { write_logging } from 'nextjs-shared/write_logging'
-// ----------------------------------------------------------------------
-//  Update Friends Setup
-// ----------------------------------------------------------------------
 //
 //  Form Schema for validation
 //
@@ -60,17 +70,18 @@ export async function action(_prevState: StateFriends, formData: FormData) {
     // -----------------
     // Delete existing friendships for this user
     // -----------------
-    await table_delete({
+    const deleteResult = await table_delete({
       caller: functionName,
       table: 'tuf_friends',
       whereColumnValuePairs: [{ column: 'uf_usid', value: uf_usid }]
     })
+    if (!deleteResult.ok) throw new Error(deleteResult.error ?? 'table_delete failed')
 
     // -----------------
     // Insert new friendships
     // -----------------
     for (const friendId of friendIds) {
-      await table_write({
+      const writeResult = await table_write({
         caller: functionName,
         table: 'tuf_friends',
         columnValuePairs: [
@@ -78,6 +89,7 @@ export async function action(_prevState: StateFriends, formData: FormData) {
           { column: 'uf_frid', value: friendId }
         ]
       })
+      if (!writeResult.ok) throw new Error(writeResult.error ?? 'table_write failed')
     }
 
     //

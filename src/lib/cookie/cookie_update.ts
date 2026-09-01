@@ -1,10 +1,17 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    cookie_update — writes the session id into COOKIE_NAME as a JSON string (httpOnly false,
+//    secure in production, sameSite lax, path '/').
+//
+//    Parameters:
+//      co_ssid — the session id to store
+//==============================================================================================
+
 import { cookies } from 'next/headers'
 import { COOKIE_NAME } from '@/src/root/constants/constants_other'
-// ----------------------------------------------------------------------
-//  Update Cookie information
-// ----------------------------------------------------------------------
+
 export async function cookie_update(co_ssid: number) {
   const functionName = 'cookie_update'
   try {

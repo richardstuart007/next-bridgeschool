@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    QuizReviewChoice — read-only answer list for one question in the quiz review, marking the
+//    user's choice right/wrong via <RadioSubject>.
+//==============================================================================================
+
 import { useEffect, useState, type JSX } from 'react'
 import RadioSubject from '@/src/ui/dashboard/quizreview/radiobuttons'
 import { table_Questions } from '@/src/lib/tables/definitions'

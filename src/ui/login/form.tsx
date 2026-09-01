@@ -1,5 +1,18 @@
 'use client';
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    LoginForm — the /login form (client). Drives useActionState(action) for email/password
+//    sign-in, debounces an email lookup (table_fetch on tus_users) to decide whether to show
+//    the password field vs. the social buttons for that account, and renders <Socials> /
+//    <GuestLogin>.
+//
+//  2) NOTES
+//    `handleEmailChange` debounces a 300ms lookup; `showPasswordField` / `showSocialButtons` /
+//    `getAccountMessage` derive the UI from that lookup's result. All render helpers
+//    (`renderForm` / `renderContent` / `renderCredentials`) are declared as `function`s.
+//==============================================================================================
+
 import { lusitana } from '@/src/root/constants/constants_fonts';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import { MyButton } from 'nextjs-shared/MyButton';
@@ -311,11 +324,13 @@ export default function LoginForm() {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(async () => {
       try {
-        const rows = await table_fetch({
+        const result = await table_fetch({
           caller: functionName,
           table: 'tus_users',
           whereColumnValuePairs: [{ column: 'us_email', value: newEmail }],
         } as table_fetch_Props);
+        if (!result.ok) throw new Error(result.error ?? 'table_fetch failed');
+        const rows = result.data;
 
         const userRecord: table_Users | undefined = rows[0];
 

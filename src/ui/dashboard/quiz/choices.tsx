@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    QuizChoice — renders the answer options for the current quiz question as a <RadioSubject>
+//    group and reports the picked option back to the parent (setAnswer / setShowSubmit).
+//==============================================================================================
+
 import { useEffect, useState, type JSX } from 'react'
 import RadioSubject from '@/src/ui/dashboard/quiz/radiobuttons'
 import { table_Questions } from '@/src/lib/tables/definitions'

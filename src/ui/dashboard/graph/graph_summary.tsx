@@ -1,3 +1,16 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Graph_Summary — server component for /dashboard/graphs. Reads the auth session + the user's
+//    graph-preference columns, fetches the Top / Recent / User datasets in parallel
+//    (Promise.allSettled), shapes them into GraphStructure objects, and renders
+//    <GraphSummaryWrapper> with them.
+//
+//  2) NOTES
+//    Failures degrade gracefully — a failed fetch falls back to an empty dataset /
+//    emptyGraphStructure rather than throwing. Datetimes are localised via convertUTCtoLocal
+//    using the user's fed country.
+//==============================================================================================
+
 import { Top_fetch } from '@/src/ui/dashboard/graph/Top/Top_fetch'
 import { Recent_fetch_1 } from '@/src/ui/dashboard/graph/Recent/Recent_fetch_1'
 import { Recent_fetch_Averages } from '@/src/ui/dashboard/graph/Recent/Recent_fetch_Averages'
@@ -55,11 +68,13 @@ export default async function Graph_Summary() {
   let countryCode = 'ZZ'
 
   if (au_usid > 0) {
-    const rows = await table_fetch({
+    const result = await table_fetch({
       caller: functionName,
       table: 'tus_users',
       whereColumnValuePairs: [{ column: 'us_usid', value: au_usid }]
     } as table_fetch_Props)
+    if (!result.ok) console.error(`${functionName}: table_fetch failed:`, result.error)
+    const rows = result.data
     userRecord = rows?.[0]
     countryCode = userRecord?.us_fedcountry ?? 'ZZ'
   }

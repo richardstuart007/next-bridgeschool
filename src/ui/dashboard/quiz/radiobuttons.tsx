@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    RadioSubject — a single-select radio list for the quiz answer options; calls the parent's
+//    handler with the selected option's index.
+//==============================================================================================
+
 import { useState, useEffect } from 'react'
 import { MyInput } from 'nextjs-shared/MyInput'
 

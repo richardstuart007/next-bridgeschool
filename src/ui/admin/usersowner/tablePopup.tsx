@@ -1,4 +1,16 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    TablePopup — modal wrapper that renders the usersowner <Table> (scoped to one user)
+//    inside <MyPopup>.
+//
+//    Parameters:
+//      uid     — user id passed through to <Table> as selected_uid
+//      isOpen  — whether the modal is shown
+//      onClose — called to close the modal
+//==============================================================================================
+
 import MyPopup from 'nextjs-shared/MyPopup'
 import Table from '@/src/ui/admin/usersowner/table'
 

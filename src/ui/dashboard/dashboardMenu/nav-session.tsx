@@ -1,4 +1,15 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    NavSession — footer of the nav rail: shows the signed-in user's name/email and the current
+//    database name.
+//
+//    Parameters:
+//      sessionInfo — the current structure_SessionsInfo
+//      dbName      — the database name to display
+//==============================================================================================
+
 import { structure_SessionsInfo } from '@/src/lib/tables/structures'
 
 interface FormProps {

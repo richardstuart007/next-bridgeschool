@@ -1,5 +1,17 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    QuizServer — server component: reads si_maxquestions from the session, fetches the
+//    questions for the given column/value (rfid or sbid), drops questions with no answers,
+//    sorts by qq_qqid, caps at si_maxquestions, and renders <QuizClient>.
+//
+//    Parameters:
+//      uq_rfid   — reference id (used when uq_column is 'qq_rfid')
+//      uq_column — 'qq_rfid' or 'qq_sbid' — which column to filter questions by
+//      uq_sbid   — subject id (used when uq_column is 'qq_sbid')
+//==============================================================================================
+
 import QuizClient from '@/src/ui/dashboard/quiz/QuizClient'
 import { table_fetch } from 'nextjs-shared/table_fetch'
 import { table_Questions } from '@/src/lib/tables/definitions'
@@ -32,12 +44,13 @@ export default async function QuizServer({ uq_rfid, uq_column, uq_sbid }: QuizSe
   //----------------------------------------------------------------------------------------------
   //.  Fetch questions from DB based on column/value
   //----------------------------------------------------------------------------------------------
-  let questions: table_Questions[] =
-    (await table_fetch({
-      caller: functionName,
-      table: 'tqq_questions',
-      whereColumnValuePairs: [{ column: uq_column, value: Column_value }]
-    })) ?? []
+  const questionsResult = await table_fetch({
+    caller: functionName,
+    table: 'tqq_questions',
+    whereColumnValuePairs: [{ column: uq_column, value: Column_value }]
+  })
+  if (!questionsResult.ok) throw new Error(questionsResult.error ?? 'table_fetch failed')
+  let questions: table_Questions[] = (questionsResult.data as table_Questions[]) ?? []
 
   //----------------------------------------------------------------------------------------------
   //.  Filter out questions with no answers

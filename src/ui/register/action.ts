@@ -1,5 +1,19 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    action — the register server action: Zod-parses formData, checks tus_users for an existing
+//    email (table_check), creates the user via write_users, then signs them in.
+//
+//    Parameters:
+//      _prevState — previous StateRegister from useActionState (unused)
+//      formData   — name + email + password
+//
+//    Returns:
+//      a StateRegister with an error message on invalid input / duplicate email / write
+//      failure; redirects on success
+//==============================================================================================
+
 import { z } from 'zod'
 import { signIn } from '@/auth'
 import { table_check } from 'nextjs-shared/table_check'
@@ -58,7 +72,12 @@ export async function action(_prevState: StateRegister | undefined, formData: Fo
     }
   ]
   const exists = await table_check(tableColumnValuePairs)
-  if (exists.found) {
+  if (!exists.ok) {
+    return {
+      message: exists.error ?? 'Email check failed'
+    }
+  }
+  if (exists.data.found) {
     return {
       message: 'Email already exists'
     }

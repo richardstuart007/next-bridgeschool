@@ -1,10 +1,19 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    getAuthSession — returns the current NextAuth session; logs 'E' and throws on failure.
+//
+//    Parameters:
+//      caller — logging caller identity
+//
+//    Returns:
+//      the NextAuth session object (or null when there is no session)
+//==============================================================================================
+
 import { auth } from '@/auth'
 import { write_logging } from 'nextjs-shared/write_logging'
-// ----------------------------------------------------------------------
-//  Get Auth Session information
-// ----------------------------------------------------------------------
+
 export async function getAuthSession(caller: string = '') {
   const functionName = 'getAuthSession'
   try {

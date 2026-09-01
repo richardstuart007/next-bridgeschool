@@ -1,5 +1,14 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Top_Header — header row for the "Top Results" graph: a month-window <MySelect> that
+//    persists the choice to the user's graph preferences and refreshes the route.
+//
+//    Parameters:
+//      initialMonths — starting month window; defaults to Top_limitMonths_Default
+//==============================================================================================
+
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import MySelect from 'nextjs-shared/MySelect'
@@ -22,19 +31,6 @@ export function Top_Header({ initialMonths = Top_limitMonths_Default }: Top_Head
     setMonths(initialMonths)
   }, [initialMonths])
 
-  const handleMonthsChange = async (value: string | number) => {
-    const numericValue = Number(value)
-    setMonths(numericValue)
-    await update_tus_GraphPrefs(
-      {
-        us_graph_top_months: numericValue
-      },
-      functionName
-    )
-
-    router.refresh()
-  }
-
   return (
     <div className='flex items-center flex-wrap gap-2'>
       <h2 className='text-sm whitespace-nowrap'>Top Results over</h2>
@@ -53,4 +49,19 @@ export function Top_Header({ initialMonths = Top_limitMonths_Default }: Top_Head
       <span className='text-sm'>months</span>
     </div>
   )
+  //----------------------------------------------------------------------------------------------
+  //  handleMonthsChange — persist the chosen month window and refresh the route
+  //----------------------------------------------------------------------------------------------
+  async function handleMonthsChange(value: string | number) {
+    const numericValue = Number(value)
+    setMonths(numericValue)
+    await update_tus_GraphPrefs(
+      {
+        us_graph_top_months: numericValue
+      },
+      functionName
+    )
+
+    router.refresh()
+  }
 }

@@ -1,3 +1,14 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    validate — business-rule validation for the question detail form: for a new question checks tqq_questions for a duplicate owner/subject/seq, and that the referenced trf_reference row exists.
+//
+//    Parameters:
+//      the form record (or bare field) to validate
+//
+//    Returns:
+//      a StateSetup — { errors?, message } ; message is null when validation passes
+//==============================================================================================
+
 import { table_check } from 'nextjs-shared/table_check'
 //
 //  Errors and Messages
@@ -42,7 +53,8 @@ export default async function maint_detail_validate(record: Table): Promise<Stat
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists.found) errors.qq_owner = ['questions must be unique']
+    if (!exists.ok) errors.qq_owner = [exists.error ?? 'Validation check failed']
+    else if (exists.data.found) errors.qq_owner = ['questions must be unique']
   }
   //
   //  Check for Add duplicate
@@ -55,7 +67,8 @@ export default async function maint_detail_validate(record: Table): Promise<Stat
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (!exists.found) errors.qq_rfid = ['id must exist']
+    if (!exists.ok) errors.qq_rfid = [exists.error ?? 'Validation check failed']
+    else if (!exists.data.found) errors.qq_rfid = ['id must exist']
   }
   //
   // Return error messages

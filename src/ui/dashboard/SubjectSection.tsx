@@ -1,4 +1,12 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    SubjectSection — one collapsible LEVEL block on the dashboard home: a colour-coded header
+//    and, per subject, its title plus its references (shown inline when a subject has
+//    <= REFS_DIRECT_MAX references, otherwise behind a "References" link).
+//==============================================================================================
+
 import { useState } from 'react'
 import { ChevronDownIcon } from '@heroicons/react/24/outline'
 import { MyLink } from 'nextjs-shared/MyLink'

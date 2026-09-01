@@ -1,3 +1,10 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /dashboard/reference_select: for the signed-in user, reads uq_sbid from the query
+//    string, fetches that subject row (when set) and the user's references (optionally scoped
+//    to the subject), and renders <ReferenceCards>.
+//==============================================================================================
+
 import ReferenceCards from '@/src/ui/dashboard/reference/ReferenceCards'
 import { Metadata } from 'next'
 import { fetch_SessionInfo } from '@/src/lib/tables/tableSpecific/fetch_SessionInfo'
@@ -37,11 +44,13 @@ export default async function Page({
       const sbidNum = Number(uq_sbid)
 
       if (sbidNum > 0) {
-        const subjectRows = await table_fetch({
+        const subjectResult = await table_fetch({
           caller: functionName,
           table: 'tsb_subject',
           whereColumnValuePairs: [{ column: 'sb_sbid', value: sbidNum }]
         } as table_fetch_Props)
+        if (!subjectResult.ok) throw new Error(subjectResult.error ?? 'table_fetch failed')
+        const subjectRows = subjectResult.data
         initialSubjectInfo = subjectRows[0] as table_Subject | undefined
       }
 
@@ -52,7 +61,7 @@ export default async function Page({
           : [])
       ]
 
-      references = (await fetchFiltered({
+      const referencesResult = await fetchFiltered({
         caller: functionName,
         table: 'trf_reference',
         joins,
@@ -61,7 +70,9 @@ export default async function Page({
         limit: 200,
         offset: 0,
         distinctColumns: []
-      })) as table_Reference[]
+      })
+      if (!referencesResult.ok) throw new Error(referencesResult.error ?? 'fetchFiltered failed')
+      references = referencesResult.data as table_Reference[]
     }
   } catch (error) {
     console.error(`${functionName}: Error fetching initial data`, error)

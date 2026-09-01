@@ -1,5 +1,17 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    UserContext — React context holding the current user's structure_ContextInfo
+//    (cx_ssid / cx_usid / cx_dbName / cx_shrink / cx_detail) and its setter.
+//
+//    Exports:
+//      UserProvider    — component; wraps children and provides { sessionContext,
+//                        setSessionContext }
+//      useUserContext  — hook; returns { sessionContext, setSessionContext }, throws if used
+//                        outside a UserProvider
+//==============================================================================================
+
 import { createContext, useState, useContext, ReactNode } from 'react'
 import { structure_ContextInfo } from '@/src/lib/tables/structures'
 //
@@ -26,9 +38,7 @@ const UserContext = createContext<UserContextType>({
 //------------------------------------------------------------------------------
 // Create the provider
 //------------------------------------------------------------------------------
-export const UserProvider: React.FC<{ children: ReactNode }> = ({
-  children
-}) => {
+export function UserProvider({ children }: { children: ReactNode }) {
   //
   //  Provided the user state and setter
   //
@@ -46,7 +56,7 @@ export const UserProvider: React.FC<{ children: ReactNode }> = ({
 //------------------------------------------------------------------------------
 // Create a custom hook to use the context
 //------------------------------------------------------------------------------
-export const useUserContext = (): UserContextType => {
+export function useUserContext(): UserContextType {
   //
   //  Get context
   //

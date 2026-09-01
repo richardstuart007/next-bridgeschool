@@ -1,5 +1,18 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    userCache_purgeOnSignIn — thin wrapper around userCache_purge for the sign-in path; clears
+//    the user's cache entries and logs an 'I' sign-in note.
+//
+//    Parameters:
+//      userId — the user signing in
+//      caller — logging caller identity
+//
+//    Returns:
+//      the userCache_purge result ({ userId, clearedCount, timestamp? })
+//==============================================================================================
+
 import { userCache_purge } from '@/src/lib/tables/cache/userCache_purge'
 import { write_logging } from 'nextjs-shared/write_logging'
 

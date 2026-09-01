@@ -1,5 +1,16 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /admin/maint/linkcheck: loads every trf_reference row and lets an admin walk each
+//    link, marking it ok / bad (persisted to localStorage) with All / Unchecked / Bad / OK
+//    filters and per-row Open / OK / Bad buttons.
+//
+//  2) NOTES
+//    Progress is stored under STORAGE_KEY in localStorage; "Reset" clears it. `openLink` reuses
+//    a single named popup window so only one preview is open at a time.
+//==============================================================================================
+
 import { useEffect, useState } from 'react'
 import { table_fetch, table_fetch_Props } from 'nextjs-shared/table_fetch'
 import { MyButton } from 'nextjs-shared/MyButton'
@@ -27,11 +38,16 @@ export default function Page() {
 
   useEffect(() => {
     async function load() {
-      const data = await table_fetch({
+      const result = await table_fetch({
         caller: functionName,
         table: 'trf_reference'
       } as table_fetch_Props)
-      setRows(data as RefRow[])
+      if (!result.ok) {
+        console.error(`${functionName}: table_fetch failed:`, result.error)
+        setLoading(false)
+        return
+      }
+      setRows(result.data as RefRow[])
       //
       //  Restore progress from localStorage
       //

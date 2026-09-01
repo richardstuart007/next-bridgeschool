@@ -1,5 +1,16 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    User_Header — header row for the "Your Results" graph: shows the running average and a
+//    month-window <MySelect> that persists the choice to the user's graph preferences and
+//    refreshes the route.
+//
+//    Parameters:
+//      averagePercentage — the average percentage shown in the heading text
+//      initialMonths     — starting month window; falls back to User_limitMonths_Average_Default
+//==============================================================================================
+
 import { useRouter } from 'next/navigation'
 import { useState, useEffect } from 'react'
 import MySelect from 'nextjs-shared/MySelect'
@@ -24,19 +35,6 @@ export function User_Header({ averagePercentage, initialMonths }: User_HeaderPro
       setMonths(initialMonths)
     }
   }, [initialMonths])
-
-  const handleMonthsChange = async (value: string | number) => {
-    const numericValue = Number(value)
-    setMonths(numericValue)
-    await update_tus_GraphPrefs(
-      {
-        us_graph_user_months: numericValue
-      },
-      functionName
-    )
-
-    router.refresh()
-  }
 
   return (
     <div className='flex items-center flex-wrap gap-2'>
@@ -69,4 +67,19 @@ export function User_Header({ averagePercentage, initialMonths }: User_HeaderPro
       </div>
     </div>
   )
+  //----------------------------------------------------------------------------------------------
+  //  handleMonthsChange — persist the chosen month window and refresh the route
+  //----------------------------------------------------------------------------------------------
+  async function handleMonthsChange(value: string | number) {
+    const numericValue = Number(value)
+    setMonths(numericValue)
+    await update_tus_GraphPrefs(
+      {
+        us_graph_user_months: numericValue
+      },
+      functionName
+    )
+
+    router.refresh()
+  }
 }

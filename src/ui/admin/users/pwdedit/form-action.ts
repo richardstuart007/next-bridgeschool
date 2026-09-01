@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Action — server action for the admin password-edit form: parses formData with a Zod schema, runs the
+//    form's Validate() for business rules, then INSERTs (new record) or UPDATEs (existing)
+//    tup_userspwd.
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated } ; databaseUpdated is true only
+//      after a successful write
+//==============================================================================================
+
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
 import bcrypt from 'bcryptjs'
@@ -66,7 +81,8 @@ export async function Action(_prevState: StateSetup, formData: FormData): Promis
       columnValuePairs: [{ column: 'up_hash', value: up_hash }],
       whereColumnValuePairs: [{ column: 'up_usid', value: up_usid }]
     }
-    await table_update(updateParams)
+    const updateResult = await table_update(updateParams)
+    if (!updateResult.ok) throw new Error(updateResult.error ?? 'table_update failed')
     return {
       message: 'Password updated successfully.',
       errors: undefined

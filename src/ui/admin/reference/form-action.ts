@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Action — server action for the reference form: parses formData with a Zod schema, runs the
+//    form's Validate() for business rules, then INSERTs (new record) or UPDATEs (existing)
+//    trf_reference.
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated } ; databaseUpdated is true only
+//      after a successful write
+//==============================================================================================
+
 import { z } from 'zod'
 import { table_write } from 'nextjs-shared/table_write'
 import { table_update } from 'nextjs-shared/table_update'
@@ -194,7 +209,8 @@ async function validateReference(record: table_Reference): Promise<StateSetup> {
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists.found) errors.rf_ref = ['Owner/Subject/Ref must be unique']
+    if (!exists.ok) errors.rf_ref = [exists.error ?? 'Validation check failed']
+    else if (exists.data.found) errors.rf_ref = ['Owner/Subject/Ref must be unique']
   }
   //
   // Return error messages

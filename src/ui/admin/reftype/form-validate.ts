@@ -1,3 +1,14 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    validate — business-rule validation for the reftype form: for a new reftype (rt_rtid === 0) checks trt_reftype for a duplicate rt_type.
+//
+//    Parameters:
+//      the form record (or bare field) to validate
+//
+//    Returns:
+//      a StateSetup — { errors?, message } ; message is null when validation passes
+//==============================================================================================
+
 import { table_Reftype } from '@/src/lib/tables/definitions'
 import { table_check } from 'nextjs-shared/table_check'
 //
@@ -27,7 +38,8 @@ export default async function validate(record: table_Reftype): Promise<StateSetu
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists.found) errors.rt_type = ['reftype must be unique']
+    if (!exists.ok) errors.rt_type = [exists.error ?? 'Validation check failed']
+    else if (exists.data.found) errors.rt_type = ['reftype must be unique']
   }
   //
   // Return error messages

@@ -1,5 +1,20 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Action — server action for the who form: parses formData with a Zod schema, runs the
+//    form's Validate() for business rules, then INSERTs (new record) or UPDATEs (existing)
+//    twh_who.
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated } ; databaseUpdated is true only
+//      after a successful write
+//==============================================================================================
+
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
 import { table_write } from 'nextjs-shared/table_write'
@@ -92,7 +107,8 @@ export async function Action(_prevState: StateSetup, formData: FormData): Promis
         { column: 'wh_title', value: wh_title }
       ]
     }
-    await (wh_whid === 0 ? table_write(writeParams) : table_update(updateParams))
+    const writeResult = await (wh_whid === 0 ? table_write(writeParams) : table_update(updateParams))
+    if (!writeResult.ok) throw new Error(writeResult.error ?? 'table write failed')
 
     return {
       message: `Database updated successfully.`,

@@ -1,5 +1,18 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    Recent_fetch_1 — fetches the latest ths_history row per user (window function, rn = 1), newest first, limited to
+//    uq_graph_recent_usersReturned users.
+//
+//    Parameters:
+//      caller — logging caller identity
+//      uq_graph_recent_usersReturned — max users to return
+//
+//    Returns:
+//      the rows (an empty array on a failed query, logged to the console)
+//==============================================================================================
+
 import { table_query } from 'nextjs-shared/table_query'
 
 interface Recent_fetch_1Props {
@@ -11,8 +24,9 @@ export async function Recent_fetch_1({
   caller,
   uq_graph_recent_usersReturned
 }: Recent_fetch_1Props) {
-  const rows = await table_query({
+  const result = await table_query({
     caller,
+    table: 'ths_history',
     query: `
       SELECT hs_hsid, hs_usid, us_name, hs_totalpoints, hs_maxpoints, hs_correctpercent, hs_datetime
       FROM (
@@ -27,5 +41,10 @@ export async function Recent_fetch_1({
     `,
     params: [uq_graph_recent_usersReturned]
   })
+  if (!result.ok) {
+    console.error('Recent_fetch_1 failed:', result.error)
+    return []
+  }
+  const rows = result.data
   return rows
 }

@@ -1,12 +1,23 @@
 ﻿'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    action — server action for the dashboard user-profile form: Zod-parses formData, UPDATEs
+//    tus_users (name / fed id / fed country / max questions / skip-correct / admin), clears the
+//    tus_users cache, then UPDATEs the user's tuo_usersowner owner.
+//
+//    Parameters:
+//      _prevState — previous StateSetup from useActionState (unused)
+//      formData   — the submitted form fields
+//
+//    Returns:
+//      a StateSetup — { errors?, message, databaseUpdated }
+//==============================================================================================
+
 import { z } from 'zod'
 import { table_update } from 'nextjs-shared/table_update'
 import { write_logging } from 'nextjs-shared/write_logging'
 import { cache_clearTable } from 'nextjs-shared/userCache_store'
-// ----------------------------------------------------------------------
-//  Update User Setup
-// ----------------------------------------------------------------------
 //
 //  Form Schema for validation
 //
@@ -85,7 +96,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     // -----------------
     // Update User
     // -----------------
-    await table_update({
+    const usersUpdateResult = await table_update({
       caller: functionName,
       table: 'tus_users',
       columnValuePairs: [
@@ -98,6 +109,7 @@ export async function action(_prevState: StateSetup, formData: FormData) {
       ],
       whereColumnValuePairs: [{ column: 'us_usid', value: us_usid }]
     })
+    if (!usersUpdateResult.ok) throw new Error(usersUpdateResult.error ?? 'table_update failed')
     //
     //  Clear the cache for this user to ensure fresh data is fetched next time
     //
@@ -105,12 +117,13 @@ export async function action(_prevState: StateSetup, formData: FormData) {
     // -----------------
     // Update usersowner
     // -----------------
-    await table_update({
+    const usersownerUpdateResult = await table_update({
       caller: functionName,
       table: 'tuo_usersowner',
       columnValuePairs: [{ column: 'uo_owner', value: ow_owner }],
       whereColumnValuePairs: [{ column: 'uo_usid', value: us_usid }]
     })
+    if (!usersownerUpdateResult.ok) throw new Error(usersownerUpdateResult.error ?? 'table_update failed')
     //
     //  OK
     //

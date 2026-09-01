@@ -1,4 +1,22 @@
-﻿import NextAuth from 'next-auth'
+﻿//==============================================================================================
+//  1) DESCRIPTION
+//    auth.ts — NextAuth v5 configuration. Exports the route handlers (GET/POST) plus `auth`,
+//    `signIn` and `signOut` used across the app.
+//
+//    Providers: Credentials (email + bcrypt hash from tup_userspwd), GitHub, Google, Facebook.
+//
+//    Returns (exports):
+//      handlers.GET / handlers.POST — the NextAuth route handlers
+//      auth                         — server helper to read the session
+//      signIn / signOut             — the NextAuth sign-in / sign-out actions
+//
+//  2) NOTES
+//    The `authorize`, `signIn`, `jwt` and `session` callbacks below are NextAuth config
+//    callbacks (passed as object properties) and stay as arrow functions. `popUserData` is the
+//    one plain helper — it maps a DB user row to the au_UserData shape NextAuth stores.
+//==============================================================================================
+
+import NextAuth from 'next-auth'
 import Credentials from 'next-auth/providers/credentials'
 import { authConfig } from '@/src/root/auth.config'
 import { z } from 'zod'
@@ -13,9 +31,7 @@ import { userCache_purgeOnSignIn } from '@/src/lib/tables/cache/userCache_purgeO
 import { write_logging } from 'nextjs-shared/write_logging'
 
 const functionName = 'auth'
-// ----------------------------------------------------------------------
-//  Check User/Password
-// ----------------------------------------------------------------------
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -77,7 +93,9 @@ export const {
             table: 'tup_userspwd',
             whereColumnValuePairs: [{ column: 'up_email', value: email }]
           }
-          const pwdRows = await table_fetch(pwdParams)
+          const pwdResult = await table_fetch(pwdParams)
+          if (!pwdResult.ok) throw new Error(pwdResult.error ?? 'table_fetch failed')
+          const pwdRows = pwdResult.data
           const userPwd = pwdRows[0]
           if (!userPwd) return null
           //
@@ -93,7 +111,9 @@ export const {
             table: 'tus_users',
             whereColumnValuePairs: [{ column: 'us_email', value: email }]
           }
-          const rows = await table_fetch(fetchParams)
+          const result = await table_fetch(fetchParams)
+          if (!result.ok) throw new Error(result.error ?? 'table_fetch failed')
+          const rows = result.data
           const userRecord = rows[0]
           if (!userRecord) return null
           //
@@ -207,7 +227,9 @@ export const {
           table: 'tus_users',
           whereColumnValuePairs: [{ column: 'us_email', value: lookupEmail }]
         }
-        const rows = await table_fetch(fetchParams)
+        const result = await table_fetch(fetchParams)
+        if (!result.ok) throw new Error(result.error ?? 'table_fetch failed')
+        const rows = result.data
         let userRecord = rows[0]
         //
         //  providerSignIn auto-creates the user if not found, then writes a session
@@ -217,7 +239,9 @@ export const {
         //  Re-fetch if the user was just created
         //
         if (!userRecord) {
-          const newRows = await table_fetch(fetchParams)
+          const newResult = await table_fetch(fetchParams)
+          if (!newResult.ok) throw new Error(newResult.error ?? 'table_fetch failed')
+          const newRows = newResult.data
           userRecord = newRows[0]
         }
         if (!userRecord) return false
@@ -254,26 +278,20 @@ export const {
     }
   }
 })
-//-----------------------------------------------------------------------
-//  Helper Function: Populate User Information
-//-----------------------------------------------------------------------
-/**
- * Interface defining the structure of a user record from the database
- * @property us_usid - User ID from database (can be number or string)
- * @property us_name - User's display name
- * @property us_email - User's email address
- */
 interface UserRecord {
   us_usid: number | string
   us_name: string
   us_email: string
 }
 
-/**
- * Creates au_UserData object from database record
- * @param userRecord - Database record containing user fields
- * @returns au_UserData object with all required authentication fields
- */
+//----------------------------------------------------------------------------------
+//  popUserData — build the au_UserData object NextAuth stores from a DB user row
+//    Params:
+//      userRecord — { us_usid, us_name, us_email } from tus_users
+//    Returns:
+//      au_UserData with NextAuth fields (id/name/email/emailVerified) and custom
+//      au_* fields; au_ssid starts blank and is filled in later by the signIn flow
+//----------------------------------------------------------------------------------
 function popUserData(userRecord: UserRecord): au_UserData {
   return {
     //

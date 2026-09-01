@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    Page — /admin/maint/subject: server component; fetches the first page of tsb_subject plus
+//    the total page count and hands them to the client <Table>.
+//==============================================================================================
+
 import Table from '@/src/ui/admin/subject/table'
 import { table_Subject } from '@/src/lib/tables/definitions'
 import { Metadata } from 'next'
@@ -18,7 +24,7 @@ export default async function Page() {
   let initialTotalPages = 0
 
   try {
-    ;[initialRows, initialTotalPages] = await Promise.all([
+    const [rowsResult, pagesResult] = await Promise.all([
       fetchFiltered({
         caller: functionName,
         table: 'tsb_subject',
@@ -36,6 +42,10 @@ export default async function Page() {
         skipCache: true
       })
     ])
+    if (!rowsResult.ok) throw new Error(rowsResult.error ?? 'fetchFiltered failed')
+    if (!pagesResult.ok) throw new Error(pagesResult.error ?? 'fetchTotalPages failed')
+    initialRows = rowsResult.data
+    initialTotalPages = pagesResult.data
   } catch (error) {
     console.error(`${functionName}: Error fetching initial data`, error)
   }

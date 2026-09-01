@@ -1,4 +1,13 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Layout — /dashboard layout shell: <NavTop baseURL='dashboard'> above the routed content.
+//
+//    Parameters:
+//      children — the routed dashboard page
+//==============================================================================================
+
 import NavTop from '@/src/ui/dashboard/dashboardMenu/NavTop'
 
 export default function Layout({ children }: { children: React.ReactNode }) {

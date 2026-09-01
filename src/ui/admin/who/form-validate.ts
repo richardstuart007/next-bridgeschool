@@ -1,3 +1,14 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    validate — business-rule validation for the who form: for a new who (wh_whid === 0) checks twh_who for a duplicate wh_who.
+//
+//    Parameters:
+//      the form record (or bare field) to validate
+//
+//    Returns:
+//      a StateSetup — { errors?, message } ; message is null when validation passes
+//==============================================================================================
+
 import { table_Who } from '@/src/lib/tables/definitions'
 import { table_check } from 'nextjs-shared/table_check'
 //
@@ -27,7 +38,8 @@ export default async function validate(record: table_Who): Promise<StateSetup> {
       }
     ]
     const exists = await table_check(tableColumnValuePairs)
-    if (exists.found) errors.wh_who = ['Who must be unique']
+    if (!exists.ok) errors.wh_who = [exists.error ?? 'Validation check failed']
+    else if (exists.data.found) errors.wh_who = ['Who must be unique']
   }
   //
   // Return error messages

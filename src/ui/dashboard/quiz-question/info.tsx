@@ -1,3 +1,13 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    QuizInfo — renders the "question N of total" line plus the question's info text.
+//
+//    Parameters:
+//      question  — the table_Questions row
+//      QuizInfo  — the current question number
+//      quizTotal — the total number of questions
+//==============================================================================================
+
 import { table_Questions } from '@/src/lib/tables/definitions'
 
 interface RadioSubjectProps {

@@ -1,10 +1,21 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    User_fetch — fetches one user's last `count` ths_history results within the last `months` months, newest first.
+//
+//    Parameters:
+//      userId — the user
+//      caller — logging caller identity
+//      months — month window
+//      count  — max rows
+//
+//    Returns:
+//      the rows (an empty array on a failed query, logged to the console)
+//==============================================================================================
+
 import { table_query } from 'nextjs-shared/table_query'
 
-//---------------------------------------------------------------------
-//  Fetch latest results for the last 'RecentResults_usersReturned' users
-//---------------------------------------------------------------------
 interface User_fetchProps {
   userId: number
   caller: string
@@ -13,8 +24,9 @@ interface User_fetchProps {
 }
 
 export async function User_fetch({ userId, caller, months, count }: User_fetchProps) {
-  const rows = await table_query({
+  const result = await table_query({
     caller,
+    table: 'ths_history',
     query: `
       SELECT hs_hsid, hs_datetime, hs_correctpercent
       FROM ths_history
@@ -25,5 +37,10 @@ export async function User_fetch({ userId, caller, months, count }: User_fetchPr
     `,
     params: [userId, months, count]
   })
+  if (!result.ok) {
+    console.error('User_fetch failed:', result.error)
+    return []
+  }
+  const rows = result.data
   return rows
 }

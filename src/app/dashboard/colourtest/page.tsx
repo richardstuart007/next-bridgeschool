@@ -1,3 +1,9 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    ColourTest — /dashboard/colourtest dev page: renders every LEVEL swatch with Read / Video
+//    / Quiz button colours for visual checking.
+//==============================================================================================
+
 import { LEVELS, QUIZ_COLOR, VIDEO_COLOR, READ_COLOR } from '@/src/root/constants/colours'
 
 export default function ColourTest() {

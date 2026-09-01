@@ -1,4 +1,14 @@
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    NavSide — the fixed left rail for /admin: school logo, <NavLinks> and <NavSession>. Loads
+//    the db name + session info on mount and pushes it into UserContext.
+//
+//    Parameters:
+//      baseURL — 'dashboard' | 'admin' — which section the links belong to
+//==============================================================================================
+
 import { useEffect, useState } from 'react'
 import NavLinks from '@/src/ui/dashboard/dashboardMenu/nav-links'
 import NavSession from '@/src/ui/dashboard/dashboardMenu/nav-session'
@@ -45,11 +55,13 @@ export default function NavSide(props: Props) {
     //
     //  Fetch database name
     //
-    const rows = await table_fetch({
+    const result = await table_fetch({
       caller: functionName,
       table: 'tdb_database',
       whereColumnValuePairs: [{ column: 'db_dbid', value: 1 }]
     } as table_fetch_Props)
+    if (!result.ok) console.error(`${functionName}: table_fetch failed:`, result.error)
+    const rows = result.data
     const row = rows[0]
     const tdb_database = row?.db_name ?? 'unknown'
     setdbName(tdb_database)

@@ -1,5 +1,16 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    ReferenceCard — one reference row: a coloured resource link (Read / Video by rf_type +
+//    rf_pubtype) and, when the reference has questions, a Quiz link into /dashboard/quiz.
+//
+//    Parameters:
+//      reference   — the trf_reference row
+//      headerColor — optional row background colour (defaults to DEFAULT_COLOR)
+//      headerText  — optional label (defaults to DEFAULT_TEXT)
+//==============================================================================================
+
 import { table_Reference } from '@/src/lib/tables/definitions'
 import { MyLink } from 'nextjs-shared/MyLink'
 import { QUIZ_COLOR, VIDEO_COLOR, READ_COLOR, DEFAULT_COLOR, DEFAULT_TEXT } from '@/src/root/constants/colours'

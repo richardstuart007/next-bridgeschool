@@ -1,5 +1,18 @@
 // src/ui/login/socials.tsx
 'use client'
+
+//==============================================================================================
+//  1) DESCRIPTION
+//    Socials — the Google / GitHub / Facebook sign-in buttons on the login page; each calls
+//    socials_signin with its provider.
+//
+//    Parameters:
+//      setSigningIn — lets the parent show a "signing in" state while the request runs
+//
+//  2) NOTES
+//    GoogleIcon / GithubIcon / FacebookIcon are local presentational helpers.
+//==============================================================================================
+
 import { MyButton } from 'nextjs-shared/MyButton'
 import { socials_signin } from './socials_signin'
 

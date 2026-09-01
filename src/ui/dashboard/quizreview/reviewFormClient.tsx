@@ -1,5 +1,12 @@
 'use client'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    ReviewFormClient — paged walkthrough of one completed quiz: for each answered question it
+//    shows the question (info / bidding / hands) and the read-only answer list with the user's
+//    pick marked right/wrong, driven by a MyPagination control.
+//==============================================================================================
+
 import { useState } from 'react'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
 import QuizBidding from '@/src/ui/dashboard/quiz-question/bidding'
@@ -59,7 +66,7 @@ export default function ReviewFormClient(props: ReviewFormClientProps) {
   //...................................................................................
   //. MyPagination
   //...................................................................................
-  const handlePageChange = (newPage: number) => {
+  function handlePageChange(newPage: number) {
     if (newPage >= 1 && newPage <= hs_qqid.length) {
       setCurrentPage(newPage)
       const questionIndex = questions.findIndex(q => q.qq_qqid === hs_qqid[newPage - 1])

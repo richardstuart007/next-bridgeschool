@@ -1,3 +1,8 @@
+//==============================================================================================
+//  1) DESCRIPTION
+//    NotFound — Next.js 404 page: frown icon, message, and a "Go Back" link to /dashboard.
+//==============================================================================================
+
 import { MyLink } from 'nextjs-shared/MyLink'
 import { FaceFrownIcon } from '@heroicons/react/24/outline'
 

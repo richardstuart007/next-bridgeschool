@@ -1,5 +1,15 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    ReviewFormServer — server component: loads the ths_history row for hs_hsid, optionally
+//    filters out correctly-answered questions (si_skipcorrect), fetches the matching
+//    tqq_questions rows, and renders <ReviewFormClient>.
+//
+//    Parameters:
+//      hs_hsid — the history id being reviewed
+//==============================================================================================
+
 import ReviewFormClient from '@/src/ui/dashboard/quizreview/reviewFormClient'
 import { table_fetch } from 'nextjs-shared/table_fetch'
 import { table_Questions, table_Usershistory } from '@/src/lib/tables/definitions'
@@ -24,12 +34,14 @@ export default async function ReviewFormServer({ hs_hsid }: ReviewFormServerProp
   //
   //  Fetch the history record
   //
-  const historyRows = await table_fetch({
+  const historyResult = await table_fetch({
     caller: functionName,
     table: 'ths_history',
     whereColumnValuePairs: [{ column: 'hs_hsid', value: hs_hsid }],
     limit: 1
   })
+  if (!historyResult.ok) throw new Error(historyResult.error ?? 'table_fetch failed')
+  const historyRows = historyResult.data
   let history: table_Usershistory = historyRows[0]
   if (!history) throw new Error(`History record not found for hs_hsid=${hs_hsid}`)
 
@@ -59,12 +71,14 @@ export default async function ReviewFormServer({ hs_hsid }: ReviewFormServerProp
   //
   //  Fetch all questions in this history
   //
-  const questions: table_Questions[] = await table_fetch({
+  const questionsResult = await table_fetch({
     caller: functionName,
     table: 'tqq_questions',
     whereColumnValuePairs: [{ column: 'qq_qqid', value: history.hs_qqid, operator: 'IN' }],
     orderBy: 'qq_qqid'
   })
+  if (!questionsResult.ok) throw new Error(questionsResult.error ?? 'table_fetch failed')
+  const questions: table_Questions[] = questionsResult.data as table_Questions[]
 
   return <ReviewFormClient history={history} questions={questions} />
 }

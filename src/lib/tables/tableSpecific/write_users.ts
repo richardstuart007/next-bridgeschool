@@ -1,5 +1,19 @@
 'use server'
 
+//==============================================================================================
+//  1) DESCRIPTION
+//    write_users — creates a new tus_users row (with graph-preference defaults) plus its
+//    matching tuo_usersowner row.
+//
+//    Parameters:
+//      provider — auth provider string stored on the user
+//      email    — the user's email
+//      name     — the user's display name
+//
+//    Returns:
+//      the inserted tus_users row; throws when either insert fails
+//==============================================================================================
+
 import { table_write } from 'nextjs-shared/table_write'
 import {
   Recent_usersReturned_Default,
@@ -8,9 +22,7 @@ import {
 import { User_limitMonths_Average_Default } from '@/src/ui/dashboard/graph/User/User_constants'
 import { Top_limitMonths_Default } from '@/src/ui/dashboard/graph/Top/Top_constants'
 import { Default_owner, Default_fedcountry } from '@/src/root/constants/constants_other'
-// ----------------------------------------------------------------------
-//  Write new user
-// ----------------------------------------------------------------------
+
 export async function write_users(provider: string, email: string, name: string) {
   const functionName = 'write_users'
   //
@@ -34,7 +46,7 @@ export async function write_users(provider: string, email: string, name: string)
   const us_graph_recent_users = Recent_usersReturned_Default
   const us_graph_recent_avg = Recent_usersAverage_Default
 
-  const userRecords = await table_write({
+  const userRecordsResult = await table_write({
     caller: functionName,
     table: 'tus_users',
     columnValuePairs: [
@@ -53,7 +65,8 @@ export async function write_users(provider: string, email: string, name: string)
     ]
   })
 
-  userRecord = userRecords[0]
+  if (!userRecordsResult.ok) throw new Error(userRecordsResult.error ?? 'table_write failed')
+  userRecord = userRecordsResult.data[0]
   if (!userRecord) {
     throw Error('providerSignIn: Write Users Error')
   }
@@ -62,7 +75,7 @@ export async function write_users(provider: string, email: string, name: string)
   //
   const uo_usid = userRecord.us_usid
   const uo_owner = Default_owner
-  await table_write({
+  const usersownerResult = await table_write({
     caller: functionName,
     table: 'tuo_usersowner',
     columnValuePairs: [
@@ -70,6 +83,7 @@ export async function write_users(provider: string, email: string, name: string)
       { column: 'uo_owner', value: uo_owner }
     ]
   })
+  if (!usersownerResult.ok) throw new Error(usersownerResult.error ?? 'table_write failed')
 
   return userRecord
 }
